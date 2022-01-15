@@ -8,36 +8,39 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Collisions/TriMesh Ground Collision System")]
-    public class TriMeshGroundCollisionSystem : BaseSystem<ITriMeshGroundCollisionTuple>
+    [AddComponentMenu("PBD2D:Systems/Collisions/Point Line Collision System")]
+    public class PointLineCollisionSystem : BaseSystem<IPointLineCollisionTuple>
     {
         [BurstCompile]
         private struct PullPointsAboveSurfaceJob : IJobParallelFor
         {
             private NativeIndexedArray<Id<Point>, float2> positions;
-            private readonly float2 surfacePoint;
-            private readonly float2 surfaceNormal;
+            private readonly float2 p;
+            private readonly float2 n;
+            private readonly float r;
 
-            public PullPointsAboveSurfaceJob(ITriMeshGroundCollisionTuple tuple)
+            public PullPointsAboveSurfaceJob(IPointLineCollisionTuple tuple)
             {
-                var (triMesh, ground) = tuple;
+                var (pointComponent, lineComponent) = tuple;
 
-                positions = triMesh.PredictedPositions;
-                (surfacePoint, surfaceNormal) = ground.Surface;
+                positions = pointComponent.PredictedPositions;
+                r = pointComponent.CollisionRadius;
+                (p, n) = lineComponent.Line;
             }
 
             public void Execute(int index)
             {
                 var pointId = (Id<Point>)index;
                 var position = positions[pointId];
-                var signedDistance = MathUtils.PointLineSignedDistance(position, surfaceNormal, surfacePoint);
+                var signedDistance = MathUtils.PointLineSignedDistance(position, n, p);
+                var C = signedDistance - r;
 
-                if (signedDistance >= 0)
+                if (C >= 0)
                 {
                     return;
                 }
 
-                var dP = signedDistance * surfaceNormal;
+                var dP = C * n;
                 positions[pointId] -= dP;
             }
 

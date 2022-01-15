@@ -4,18 +4,6 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface ITriMeshCollideWithGround : IComponent
-    {
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-    }
-    public interface IGroundCollideWithTriMesh : IComponent
-    {
-        Surface Surface { get; }
-    }
-    public interface ITriMeshGroundCollisionTuple : IComponent
-    {
-        void Deconstruct(out ITriMeshCollideWithGround triMesh, out IGroundCollideWithTriMesh ground);
-    }
     public interface ITriMeshCollideWithFluid : IComponent
     {
         float Weight { get; }
@@ -107,10 +95,7 @@ namespace andywiecko.PBD2D.Core
         NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
     }
 
-    public interface IRodCollideWithTriMesh : IComponent { }
-    public interface ITriMeshCollideWithRod : IComponent { }
-    public interface IRodTriMeshCollisionTuple : IComponent { }
-
+    #region Capsule-capsule collisions
     public interface ICapsuleCollideWithCapsule : IComponent
     {
         float CollisionRadius { get; }
@@ -137,4 +122,33 @@ namespace andywiecko.PBD2D.Core
     {
         public static void Deconstruct(this ICapsuleCapsuleCollisionTuple t, out ICapsuleCollideWithCapsule c1, out ICapsuleCollideWithCapsule c2) => _ = (c1 = t.Component1, c2 = t.Component2);
     }
+    #endregion
+
+    #region Point-line static collisions
+    public interface IPointLineCollisionTuple : IComponent
+    {
+        IPointCollideWithPlane PointComponent { get; }
+        ILineCollideWithPoint LineComponent { get; }
+    }
+
+    public interface IPointCollideWithPlane : IComponent
+    {
+        float CollisionRadius { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+    }
+
+    public interface ILineCollideWithPoint : IComponent
+    {
+        Line Line { get; }
+    }
+
+    public interface ITriMeshPointsCollideWithGroundLine : IPointCollideWithPlane { }
+    public interface IGroundLineCollideWithTriMeshPoints : ILineCollideWithPoint { }
+
+    public static class PointLineCollisionTupleExtensions
+    {
+        public static void Deconstruct(this IPointLineCollisionTuple tuple, out IPointCollideWithPlane point, out ILineCollideWithPoint line)
+            => _ = (point = tuple.PointComponent, line = tuple.LineComponent);
+    }
+    #endregion
 }

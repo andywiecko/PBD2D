@@ -41,6 +41,7 @@ namespace andywiecko.PBD2D.Solver
         public void Start()
         {
             RegenerateJobsList();
+            actionsGenerator.Subscribe();
         }
 
         public void Update()

@@ -1,15 +1,13 @@
-using System;
 using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    [Obsolete("Use "+ nameof(Line) + " instead.")]
-    public readonly struct Surface
+    public readonly struct Line
     {
         public readonly float2 Point;
         public readonly float2 Normal;
 
-        public Surface(float2 point, float2 normal)
+        public Line(float2 point, float2 normal)
         {
             Point = point;
             Normal = normal;
