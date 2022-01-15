@@ -6,7 +6,7 @@ namespace andywiecko.PBD2D.Components
 {
     public class Ground : BaseComponent
     {
-        public Surface Surface => new Surface
+        public Line Surface => new 
         (
             point: transform.position.ToFloat2(),
             normal: transform.up.ToFloat2()
@@ -18,8 +18,12 @@ namespace andywiecko.PBD2D.Components
             var tangent = normal.Rotate90CW();
             var length = 100;
             Gizmos.color = Color.black;
-            Gizmos.DrawRay(point.ToFloat3(), +(length * tangent).ToFloat3());
-            Gizmos.DrawRay(point.ToFloat3(), -(length * tangent).ToFloat3());
+            var p = point.ToFloat3();
+            var n = normal.ToFloat3();
+            Gizmos.DrawRay(p, +(length * tangent).ToFloat3());
+            Gizmos.DrawRay(p, -(length * tangent).ToFloat3());
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(p, 0.5f * n);
         }
     }
 }
