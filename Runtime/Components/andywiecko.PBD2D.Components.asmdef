@@ -1,0 +1,21 @@
+{
+    "name": "andywiecko.PBD2D.Components",
+    "rootNamespace": "",
+    "references": [
+        "andywiecko.PBD2D.Core",
+        "andywiecko.BurstCollections",
+        "Unity.Collections",
+        "Unity.Mathematics",
+        "andywiecko.BurstMathUtils",
+        "andywiecko.BurstTriangulator"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

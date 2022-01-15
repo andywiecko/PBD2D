@@ -1,0 +1,22 @@
+{
+    "name": "andywiecko.PBD2D.Systems",
+    "rootNamespace": "",
+    "references": [
+        "andywiecko.PBD2D.Core",
+        "andywiecko.BurstCollections",
+        "andywiecko.BurstMathUtils",
+        "Unity.Burst",
+        "Unity.Jobs",
+        "Unity.Collections",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

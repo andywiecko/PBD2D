@@ -1,0 +1,17 @@
+{
+    "name": "andywiecko.PBD2D.Solver",
+    "rootNamespace": "",
+    "references": [
+        "andywiecko.PBD2D.Core",
+        "andywiecko.PBD2D.Systems"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,45 @@
+using andywiecko.BurstCollections;
+using System;
+using Unity.Mathematics;
+
+namespace andywiecko.PBD2D.Core
+{
+    [Serializable]
+    public readonly struct Edge : IEquatable<Edge>
+    {
+        public static Edge Disabled => new Edge(Id<Point>.Invalid, Id<Point>.Invalid);
+
+        public bool IsEnabled => !Equals(Disabled);
+
+        public readonly Id<Point> IdA;
+        public readonly Id<Point> IdB;
+
+        public Edge(Id<Point> idA, Id<Point> idB) : this((int)idA, (int)idB)
+        {
+        }
+
+        private Edge(int idA, int idB)
+        {
+            IdA = (Id<Point>)math.min(idA, idB);
+            IdB = (Id<Point>)math.max(idA, idB);
+        }
+
+        public static implicit operator Edge((int idA, int idB) ids) => new Edge(ids);
+        public static implicit operator Edge((Id<Point> idA, Id<Point> idB) ids) => new Edge(ids);
+
+        private Edge((int idA, int idB) ids) : this((Id<Point>)ids.idA, (Id<Point>)ids.idB) { }
+        private Edge((Id<Point> idA, Id<Point> idB) ids) : this(ids.idA, ids.idB) { }
+
+        public void Deconstruct(out Id<Point> idA, out Id<Point> idB)
+        {
+            idA = IdA;
+            idB = IdB;
+        }
+
+        public bool Equals(Edge other) => IdA == other.IdA && IdB == other.IdB;
+
+        public bool Contains(Id<Point> id) => IdA == id || IdB == id;
+
+        public override string ToString() => $"({nameof(Edge)})({IdA}, {IdB})";
+    }
+}

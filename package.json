@@ -1,0 +1,30 @@
+{
+    "name": "com.andywiecko.pbd2d",
+    "version": "0.1.0",
+    "displayName": "PBD2D",
+    "description": "Unity Position Based Dynamics in two dimensions.",
+    "unity": "2021.2",
+    "unityRelease": "5f1",
+    "keywords": [
+        "Burst",
+        "Physics-2d",
+        "Softbody-dynamics",
+        "Position-based-dynamics"
+    ],
+    "author": {
+        "name": "Andrzej Więckowski",
+        "email": "andywiecko@gmail.com",
+        "url": "https://andywiecko.github.io/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/andywiecko/PBD2D"
+    },
+    "dependencies": {
+        "com.unity.burst": "1.6.3",
+        "com.unity.jobs": "0.11.0-preview.6",
+        "com.andywiecko.burst.mathutils": "1.1.0",
+        "com.andywiecko.burst.collections": "1.2.0",
+        "com.andywiecko.burst.triangulator": "1.0.1"
+    }
+}
