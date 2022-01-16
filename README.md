@@ -40,6 +40,13 @@ TODO: Add note about triangulation.
 
 #### Edge Length Constraint System
 
+System responsible for resolving edge length constraint, the most common constraint in PBD simulation.
+Constraint is defined in the following way
+
+![Figure](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2)=\|p_1-p_2\|-\ell)
+
+where _l_ is rest length of the edge (_p₁, p₂_).
+
 #### Triangle Area Constraint System
 
 ### Collisions

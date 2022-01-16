@@ -67,7 +67,7 @@ namespace andywiecko.PBD2D.Systems
             }
         }
 
-        public override JobHandle Schedule(JobHandle dependencies)
+        public override JobHandle Schedule(JobHandle dependencies = default)
         {
             foreach (var constraint in References)
             {

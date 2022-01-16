@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
 using andywiecko.PBD2D.Systems;
 using NUnit.Framework;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 
@@ -28,10 +29,10 @@ namespace andywiecko.PBD2D.Editor.Tests
             public override void Dispose()
             {
                 base.Dispose();
-                PredictedPositions.Dispose();
-                massesInv.Dispose();
-                edges.Dispose();
-                restLengths.Dispose();
+                PredictedPositions?.Dispose();
+                massesInv?.Dispose();
+                edges?.Dispose();
+                restLengths?.Dispose();
             }
 
             public FakeEdgeLengthConstraint SetMassInv(int i, float mInv)
@@ -61,7 +62,26 @@ namespace andywiecko.PBD2D.Editor.Tests
                 restLengths.Value[Id<Edge>.Zero] = restLength;
                 return this;
             }
+
+            public FakeEdgeLengthConstraint DefaultConfiguration()
+            {
+                return
+                    SetPositions(defaultInitialPositions)
+                    .SetEdge(1, 2, restLength: 1f)
+                    .SetMassInv(1, 1f)
+                    .SetMassInv(2, 1f)
+                ;
+            }
         }
+
+        private static readonly float2[] defaultInitialPositions = new float2[]
+        {
+            new(0, 0),
+            new(1, 0),
+            new(2, 0),
+            new(3, 0),
+            new(4, 0)
+        };
 
         private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
 
@@ -82,43 +102,71 @@ namespace andywiecko.PBD2D.Editor.Tests
         }
 
         [Test]
-        public void EdgeLengthConstraintTest()
+        public void StationaryTest()
         {
-            float2[] initialPositions =
-            {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(3, 0),
-                    new(4, 0)
-            };
             component
-                .SetPositions(initialPositions)
-                .SetEdge(1, 2, restLength: 1f)
-                .SetMassInv(1, 1f)
-                .SetMassInv(2, 1f)
-            ;
-
-            component
+                .DefaultConfiguration()
                 .SetPosition(1, new(1, 0))
                 .SetPosition(2, new(2, 0))
             ;
-            system.Schedule(default).Complete();
-            Assert.That(Positions, Is.EqualTo(initialPositions));
+            system.Schedule().Complete();
+            Assert.That(Positions, Is.EqualTo(defaultInitialPositions));
+        }
 
+        [Test]
+        public void StretchingTest()
+        {
             component
+                .DefaultConfiguration()
                 .SetPosition(1, new(0.9f, 0))
                 .SetPosition(2, new(2.1f, 0))
             ;
-            system.Schedule(default).Complete();
-            Assert.That(Positions, Is.EqualTo(initialPositions).Using(Float2Comparer.Instance));
+            system.Schedule().Complete();
+            Assert.That(Positions, Is.EqualTo(defaultInitialPositions).Using(Float2Comparer.Instance));
+        }
 
+        [Test]
+        public void CompressionTest()
+        {
             component
+                .DefaultConfiguration()
                 .SetPosition(1, new(1.1f, 0))
                 .SetPosition(2, new(1.9f, 0))
             ;
-            system.Schedule(default).Complete();
-            Assert.That(Positions, Is.EqualTo(initialPositions).Using(Float2Comparer.Instance));
+            system.Schedule().Complete();
+            Assert.That(Positions, Is.EqualTo(defaultInitialPositions).Using(Float2Comparer.Instance));
+        }
+
+        [Test]
+        public void NonUniformMassTest()
+        {
+            component
+                .DefaultConfiguration()
+                .SetPosition(1, new(1.1f, 0))
+                .SetPosition(2, new(1.9f, 0))
+                .SetMassInv(1, 0f)
+            ;
+            system.Schedule().Complete();
+            var expectedPositions = defaultInitialPositions.ToArray();
+            expectedPositions[1] = new(1.1f, 0);
+            expectedPositions[2] = new(2.1f, 0);
+            Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
+        }
+
+        [Test]
+        public void NonUnitStiffnessTest()
+        {
+            component
+                .DefaultConfiguration()
+                .SetPosition(1, new(1.1f, 0))
+                .SetPosition(2, new(1.9f, 0))
+                .Stiffness = 0.5f
+            ;
+            system.Schedule().Complete();
+            var expectedPositions = defaultInitialPositions.ToArray();
+            expectedPositions[1] = new(1.05f, 0);
+            expectedPositions[2] = new(1.95f, 0);
+            Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
         }
     }
 }
