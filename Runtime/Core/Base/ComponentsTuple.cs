@@ -56,8 +56,7 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        private static int id = 0;
-        public Id<IComponent> Id { get; } = (Id<IComponent>)id++;
+        public Id<IComponent> Id { get; } = ComponentIdCounter.GetNext();
         private readonly List<IDisposable> refsToDisposeOnDestroy = new();
 
         protected void DisposeOnDestroy(params IDisposable[] references)

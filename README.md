@@ -16,6 +16,7 @@ Unity Position Based Dynamics in two dimensions
     - [Collisions](#collisions)
       - [Point Line Collision System](#point-line-collision-system)
     - [Debug](#debug)
+      - [Mouse Interaction System](#mouse-interaction-system)
     - [Graphics](#graphics)
   - [Components](#components)
     - [TriMesh](#trimesh)
@@ -51,6 +52,11 @@ For example system is responsible for resolving [TriMesh](#trimesh)-[Ground](#gr
 
 ### Debug
 
+#### Mouse Interaction System
+
+System used for interacting mouse pointer with the simulated object, rather for debug purposes.
+It works on components which implement the `IMouseInteractionComponent`.
+
 ### Graphics
 
 ## Components
@@ -63,9 +69,17 @@ One can convert sprites to simulated objects using built-in triangulator and scr
 
 Supported constraints:
 
-- Edge length constraint (see the corresponding [system](#edge-length-constraint-system)),
+- Edge length constraint (see [system](#edge-length-constraint-system)),
+- Triangle area constraint (see [system](#triangle-area-constraint-system))
 
 ### Ground
+
+As the name suggests, the component represent the plane surface.
+**TODO:**...
+
+Implemented collisions:
+
+- with [TriMesh](#trimesh).
 
 ## Dependencies
 

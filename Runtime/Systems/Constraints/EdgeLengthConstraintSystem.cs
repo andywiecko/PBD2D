@@ -39,11 +39,6 @@ namespace andywiecko.PBD2D.Systems
             private void Execute(Id<Edge> edgeId)
             {
                 var restLenght = restLengths[edgeId];
-                if (restLenght == 0f)
-                {
-                    return;
-                }
-
                 var edge = edges[edgeId];
                 var idA = edge.IdA;
                 var idB = edge.IdB;

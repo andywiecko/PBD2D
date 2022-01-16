@@ -1,0 +1,29 @@
+{
+    "name": "andywiecko.PBD2D.Tests",
+    "rootNamespace": "",
+    "references": [
+        "andywiecko.PBD2D.Systems",
+        "andywiecko.PBD2D.Core",
+        "andywiecko.BurstMathUtils",
+        "andywiecko.BurstCollections",
+        "Unity.Mathematics",
+        "Unity.Jobs",
+        "Unity.Collections",
+        "Unity.Burst"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

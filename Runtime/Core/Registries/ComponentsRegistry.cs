@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
@@ -8,7 +11,12 @@ namespace andywiecko.PBD2D.Core
     public class ComponentsRegistry
     {
         private static readonly Dictionary<Type, IReadOnlyList<(MethodInfo Add, MethodInfo Remove)>> derivedTypesInterfacesMethods = new();
-        private static readonly IReadOnlyList<Type> typesToCache = new[] { typeof(BaseComponent), typeof(ComponentsTuple) };
+        private static readonly IReadOnlyList<Type> typesToCache = new[] { typeof(BaseComponent), typeof(ComponentsTuple), typeof(FreeComponent) };
+
+#if UNITY_EDITOR
+        [InitializeOnLoadMethod]
+        private static void EditorInitialization() => Initialize();
+#endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Initialize()
@@ -38,7 +46,7 @@ namespace andywiecko.PBD2D.Core
                     list.Add(GetMethods(@interface));
                 }
             }
-            derivedTypesInterfacesMethods.Add(type, list);
+            derivedTypesInterfacesMethods.TryAdd(type, list);
 
             static (MethodInfo, MethodInfo) GetMethods(Type type)
             {
