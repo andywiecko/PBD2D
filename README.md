@@ -30,6 +30,9 @@ TODO: Add note about packages/and possible upm registry
 
 ## Introduction
 
+Position based dynamics is a great method for interactive physics simulation.
+For the newcomers the [paper][muller.2007][^1] is highly recommended.
+
 TODO: Add note about triangulation.
 
 ## Systems
@@ -101,3 +104,6 @@ Implemented collisions:
 ## Contributors
 
 - [Andrzej Więckowski, Ph.D](https://andywiecko.github.io/).
+
+[muller.2007]:https://doi.org/10.1016/j.jvcir.2007.01.005
+[^1]:M.Müller, B.Heidelberger, M.Hennix, and J.Ratcliff, "Position based dynamics," [J. Vis. Commun. Image Represent., **18**, 2 (2007)][muller.2007].
