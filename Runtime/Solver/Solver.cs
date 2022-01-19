@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Solver
 {
-    public class Solver : MonoBehaviour
+    public class Solver : MonoBehaviour, ISimulationConfigurationProvider
     {
         public event Action OnScheduling;
         public event Action OnJobsComplete;
@@ -18,7 +18,10 @@ namespace andywiecko.PBD2D.Solver
 
         private JobHandle dependencies;
 
-        private List<Func<JobHandle, JobHandle>> jobs = new List<Func<JobHandle, JobHandle>>();
+        private List<Func<JobHandle, JobHandle>> jobs = new ();
+
+        [field: SerializeField]
+        public SimulationConfiguration SimulationConfiguration { get; private set; } = new();
 
         public void ResetActions()
         {
