@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Position Based Dynamics/Step End System")]
-    public class PositionBasedDynamicsStepEndSystem : BaseSystem<IPositionBasedDynamics>
+    public class PositionBasedDynamicsStepEndSystem : SystemWithSimulationConfiguration<IPositionBasedDynamics>
     {
         [BurstCompile]
         private struct MovePositionsAndUpdateVelocityJob : IJobParallelFor
@@ -16,15 +16,15 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2> velocities;
             private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly predictedPositions;
-            private readonly float deltaTime;
+            private readonly float dt;
             private readonly NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
 
-            public MovePositionsAndUpdateVelocityJob(IPositionBasedDynamics component)
+            public MovePositionsAndUpdateVelocityJob(IPositionBasedDynamics component, float dt)
             {
                 velocities = component.Velocities;
                 positions = component.Positions;
                 predictedPositions = component.PredictedPositions.Value.AsReadOnly();
-                deltaTime = 0.001f;
+                this.dt = dt;
                 massesInv = component.MassesInv;
             }
 
@@ -34,17 +34,17 @@ namespace andywiecko.PBD2D.Systems
                 if (massesInv[pointId] != 0)
                 {
                     var predictedPosition = predictedPositions[pointId];
-                    velocities[pointId] = (predictedPosition - positions[pointId]) / deltaTime;
+                    velocities[pointId] = (predictedPosition - positions[pointId]) / dt;
                     positions[pointId] = predictedPosition;
                 }
             }
         }
 
-        public override JobHandle Schedule(JobHandle dependencies)
+        public override JobHandle Schedule(JobHandle dependencies = default)
         {
             foreach (var component in References)
             {
-                dependencies = new MovePositionsAndUpdateVelocityJob(component).Schedule(component.Positions.Value.Length, 64, dependencies);
+                dependencies = new MovePositionsAndUpdateVelocityJob(component, dt: Configuration.DeltaTime).Schedule(component.Positions.Value.Length, 64, dependencies);
             }
 
             return dependencies;
