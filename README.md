@@ -13,6 +13,7 @@ Unity Position Based Dynamics in two dimensions
       - [Position Based Dynamics](#position-based-dynamics)
       - [Edge Length Constraint System](#edge-length-constraint-system)
       - [Triangle Area Constraint System](#triangle-area-constraint-system)
+      - [Shape Matching System](#shape-matching-system)
     - [Collisions](#collisions)
       - [Point Line Collision System](#point-line-collision-system)
     - [Debug](#debug)
@@ -33,6 +34,9 @@ TODO: Add note about packages/and possible upm registry
 Position based dynamics is a great method for interactive physics simulation.
 For the newcomers the [paper][muller.2007][^1] is highly recommended.
 
+... or [survey][bender.2017][^3]
+
+
 TODO: Add note about triangulation.
 
 ## Systems
@@ -51,6 +55,10 @@ Constraint is defined in the following way
 where _l_ is rest length of the edge (_p₁, p₂_).
 
 #### Triangle Area Constraint System
+
+#### Shape Matching System
+
+[paper][muller.2005][^2]
 
 ### Collisions
 
@@ -107,3 +115,9 @@ Implemented collisions:
 
 [muller.2007]:https://doi.org/10.1016/j.jvcir.2007.01.005
 [^1]:M.Müller, B.Heidelberger, M.Hennix, and J.Ratcliff, "Position based dynamics," [J. Vis. Commun. Image Represent., **18**, 2 (2007)][muller.2007].
+
+[muller.2005]:https://doi.org/10.1145/1073204.1073216
+[^2]:M.Müller, B.Heidelberger, M.Teschner, and M.Gros, "Meshless deformations based on shape matching," [ACM Trans. Graph. **24**, 3 (2005)][muller.2005].
+
+[bender.2017]:https://doi.org/10.2312/egt.20171034
+[^3]:J.Bender, M.Müller, and M.Macklin, [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)][bender.2017].
