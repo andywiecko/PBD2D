@@ -12,11 +12,11 @@ namespace andywiecko.PBD2D.Solver
 
     public class SolverJobsGenerator : ISolverJobsGenerator
     {
-        private readonly ISolverOptions options;
+        private IReadOnlyDictionary<SimulationStep, List<Type>> systemOrder;
 
-        public SolverJobsGenerator(ISolverOptions options)
+        public SolverJobsGenerator(ISolverSystemsExecutionOrder options)
         {
-            this.options = options;
+            systemOrder = options.GetSystemOrder();
         }
 
         private class SetPhysicStateHelper
@@ -64,7 +64,7 @@ namespace andywiecko.PBD2D.Solver
         private List<Func<JobHandle, JobHandle>> GetJobsFor(SimulationStep step)
         {
             var jobs = new List<Func<JobHandle, JobHandle>>();
-            foreach (var type in options.SystemOrder[step])
+            foreach (var type in systemOrder[step])
             {
                 foreach (var system in SystemsRegistry.SystemsOf(type))
                 {

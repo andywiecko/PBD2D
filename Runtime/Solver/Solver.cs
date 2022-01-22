@@ -11,14 +11,15 @@ namespace andywiecko.PBD2D.Solver
         public event Action OnScheduling;
         public event Action OnJobsComplete;
 
-        private ISolverOptions options;
-        private ISolverJobsConfiguration configuration;
         private ISolverJobsGenerator jobsGenerator;
         private ISolverActionsGenerator actionsGenerator;
 
         private JobHandle dependencies;
 
-        private List<Func<JobHandle, JobHandle>> jobs = new ();
+        private List<Func<JobHandle, JobHandle>> jobs = new();
+
+        [field: SerializeField]
+        public SolverSystemsExecutionOrder JobsExecutionOrder { get; private set; } = default;
 
         [field: SerializeField]
         public SimulationConfiguration SimulationConfiguration { get; private set; } = new();
@@ -32,9 +33,7 @@ namespace andywiecko.PBD2D.Solver
         private void Awake()
         {
             dependencies = new JobHandle();
-            configuration = new SolverJobsConfiguration();
-            options = configuration.Configure(new SolverOptions());
-            jobsGenerator = new SolverJobsGenerator(options);
+            jobsGenerator = new SolverJobsGenerator(JobsExecutionOrder);
             actionsGenerator = new SolverActionsGenerator(this);
 
             SystemsRegistry.OnRegistryChange += RegenerateJobsList;

@@ -61,9 +61,14 @@ namespace andywiecko.PBD2D
         public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
     }
 
+    public interface ISolverSystemsExecutionOrder
+    {
+        public IReadOnlyDictionary<SimulationStep, List<Type>> GetSystemOrder();
+    }
+
     [CreateAssetMenu(fileName = "SolverSystemsExecutionOrder",
         menuName = "PBD2D/Solver/Solver Systems Execution Order")]
-    public class SolverSystemsExecutionOrder : ScriptableObject
+    public class SolverSystemsExecutionOrder : ScriptableObject, ISolverSystemsExecutionOrder
     {
         private static Type[] types;
         private static readonly Dictionary<Type, string> typeToGuid = new();
@@ -93,7 +98,7 @@ namespace andywiecko.PBD2D
                 }
                 else
                 {
-                    Debug.Log($"Error {type}"); // throw something
+                    throw new NotImplementedException("This Type-GUID case is not handled yet.");
                 }
             }
         }
@@ -148,6 +153,27 @@ namespace andywiecko.PBD2D
         [Space(30)]
         [SerializeField]
         private List<UnconfiguredType> undefinedTypes = new();
+
+        private readonly Dictionary<SimulationStep, List<Type>> systemOrder = new();
+
+        public IReadOnlyDictionary<SimulationStep, List<Type>> GetSystemOrder()
+        {
+            systemOrder.Clear();
+
+            foreach (var s in SystemExtensions.GetValues<SimulationStep>())
+            {
+                var list = GetListAtStep(s);
+                if (list is null) continue;
+                var types = new List<Type>(capacity: list.Count);
+                foreach (var st in list)
+                {
+                    types.Add(st.Value);
+                }
+                systemOrder.Add(s, types);
+            }
+
+            return systemOrder;
+        }
 
         private void OnValidate()
         {

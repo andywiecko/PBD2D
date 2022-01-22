@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff7cfd002b57be42b2fb365812a1161, type: 3}
+  m_Name: DefaultSystemsExecutionOrder
+  m_EditorClassIdentifier: 
+  frameStart:
+  - tag: External Edges Collider Tri Mesh System
+    <Guid>k__BackingField: d4fd831654392cd4f877bb83a422b160
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.ExternalEdgesColliderTriMeshSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Triangles Collider Tri Mesh System
+    <Guid>k__BackingField: 46de8ccdbefab934c9bf9fa6dd180b42
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.TrianglesColliderTriMeshSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Triangle Bounding Volume Tree Tri Mesh System
+    <Guid>k__BackingField: cb49aaae5573b3943b31d821fa6f3360
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleBoundingVolumeTreeTriMeshSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  stepStart:
+  - tag: Position Based Dynamics Step Start System
+    <Guid>k__BackingField: e09d1af8e500096498f1414949b909bc
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepStartSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  subStep:
+  - tag: Edge Length Constraint System
+    <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.EdgeLengthConstraintSystem, andywiecko.PBD2D.Systems,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Triangle Area Constraint System
+    <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleAreaConstraintSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Shape Matching Constraint System
+    <Guid>k__BackingField: 538b76c4234524e4b8b9b7faa5d6e9aa
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.ShapeMatchingConstraintSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Mouse Interaction System
+    <Guid>k__BackingField: 9a89fe673d7a53a438bda9e23d905790
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Point Line Collision System
+    <Guid>k__BackingField: 2ed1a7a66d14f2d42a1643f489f93c4e
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.PointLineCollisionSystem, andywiecko.PBD2D.Systems,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Capsule Capsule Collision System
+    <Guid>k__BackingField: 9524172c6d9c1bb449f00373f3c017ab
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  stepEnd:
+  - tag: Position Based Dynamics Step End System
+    <Guid>k__BackingField: 088831c1e88b859458a06401f038b333
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepEndSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  frameEnd:
+  - tag: Tri Mesh Renderer System
+    <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  undefinedTypes: []
