@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace andywiecko.PBD2D.Core
@@ -34,5 +35,7 @@ namespace andywiecko.PBD2D.Core
                 }
             }
         }
+
+        public static T[] GetValues<T>() where T : Enum => Enum.GetValues(typeof(T)).Cast<T>().ToArray();
     }
 }
