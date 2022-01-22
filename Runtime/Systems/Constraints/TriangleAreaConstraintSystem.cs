@@ -31,26 +31,29 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute()
             {
-                foreach (var (triId, triangle) in triangles.IdsValues)
+                foreach (var i in 0..triangles.Length)
                 {
-                    if (triangle.IsEnabled)
-                    {
-                        ApplyAreaConstraint(triId, triangle);
-                    }
+                    ApplyAreaConstraint((Id<Triangle>)i);
                 }
             }
 
-            private void ApplyAreaConstraint(Id<Triangle> triId, Triangle triangle)
+            private void ApplyAreaConstraint(Id<Triangle> triId)
             {
+                var triangle = triangles[triId];
                 var (idA, idB, idC) = triangle;
-                var (pA, pB, pC) = (positions[idA], positions[idB], positions[idC]);
-                var (mInvA, mInvB, mInvC) = (massesInv[idA], massesInv[idB], massesInv[idC]);
-
-                var restArea2 = restAreas2[triId];
+                var (pA, pB, pC) = positions.At(triangle);
+                var (mInvA, mInvB, mInvC) = massesInv.At(triangle);
 
                 var pAB = pB - pA;
                 var pAC = pC - pA;
                 var pBC = pC - pB;
+
+                var lambda = mInvA * math.lengthsq(pBC) + mInvB * math.lengthsq(pAC) + mInvC * math.lengthsq(pAB);
+                if (lambda < Constants.FloatEpsilon)
+                {
+                    return;
+                }
+                lambda = stiffness / lambda;
 
                 var A = MathUtils.Cross(pAB, pAC);
                 if (math.abs(A) < Constants.FloatEpsilon)
@@ -58,24 +61,14 @@ namespace andywiecko.PBD2D.Systems
                     return;
                 }
 
-                var C = A - restArea2;
-
-                //var lambda = 0.5f * math.sign(A) * (mInvA * math.lengthsq(pBC) + mInvB * math.lengthsq(pAC) + mInvC * math.lengthsq(pAB));
-                var lambda = mInvA * math.lengthsq(pBC) + mInvB * math.lengthsq(pAC) + mInvC * math.lengthsq(pAB);
-                if (lambda < Constants.FloatEpsilon)
-                {
-                    return;
-                }
-
-                lambda = stiffness / lambda;
-
+                var C = A - restAreas2[triId];
                 positions[idA] += lambda * mInvA * C * MathUtils.Rotate90CW(pBC);
-                positions[idB] -= lambda * mInvB * C * MathUtils.Rotate90CW(pAC);
+                positions[idB] += lambda * mInvB * C * MathUtils.Rotate90CW(-pAC);
                 positions[idC] += lambda * mInvC * C * MathUtils.Rotate90CW(pAB);
             }
         }
 
-        public override JobHandle Schedule(JobHandle dependencies)
+        public override JobHandle Schedule(JobHandle dependencies = default)
         {
             foreach (var constraint in References)
             {

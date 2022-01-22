@@ -40,19 +40,16 @@ namespace andywiecko.PBD2D.Systems
             {
                 var restLenght = restLengths[edgeId];
                 var edge = edges[edgeId];
-                var idA = edge.IdA;
-                var idB = edge.IdB;
+                var (idA, idB) = edge;
 
-                var wA = massesInv[idA];
-                var wB = massesInv[idB];
+                var (wA, wB) = massesInv.At(edge);
                 var wAB = wA + wB;
                 if (wAB <= Constants.FloatEpsilon)
                 {
                     return;
                 }
 
-                var pA = predictedPositions[idA];
-                var pB = predictedPositions[idB];
+                var (pA, pB) = predictedPositions.At(edge);
                 var pAB = pB - pA;
                 var length = math.length(pAB);
                 if (length < Constants.FloatEpsilon)

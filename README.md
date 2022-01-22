@@ -50,11 +50,19 @@ TODO: Add note about triangulation.
 System responsible for resolving edge length constraint, the most common constraint in PBD simulation.
 Constraint is defined in the following way
 
-![Figure](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2)=\|p_1-p_2\|-\ell)
+![Figure](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2)=\|\vec&space;p_1-\vec&space;p_2\|-\ell)
 
 where _l_ is rest length of the edge (_p₁, p₂_).
 
 #### Triangle Area Constraint System
+
+System responsible for resolving triangle area (signed) constraint.
+Constraint enforces that triangle area is conserved during the simulation.
+The constraint function is defined in the following way
+
+![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2,p_3)=\vec&space;p_{12}\times&space;\vec&space;p_{13}-A)
+
+where _pᵢⱼ_=_pⱼ_-_pᵢ_ and _A_ is 2 times rest area of the triangle (_p₁_,	_p₂_,	_p₃_).
 
 #### Shape Matching System
 
@@ -120,4 +128,4 @@ Implemented collisions:
 [^2]:M.Müller, B.Heidelberger, M.Teschner, and M.Gros, "Meshless deformations based on shape matching," [ACM Trans. Graph. **24**, 3 (2005)][muller.2005].
 
 [bender.2017]:https://doi.org/10.2312/egt.20171034
-[^3]:J.Bender, M.Müller, and M.Macklin, [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)][bender.2017].
+[^3]:J.Bender, M.Müller, and M.Macklin, "A Survey on Position Based Dynamics," [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)][bender.2017].
