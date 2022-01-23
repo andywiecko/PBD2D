@@ -30,15 +30,7 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute()
             {
-                var com = float2.zero;
-                foreach (var (pId, p) in positions.IdsValues)
-                {
-                    var m = 1 / massesInv[pId];
-                    com += m * p;
-                }
-                com /= M;
-
-                this.com.Value = com;
+                com.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, massesInv, totalMass: M);
             }
         }
 
@@ -47,14 +39,13 @@ namespace andywiecko.PBD2D.Systems
         {
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private NativeIndexedArray<Id<Point>, float2> relativePositions;
-            [ReadOnly]
-            private NativeReference<float2> com;
+            private NativeReference<float2>.ReadOnly com;
 
             public CalculateRelativePositionsJob(IShapeMatchingConstraint component)
             {
                 positions = component.PredictedPositions.Value.AsReadOnly();
                 relativePositions = component.RelativePositions;
-                com = component.CenterOfMass;
+                com = component.CenterOfMass.Value.AsReadOnly();
             }
 
             public JobHandle Schedule(JobHandle dependencies)
@@ -99,51 +90,32 @@ namespace andywiecko.PBD2D.Systems
             }
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         private struct CalculateRotationMatrixJob : IJob
         {
-            private NativeReference<float2x2>.ReadOnly Apq;
+            private NativeReference<float2x2>.ReadOnly ApqRef;
             private readonly float2x2 Aqq;
 
-            public NativeReference<Complex> R;
-            public NativeReference<float2x2> A;
+            public NativeReference<Complex> RRef;
+            public NativeReference<float2x2> ARef;
             private readonly float beta;
 
             public CalculateRotationMatrixJob(IShapeMatchingConstraint component)
             {
-                Apq = component.ApqMatrix.Value.AsReadOnly();
+                ApqRef = component.ApqMatrix.Value.AsReadOnly();
                 Aqq = component.AqqMatrix;
-                R = component.Rotation;
-                A = component.AMatrix;
+                RRef = component.Rotation;
+                ARef = component.AMatrix;
                 beta = component.Beta;
             }
 
             public void Execute()
             {
-                /*
-                var A = math.mul(Apq.Value, Aqq);
-                //var A = Apq.Value;
-                var r = MathUtils.PolarDecomposition(A, R.Value);
-                Debug.Log(MathUtils.FrobeniusNorm(A - r.ToMatrix()));
-                //var r = MathUtils.PolarDecomposition(A);
-                R.Value = r;
-                this.A.Value = beta * A + (1 - beta) * R.Value.ToMatrix();
-                */
-
-                /*
-                var matrix = math.mul(math.transpose(Apq.Value), Apq.Value);
-                MathUtils.EigenDecomposition(matrix, out var eigval, out var eigvec);
-                var lambdas = math.rsqrt(math.abs(eigval)).ToDiag();
-                R.Value = new Complex(math.mul(Apq.Value, lambdas.Transform(eigvec)));
-                this.A.Value =  R.Value.ToMatrix();
-                */
-
-                var A = Apq.Value;
-                //var A = math.mul(Apq.Value, Aqq);
-                var V = A + math.determinant(A) * math.inverse(math.transpose(A));
-                V *= math.rsqrt(math.abs(math.determinant(V)));
-                R.Value = new Complex(V);
-                this.A.Value = beta * math.mul(A, Aqq) + (1 - beta) * V;
+                var Apq = ApqRef.Value;
+                MathUtils.PolarDecomposition(Apq, out var V);
+                RRef.Value = new Complex(V);
+                var A = math.mul(Apq, Aqq);
+                ARef.Value = beta * A + (1 - beta) * V;
             }
         }
 
@@ -152,21 +124,17 @@ namespace andywiecko.PBD2D.Systems
         {
             private NativeIndexedArray<Id<Point>, float2> positions;
             private readonly float k;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
-            [ReadOnly]
-            private NativeReference<float2x2> ARef;
+            private NativeReference<float2x2>.ReadOnly ARef;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly initialRelativePositions;
-            [ReadOnly]
-            private NativeReference<float2> comRef;
+            private NativeReference<float2>.ReadOnly comRef;
 
             public ApplyShapeMatchingConstraintJob(IShapeMatchingConstraint component)
             {
                 positions = component.PredictedPositions;
                 k = component.Stiffness;
-                massesInv = component.MassesInv;
-                ARef = component.AMatrix;
+                ARef = component.AMatrix.Value.AsReadOnly();
                 initialRelativePositions = component.InitialRelativePositions;
-                comRef = component.CenterOfMass;
+                comRef = component.CenterOfMass.Value.AsReadOnly();
             }
 
             public JobHandle Schedule(JobHandle dependencies)
@@ -186,7 +154,7 @@ namespace andywiecko.PBD2D.Systems
             }
         }
 
-        public override JobHandle Schedule(JobHandle dependencies)
+        public override JobHandle Schedule(JobHandle dependencies = default)
         {
             foreach (var component in References)
             {

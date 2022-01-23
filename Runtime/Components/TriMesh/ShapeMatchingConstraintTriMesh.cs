@@ -1,7 +1,6 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
 using andywiecko.PBD2D.Core;
-using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -40,21 +39,8 @@ namespace andywiecko.PBD2D.Components
             triMesh = GetComponent<TriMesh>();
             var pointsCount = triMesh.Positions.Value.Length;
 
-            var M = 0f;
-            var com = float2.zero;
-            foreach (var (pId, p) in triMesh.Positions.Value.IdsValues)
-            {
-                var m = 1 / MassesInv[pId];
-                com += m * p;
-                M += m;
-            }
-            com /= M;
-            TotalMass = M;
-
-            var managedInitialRelativePositions = triMesh.Positions.Value.Select(i => i - com).ToArray();
-
             DisposeOnDestroy(
-                initialRelativePositions = new NativeIndexedArray<Id<Point>, float2>(managedInitialRelativePositions, Allocator.Persistent),
+                initialRelativePositions = new NativeIndexedArray<Id<Point>, float2>(pointsCount, Allocator.Persistent),
                 RelativePositions = new NativeIndexedArray<Id<Point>, float2>(pointsCount, Allocator.Persistent),
                 CenterOfMass = new NativeReference<float2>(Allocator.Persistent),
                 ApqMatrix = new NativeReference<float2x2>(Allocator.Persistent),
@@ -62,14 +48,35 @@ namespace andywiecko.PBD2D.Components
                 Rotation = new NativeReference<Complex>(Complex.Identity, Allocator.Persistent)
             );
 
-            var Aqq = float2x2.zero;
-            foreach (var (pId, p) in triMesh.Positions.Value.IdsValues)
+            TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv);
+            CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, MassesInv, TotalMass);
+            ShapeMatchingUtils.CalculateRelativePositions(initialRelativePositions, triMesh.Positions.Value, CenterOfMass.Value.Value);
+            AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(initialRelativePositions, MassesInv);
+
+            var a = 4;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if(!Application.isPlaying)
             {
-                var m = 1 / triMesh.MassesInv.Value[pId];
-                var q = p - com;
-                Aqq += m * MathUtils.OuterProduct(q, q);
+                return;
             }
-            AqqMatrix = math.inverse(Aqq);
+
+            DrawRotation();
+        }
+
+        private void DrawRotation()
+        {
+            var com = CenterOfMass.Value.Value.ToFloat3();
+            var R = Rotation.Value.Value;
+            var right = R.Value.ToFloat3();
+            var up = MathUtils.Rotate90CCW(R.Value).ToFloat3();
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(com, right);
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(com, up);
         }
     }
 }
