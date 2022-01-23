@@ -13,7 +13,7 @@ Unity Position Based Dynamics in two dimensions
       - [Position Based Dynamics](#position-based-dynamics)
       - [Edge Length Constraint System](#edge-length-constraint-system)
       - [Triangle Area Constraint System](#triangle-area-constraint-system)
-      - [Shape Matching System](#shape-matching-system)
+      - [Shape Matching Constraint System](#shape-matching-constraint-system)
     - [Collisions](#collisions)
       - [Point Line Collision System](#point-line-collision-system)
     - [Debug](#debug)
@@ -24,6 +24,7 @@ Unity Position Based Dynamics in two dimensions
     - [Ground](#ground)
   - [Dependencies](#dependencies)
   - [Contributors](#contributors)
+  - [Bibliography](#bibliography)
 
 ## Getting started
 
@@ -64,9 +65,34 @@ The constraint function is defined in the following way
 
 where _pᵢⱼ_=_pⱼ_-_pᵢ_ and _A_ is 2 times rest area of the triangle (_p₁_,	_p₂_,	_p₃_).
 
-#### Shape Matching System
+#### Shape Matching Constraint System
 
-[paper][muller.2005][^2]
+The system is responsible for resolving the shape matching constraint.
+Shape matching formulation can be found in the
+[paper][muller.2005][^2].
+The method has many advantages:
+
+- can be easly embeded withing PBD framework,
+- can be used for simulation _meshless_ objects,
+- it is computationally cheap,
+- can be used for simulation (quasi) rigid bodies.
+
+Shape matching problem can be formulated using the following function
+
+![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;f(\vec&space;p,\vec&space;q)=\sum_i&space;w_i\left(R\vec&space;q_i-\vec&space;p_i\right)^2)
+
+where weight _wᵢ_ corresponds to inverse mass,
+_qᵢ_ to the initial relative position with respect to the initial center of mass _t₀_,
+and _pᵢ_ to the current relative position with respect to the current center of mass _t_.
+
+The goal is to find rotation _R_, and translation _t_ that minimizes the function _f(p,q)_.
+It can be shown analytically that such rotation _R_ can be found as a rotational part of the given matrix
+
+![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;A_{pq}=\sum_im_i\vec&space;p_i\vec&space;q_i^\mathsf{T})
+
+System supports the linear deformation model (see [^2] for more details).
+
+**TODO:...**
 
 ### Collisions
 
@@ -96,7 +122,8 @@ One can convert sprites to simulated objects using built-in triangulator and scr
 Supported constraints:
 
 - Edge length constraint (see [system](#edge-length-constraint-system)),
-- Triangle area constraint (see [system](#triangle-area-constraint-system))
+- Triangle area constraint (see [system](#triangle-area-constraint-system)),
+- Shape matching constraint (see [system](#shape-matching-constraint-system))
 
 ### Ground
 
@@ -120,6 +147,8 @@ Implemented collisions:
 ## Contributors
 
 - [Andrzej Więckowski, Ph.D](https://andywiecko.github.io/).
+
+## Bibliography
 
 [muller.2007]:https://doi.org/10.1016/j.jvcir.2007.01.005
 [^1]:M.Müller, B.Heidelberger, M.Hennix, and J.Ratcliff, "Position based dynamics," [J. Vis. Commun. Image Represent., **18**, 2 (2007)][muller.2007].
