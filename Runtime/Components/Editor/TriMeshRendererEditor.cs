@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Components.Editor
 {
@@ -8,18 +7,16 @@ namespace andywiecko.PBD2D.Components.Editor
     {
         private TriMeshRenderer TriMeshRenderer => target as TriMeshRenderer;
 
-        private bool duringEditor = false;
-
-        private void OnEnable() => duringEditor = Application.isEditor && !Application.isPlaying;
-
         private void OnDestroy()
         {
-            if (duringEditor && TriMeshRenderer == null)
+            if(EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                if (TriMeshRenderer.RendererTransform != null)
-                {
-                    DestroyImmediate(TriMeshRenderer.RendererTransform.gameObject);
-                }
+                return;
+            }
+
+            if (TriMeshRenderer == null && TriMeshRenderer.RendererTransform != null)
+            {
+                DestroyImmediate(TriMeshRenderer.RendererTransform.gameObject);
             }
         }
     }

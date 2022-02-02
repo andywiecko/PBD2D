@@ -3,6 +3,7 @@ using andywiecko.PBD2D.Core;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
@@ -11,6 +12,9 @@ namespace andywiecko.PBD2D.Components
     [CreateAssetMenu(fileName = "TriMeshSerializedData (Triangulator)", menuName = "PBD2D/ScriptableObjects/TriMeshSerializedData (Triangulator)")]
     public class TriMeshSerializedDataTriangulator : TriMeshSerializedData
     {
+        [field: SerializeField, HideInInspector]
+        public override Mesh Mesh { get; protected set; } = default;
+
         [field: SerializeField]
         private Texture2D texture = default;
 
@@ -46,6 +50,26 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField, HideInInspector]
         public float2[] colliderPoints { get; private set; } = default;
 
+        public void RegenerateMesh()
+        {
+            if (Mesh != null)
+            {
+                AssetDatabase.RemoveObjectFromAsset(Mesh);
+            }
+            Mesh = CreateMesh();
+            Mesh.name = "Generated Mesh";
+            AssetDatabase.AddObjectToAsset(Mesh, this);
+
+            Mesh CreateMesh()
+            {
+                var mesh = new Mesh(); 
+                mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
+                mesh.SetTriangles(Triangles, submesh: 0);
+                mesh.SetUVs(0, UVs);
+                return mesh;
+            }
+        }
+
         private void GetPointsFromCollider()
         {
             if (texture != null)
@@ -61,13 +85,16 @@ namespace andywiecko.PBD2D.Components
 
                 DestroyImmediate(go);
             }
-
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.delayCall -= GetPointsFromCollider;
+#endif 
         }
 
         private void OnValidate()
         {
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.delayCall += GetPointsFromCollider;
+#endif
         }
 
         public void CopyDataFromTriangulation(Triangulator triangulator)
@@ -96,7 +123,6 @@ namespace andywiecko.PBD2D.Components
 
             Edges = edgeIds.ToArray();
 
-
             var edgesCount = Edges.Length / 2;
 
             var localMassInv = pointsCount / totalMass;
@@ -104,7 +130,7 @@ namespace andywiecko.PBD2D.Components
             RestLengths = Enumerable.Range(0, edgesCount).Select(i =>
             {
                 var (e1, e2) = (Edges[2 * i], Edges[2 * i + 1]);
-                var (pA, pB) = (Positions[(int)e1], Positions[(int)e2]);
+                var (pA, pB) = (Positions[e1], Positions[e2]);
                 return math.distance(pA, pB);
             }).ToArray();
 

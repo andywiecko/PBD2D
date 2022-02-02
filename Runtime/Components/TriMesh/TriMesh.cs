@@ -58,6 +58,12 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
+            UnityEditor.EditorApplication.delayCall += DelayedOnValidate;
+        }
+
+        private void DelayedOnValidate()
+        {
+            UnityEditor.EditorApplication.delayCall -= DelayedOnValidate;
             if (SerializedData != serializedData)
             {
                 OnSerializedDataChange?.Invoke();
