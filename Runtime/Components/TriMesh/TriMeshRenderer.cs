@@ -2,7 +2,6 @@ using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
@@ -17,67 +16,16 @@ namespace andywiecko.PBD2D.Components
         private TriMesh TriMesh => triMesh == null ? triMesh = GetComponent<TriMesh>() : triMesh;
         private TriMesh triMesh;
 
-        [field: SerializeField, HideInInspector]
-        public Transform RendererTransform { get; private set; } = default;
+        [field: SerializeField, /*HideInInspector*/]
+        public Transform RendererTransform { get; set; } = default;
 
         private Mesh Mesh { get => meshFilter.mesh; set => meshFilter.mesh = value; }
-        [SerializeField, HideInInspector]
         private MeshFilter meshFilter;
-
-        private void OnValidate()
-        {
-            if (EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                return;
-            }
-
-            TriMesh.OnSerializedDataChange += DelayedOnValidate;
-
-            if (RendererTransform is null)
-            {
-                EditorApplication.delayCall += DelayedOnValidate;
-            }
-        }
-
-        private void DelayedOnValidate()
-        {
-            EditorApplication.delayCall -= DelayedOnValidate;
-
-            var newTransform = TryCreateRendererTransform();
-            if (newTransform == null) return;
-            RendererTransform =newTransform;
-            RendererTransform.TryAddComponent<MeshRenderer>();
-            meshFilter = RendererTransform.TryAddComponent<MeshFilter>();
-            var mesh = GetComponent<TriMesh>().SerializedData.Mesh;
-            Mesh = Instantiate(mesh);
-        }
-
-        private Transform TryCreateRendererTransform()
-        {
-            if (this == null || transform == null) return default;
-
-            var name = nameof(TriMeshRenderer);
-            var rendererTransform = transform.Find(name);
-
-            if (rendererTransform == null)
-            {
-                rendererTransform = new GameObject(name).transform;
-                rendererTransform.SetParent(transform);
-                rendererTransform.localPosition = float3.zero;
-            }
-            return rendererTransform;
-        }
-
-        protected override void OnDestroy()
-        {
-            TriMesh.OnSerializedDataChange -= DelayedOnValidate;
-
-            base.OnDestroy();
-        }
 
         private void Start()
         {
             RendererTransform.position = float3.zero;
+            meshFilter = RendererTransform.GetComponent<MeshFilter>();
 
             DisposeOnDestroy(
                 MeshVertices = new NativeArray<float3>(TriMesh.Positions.Value.Length, Allocator.Persistent)
