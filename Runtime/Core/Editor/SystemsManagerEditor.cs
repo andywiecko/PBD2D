@@ -1,8 +1,10 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +16,9 @@ namespace andywiecko.PBD2D.Core.Editor
         private static readonly IReadOnlyDictionary<string, Dictionary<Type, string>> categoryToTypes;
 
         private SystemsManager Target => target as SystemsManager;
+
+        private PrefabStage prefabStage;
+        private (bool isPrefabInstance, bool isPrefabAsset, bool isStage) targetStatus;
 
         static SystemsManagerEditor()
         {
@@ -39,12 +44,27 @@ namespace andywiecko.PBD2D.Core.Editor
             categoryToTypes = tmp;
         }
 
+        private void OnEnable()
+        {
+            targetStatus.isPrefabInstance = PrefabUtility.IsPartOfPrefabInstance(target);
+            targetStatus.isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(target);
+            prefabStage = PrefabStageUtility.GetPrefabStage(Target.gameObject);
+            targetStatus.isStage = prefabStage != null;
+        }
+
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
 
-            root.Add(new IMGUIContainer(base.OnInspectorGUI));
-            root.Add(SystemsList());
+            if (targetStatus.isPrefabAsset)
+            {
+                root.Add(new HelpBox("Editing in asset view is not supported.\nPlease open prefab in isolation mode.", HelpBoxMessageType.Warning));
+            }
+            else
+            {
+                root.Add(new IMGUIContainer(base.OnInspectorGUI));
+                root.Add(SystemsList());
+            }
 
             return root;
         }
@@ -71,7 +91,7 @@ namespace andywiecko.PBD2D.Core.Editor
         protected VisualElement CreateToggleButtonForType(Type type, string category, string name)
         {
             var categoryComponent = Target.transform.Find(category);
-            if(categoryComponent == null)
+            if (categoryComponent == null)
             {
                 categoryComponent = new GameObject(category).transform;
                 categoryComponent.transform.parent = Target.transform;
@@ -81,19 +101,87 @@ namespace andywiecko.PBD2D.Core.Editor
             var toggle = new Toggle(name) { value = value };
             toggle.RegisterValueChangedCallback((evt) =>
             {
-                switch (evt.newValue)
+                switch (targetStatus)
                 {
-                    case true:
-                        Undo.AddComponent(categoryComponent.gameObject, type);
+                    case (false, false, false):
+                        NonPrefabInstanceCase(evt.newValue, categoryComponent, type);
                         break;
 
-                    case false:
-                        DestroyImmediate(categoryComponent.GetComponent(type));
+                    case (true, false, false):
+                        PrefabInstanceCase(evt.newValue, categoryComponent, type);
                         break;
+
+                    case (false, false, true):
+                        PrefabAssetIsolationStageCase(evt.newValue, categoryComponent, type);
+                        break;
+
+                    case (false, true, false):
+                        // TODO: PrefabAssetNonIsolationStageCase
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
                 }
 
             });
             return toggle;
         }
+
+        private void NonPrefabInstanceCase(bool value, Transform category, Type type)
+        {
+            switch (value)
+            {
+                case true:
+                    Undo.AddComponent(category.gameObject, type);
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(category.GetComponent(type));
+                    break;
+            }
+        }
+
+        private void PrefabInstanceCase(bool value, Transform category, Type type)
+        {
+            switch (value)
+            {
+                case true:
+                    var removedComponent = PrefabUtility
+                        .GetRemovedComponents(category.gameObject)
+                        .FirstOrDefault(c => c.assetComponent.GetType() == type);
+
+                    if (removedComponent != null)
+                    {
+                        removedComponent.Revert();
+                    }
+                    else
+                    {
+                        Undo.AddComponent(category.gameObject, type);
+                    }
+
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(category.GetComponent(type));
+                    break;
+            }
+        }
+
+        private void PrefabAssetIsolationStageCase(bool value, Transform category, Type type)
+        {
+            switch (value)
+            {
+                case true:
+                    Undo.AddComponent(category.gameObject, type);
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(category.GetComponent(type));
+                    break;
+            }
+
+            EditorUtility.SetDirty(target);
+        }
     }
 }
+#endif
