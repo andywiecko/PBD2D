@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,9 @@ namespace andywiecko.PBD2D.Components.Editor
         protected T Target => target as T;
         private static readonly Type TargetType = typeof(T);
         private static readonly IReadOnlyDictionary<string, Dictionary<Type, string>> categoryToTypes;
+
+        private PrefabStage prefabStage;
+        private (bool isPrefabInstance, bool isPrefabAsset, bool isStage) targetStatus;
 
         static BaseComponentEditor()
         {
@@ -52,7 +56,15 @@ namespace andywiecko.PBD2D.Components.Editor
             var root = new VisualElement();
 
             root.Add(new IMGUIContainer(base.OnInspectorGUI));
-            root.Add(ComponentsList());
+
+            if (targetStatus.isPrefabAsset)
+            {
+                root.Add(new HelpBox("Editing in asset view is not supported.\nPlease open prefab in isolation mode.", HelpBoxMessageType.Warning));
+            }
+            else
+            {
+                root.Add(ComponentsList());
+            }
 
             return root;
         }
@@ -82,18 +94,106 @@ namespace andywiecko.PBD2D.Components.Editor
             var toggle = new Toggle(name) { value = value };
             toggle.RegisterValueChangedCallback((evt) =>
             {
-                switch (evt.newValue)
+                switch (targetStatus)
                 {
-                    case true:
-                        Undo.AddComponent(Target.gameObject, type);
+                    case (false, false, false):
+                        NonPrefabInstanceCase(evt.newValue, type);
                         break;
 
-                    case false:
-                        DestroyImmediate(Target.GetComponent(type));
+                    case (true, false, false):
+                        PrefabInstanceCase(evt.newValue, type);
                         break;
+
+                    case (false, false, true):
+                        PrefabAssetIsolationStageCase(evt.newValue, type);
+                        break;
+
+                    case (false, true, false):
+                        // TODO: PrefabAssetNonIsolationStageCase
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
                 }
+
+
+
             });
             return toggle;
+        }
+
+        private void PrefabAssetIsolationStageCase(bool newValue, Type type)
+        {
+            switch (newValue)
+            {
+                case true:
+                    Undo.AddComponent(Target.gameObject, type);
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(Target.GetComponent(type));
+                    break;
+            }
+
+            EditorUtility.SetDirty(target);
+        }
+
+        private void PrefabInstanceCase(bool value, Type type)
+        {
+            switch (value)
+            {
+                case true:
+                    var removedComponent = PrefabUtility
+                        .GetRemovedComponents(Target.gameObject)
+                        .FirstOrDefault(c => c.assetComponent.GetType() == type);
+
+                    if (removedComponent != null)
+                    {
+                        removedComponent.Revert();
+                    }
+                    else
+                    {
+                        Undo.AddComponent(Target.gameObject, type);
+                    }
+
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(Target.GetComponent(type));
+                    break;
+            }
+        }
+
+        private void NonPrefabInstanceCase(bool newValue, Type type)
+        {
+            switch (newValue)
+            {
+                case true:
+                    Undo.AddComponent(Target.gameObject, type);
+                    break;
+
+                case false:
+                    Undo.DestroyObjectImmediate(Target.GetComponent(type));
+                    break;
+            }
+        }
+
+        private void OnEnable()
+        {
+            RefreshTargetStatus();
+        }
+
+        private void OnValidate()
+        {
+            RefreshTargetStatus();
+        }
+
+        private void RefreshTargetStatus()
+        {
+            targetStatus.isPrefabInstance = PrefabUtility.IsPartOfPrefabInstance(target);
+            targetStatus.isPrefabAsset = PrefabUtility.IsPartOfPrefabAsset(target);
+            prefabStage = PrefabStageUtility.GetPrefabStage(Target.gameObject);
+            targetStatus.isStage = prefabStage != null;
         }
     }
 }
