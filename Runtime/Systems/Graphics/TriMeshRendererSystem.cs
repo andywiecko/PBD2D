@@ -34,6 +34,7 @@ namespace andywiecko.PBD2D.Systems
             }
         }
 
+        [SolverAction]
         public void Redraw()
         {
             foreach (var renderer in References)

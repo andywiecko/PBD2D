@@ -27,6 +27,7 @@ namespace andywiecko.PBD2D.Systems
             }
         }
 
+        [SolverAction]
         public void MouseInteractionUpdate()
         {
             grabBody = false;

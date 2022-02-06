@@ -12,7 +12,7 @@ namespace andywiecko.PBD2D.Solver
         public event Action OnJobsComplete;
 
         private ISolverJobsGenerator jobsGenerator;
-        private ISolverActionsGenerator actionsGenerator;
+        private SolverActionsGenerator actionsGenerator;
 
         private JobHandle dependencies;
 
@@ -20,6 +20,9 @@ namespace andywiecko.PBD2D.Solver
 
         [field: SerializeField]
         public SolverSystemsExecutionOrder JobsExecutionOrder { get; private set; } = default;
+
+        [field: SerializeField]
+        public SolverActionsExecutionOrder ActionsExecutionOrder { get; private set; } = default;
 
         [field: SerializeField]
         public SimulationConfiguration SimulationConfiguration { get; private set; } = new();
@@ -34,16 +37,16 @@ namespace andywiecko.PBD2D.Solver
         {
             dependencies = new JobHandle();
             jobsGenerator = new SolverJobsGenerator(JobsExecutionOrder);
-            actionsGenerator = new SolverActionsGenerator(this);
+            actionsGenerator = new SolverActionsGenerator(ActionsExecutionOrder);
 
             SystemsRegistry.OnRegistryChange += RegenerateJobsList;
-            SystemsRegistry.OnRegistryChange += actionsGenerator.Subscribe;
+            SystemsRegistry.OnRegistryChange += () => actionsGenerator.Subscribe(this);
         }
 
         public void Start()
         {
             RegenerateJobsList();
-            actionsGenerator.Subscribe();
+            actionsGenerator.Subscribe(this);
         }
 
         public void Update()
@@ -67,7 +70,7 @@ namespace andywiecko.PBD2D.Solver
         public void OnDestroy()
         {
             SystemsRegistry.OnRegistryChange -= RegenerateJobsList;
-            SystemsRegistry.OnRegistryChange -= actionsGenerator.Subscribe;
+            SystemsRegistry.OnRegistryChange -= () => actionsGenerator.Subscribe(this);
         }
     }
 }

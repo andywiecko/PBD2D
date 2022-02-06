@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using UnityEditor;
 
@@ -33,3 +34,4 @@ namespace andywiecko.PBD2D.Core.Editor
         }
     }
 }
+#endif

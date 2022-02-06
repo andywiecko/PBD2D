@@ -1,13 +1,16 @@
 using andywiecko.PBD2D.Core;
+#if UNITY_EDITOR
 using andywiecko.PBD2D.Core.Editor;
-using andywiecko.PBD2D.Solver;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
-namespace andywiecko.PBD2D
+namespace andywiecko.PBD2D.Solver
 {
     [Serializable]
     public class SerializedType
@@ -19,7 +22,7 @@ namespace andywiecko.PBD2D
         public string Guid { get; private set; } = default;
 
         [SerializeField]
-        private string assembly = "";
+        private MonoScript script = default;
 
         [HideInInspector, SerializeField]
         private string assemblyQualifiedName = "";
@@ -35,8 +38,9 @@ namespace andywiecko.PBD2D
         public void Validate(Type type)
         {
             tag = type.Name.ToNonPascal();
-            assembly = type.Assembly.FullName;
             assemblyQualifiedName = type.AssemblyQualifiedName;
+            var path = AssetDatabase.GUIDToAssetPath(Guid);
+            script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
         }
     }
 
@@ -74,6 +78,7 @@ namespace andywiecko.PBD2D
         private static readonly Dictionary<Type, string> typeToGuid = new();
         private static readonly Dictionary<string, Type> guidToType = new();
 
+#if UNITY_EDITOR
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
@@ -102,6 +107,7 @@ namespace andywiecko.PBD2D
                 }
             }
         }
+#endif
 
         private List<Type> GetSerializedTypes() => new[] { frameStart, stepStart, subStep, stepEnd, frameEnd }
             .SelectMany(i => i)
@@ -207,6 +213,18 @@ namespace andywiecko.PBD2D
             foreach (var t in types.Except(GetSerializedTypes()))
             {
                 undefinedTypes.Add(new(t, typeToGuid[t]));
+            }
+
+            foreach (var step in SystemExtensions.GetValues<SimulationStep>())
+            {
+                var list = GetListAtStep(step);
+                if (list is not null)
+                {
+                    foreach (var l in list)
+                    {
+                        l.Validate(guidToType[l.Guid]);
+                    }
+                }
             }
         }
     }

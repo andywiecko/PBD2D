@@ -1,0 +1,21 @@
+{
+    "name": "andywiecko.PBD2D.Components.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:91491537b10b63a4a84d2a812ebae873",
+        "GUID:e5641b1cd1a885343867fa13943a7352",
+        "GUID:db11b4b5d7520bc479416b48c98206cb",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

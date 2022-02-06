@@ -46,6 +46,7 @@ namespace andywiecko.PBD2D.Components.Editor
                 triangulator.Schedule(data.AsReadOnly(), default).Complete();
 
                 Data.CopyDataFromTriangulation(triangulator);
+                Data.RegenerateMesh();
 
                 EditorUtility.SetDirty(Data);
             })

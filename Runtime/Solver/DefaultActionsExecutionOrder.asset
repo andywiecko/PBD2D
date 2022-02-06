@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e119b7a44b6384ea66a6bf04de193a, type: 3}
+  m_Name: DefaultActionsExecutionOrder
+  m_EditorClassIdentifier: 
+  onScheduling: []
+  onJobsCompletion:
+  - tag: Redraw (Tri Mesh Renderer System)
+    <Name>k__BackingField: Redraw
+    <SerializedType>k__BackingField:
+      tag: Tri Mesh Renderer System
+      <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
+      script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Mouse Interaction Update (Mouse Interaction System)
+    <Name>k__BackingField: MouseInteractionUpdate
+    <SerializedType>k__BackingField:
+      tag: Mouse Interaction System
+      <Guid>k__BackingField: 9a89fe673d7a53a438bda9e23d905790
+      script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  undefinedMethods: []
