@@ -9,13 +9,6 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Solver
 {
-    public enum SolverAction
-    {
-        Undefined = -1,
-        OnScheduling,
-        OnJobsCompletion
-    }
-
     [Serializable]
     public class SerializedMethod
     {
@@ -142,7 +135,7 @@ namespace andywiecko.PBD2D.Solver
 
         private readonly Dictionary<SolverAction, List<(MethodInfo, Type)>> actionOrder = new();
 
-        public IReadOnlyDictionary<SolverAction, List<(MethodInfo, Type)>> GetActionOrder()
+        public IReadOnlyDictionary<SolverAction, List<(MethodInfo, Type)>> GetActionsOrder()
         {
             actionOrder.Clear();
             foreach (var a in SystemExtensions.GetValues<SolverAction>())
@@ -150,7 +143,7 @@ namespace andywiecko.PBD2D.Solver
                 var list = GetListAtAction(a);
                 if (list is null) continue;
                 var methods = new List<(MethodInfo, Type)>(capacity: list.Count);
-                foreach(var (m, t) in list)
+                foreach (var (m, t) in list)
                 {
                     methods.Add((m, t));
                 }
@@ -172,7 +165,11 @@ namespace andywiecko.PBD2D.Solver
         [SerializeField]
         private List<UnconfiguredMethod> undefinedMethods = new();
 
-        private void OnValidate()
+        private void Awake() => ValidateMethods();
+
+        private void OnValidate() => ValidateMethods();
+
+        private void ValidateMethods()
         {
             // HACK:
             //   For unknown reason static dicts don't survive when saving assest,

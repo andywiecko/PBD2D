@@ -65,14 +65,14 @@ namespace andywiecko.PBD2D.Solver
         public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
     }
 
-    public interface ISolverSystemsExecutionOrder
+    public interface ISolverJobsExecutionOrder
     {
-        public IReadOnlyDictionary<SimulationStep, List<Type>> GetSystemOrder();
+        public IReadOnlyDictionary<SimulationStep, List<Type>> GetJobsOrder();
     }
 
     [CreateAssetMenu(fileName = "SolverSystemsExecutionOrder",
         menuName = "PBD2D/Solver/Solver Systems Execution Order")]
-    public class SolverSystemsExecutionOrder : ScriptableObject, ISolverSystemsExecutionOrder
+    public class SolverJobsExecutionOrder : ScriptableObject, ISolverJobsExecutionOrder
     {
         private static Type[] types;
         private static readonly Dictionary<Type, string> typeToGuid = new();
@@ -160,11 +160,11 @@ namespace andywiecko.PBD2D.Solver
         [SerializeField]
         private List<UnconfiguredType> undefinedTypes = new();
 
-        private readonly Dictionary<SimulationStep, List<Type>> systemOrder = new();
+        private readonly Dictionary<SimulationStep, List<Type>> jobsOrder = new();
 
-        public IReadOnlyDictionary<SimulationStep, List<Type>> GetSystemOrder()
+        public IReadOnlyDictionary<SimulationStep, List<Type>> GetJobsOrder()
         {
-            systemOrder.Clear();
+            jobsOrder.Clear();
 
             foreach (var s in SystemExtensions.GetValues<SimulationStep>())
             {
@@ -175,13 +175,17 @@ namespace andywiecko.PBD2D.Solver
                 {
                     types.Add(st.Value);
                 }
-                systemOrder.Add(s, types);
+                jobsOrder.Add(s, types);
             }
 
-            return systemOrder;
+            return jobsOrder;
         }
 
-        private void OnValidate()
+        private void Awake() => ValidateTypes();
+
+        private void OnValidate() => ValidateTypes();
+
+        private void ValidateTypes()
         {
             // HACK:
             //   For unknown reason static dicts don't survive when saving assest,

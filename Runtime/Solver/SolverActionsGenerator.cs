@@ -1,37 +1,43 @@
 using andywiecko.PBD2D.Core;
-using andywiecko.PBD2D.Systems;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace andywiecko.PBD2D.Solver
 {
-    public class SolverActionsGenerator
+    public interface ISolverActionsGenerator
     {
-        private IReadOnlyDictionary<SolverAction, List<(MethodInfo, Type)>> actionOrder;
+        void GenerateActions();
+    }
 
-        public SolverActionsGenerator(SolverActionsExecutionOrder actionsExecutionOrder)
+    public class SolverActionsGenerator : ISolverActionsGenerator
+    {
+        private readonly IReadOnlyDictionary<SolverAction, List<(MethodInfo, Type)>> actionsOrder;
+        private readonly Solver solver;
+
+        public SolverActionsGenerator(Solver solver, SolverActionsExecutionOrder actionsExecutionOrder)
         {
-            actionOrder = actionsExecutionOrder.GetActionOrder();
+            this.solver = solver;
+            actionsOrder = actionsExecutionOrder.GetActionsOrder();
         }
 
-        public void Subscribe(Solver solver)
+        public void GenerateActions()
         {
             solver.ResetActions();
 
-            foreach(var (m, t) in actionOrder[SolverAction.OnScheduling])
+            foreach (var (method, type) in actionsOrder[SolverAction.OnScheduling])
             {
-                foreach(var s in SystemsRegistry.SystemsOf(t))
+                foreach (var system in SystemsRegistry.SystemsOf(type))
                 {
-                    solver.OnScheduling += () => m.Invoke(s, default);
+                    solver.OnScheduling += () => method.Invoke(system, default);
                 }
             }
 
-            foreach (var (m, t) in actionOrder[SolverAction.OnJobsCompletion])
+            foreach (var (method, type) in actionsOrder[SolverAction.OnJobsCompletion])
             {
-                foreach (var s in SystemsRegistry.SystemsOf(t))
+                foreach (var system in SystemsRegistry.SystemsOf(type))
                 {
-                    solver.OnJobsComplete += () => m.Invoke(s, default);
+                    solver.OnJobsComplete += () => method.Invoke(system, default);
                 }
             }
         }

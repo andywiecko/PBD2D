@@ -8,24 +8,22 @@ namespace andywiecko.PBD2D.Solver
 {
     public class Solver : MonoBehaviour, ISimulationConfigurationProvider
     {
-        public event Action OnScheduling;
-        public event Action OnJobsComplete;
-
-        private ISolverJobsGenerator jobsGenerator;
-        private SolverActionsGenerator actionsGenerator;
-
-        private JobHandle dependencies;
-
-        private List<Func<JobHandle, JobHandle>> jobs = new();
-
         [field: SerializeField]
-        public SolverSystemsExecutionOrder JobsExecutionOrder { get; private set; } = default;
+        public SolverJobsExecutionOrder JobsExecutionOrder { get; private set; } = default;
 
         [field: SerializeField]
         public SolverActionsExecutionOrder ActionsExecutionOrder { get; private set; } = default;
 
         [field: SerializeField]
         public SimulationConfiguration SimulationConfiguration { get; private set; } = new();
+
+        public event Action OnScheduling;
+        public event Action OnJobsComplete;
+
+        private List<Func<JobHandle, JobHandle>> jobs = new();
+        private ISolverJobsGenerator jobsGenerator;
+        private ISolverActionsGenerator actionsGenerator;
+        private JobHandle dependencies = new();
 
         public void ResetActions()
         {
@@ -35,18 +33,15 @@ namespace andywiecko.PBD2D.Solver
 
         private void Awake()
         {
-            dependencies = new JobHandle();
             jobsGenerator = new SolverJobsGenerator(JobsExecutionOrder);
-            actionsGenerator = new SolverActionsGenerator(ActionsExecutionOrder);
+            actionsGenerator = new SolverActionsGenerator(this, ActionsExecutionOrder);
 
-            SystemsRegistry.OnRegistryChange += RegenerateJobsList;
-            SystemsRegistry.OnRegistryChange += () => actionsGenerator.Subscribe(this);
+            SystemsRegistry.OnRegistryChange += RegenerateSolverTasks;
         }
 
         public void Start()
         {
-            RegenerateJobsList();
-            actionsGenerator.Subscribe(this);
+            RegenerateSolverTasks();
         }
 
         public void Update()
@@ -65,12 +60,15 @@ namespace andywiecko.PBD2D.Solver
             return dependencies;
         }
 
-        private void RegenerateJobsList() => jobs = jobsGenerator.GenerateJobs();
-
         public void OnDestroy()
         {
-            SystemsRegistry.OnRegistryChange -= RegenerateJobsList;
-            SystemsRegistry.OnRegistryChange -= () => actionsGenerator.Subscribe(this);
+            SystemsRegistry.OnRegistryChange -= RegenerateSolverTasks;
+        }
+
+        private void RegenerateSolverTasks()
+        {
+            jobs = jobsGenerator.GenerateJobs();
+            actionsGenerator.GenerateActions();
         }
     }
 }
