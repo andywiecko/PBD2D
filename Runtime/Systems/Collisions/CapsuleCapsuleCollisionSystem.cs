@@ -108,6 +108,8 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2> positions2;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv1;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv2;
+            private NativeIndexedArray<Id<Point>, Friction> friction1;
+            private NativeIndexedArray<Id<Point>, Friction> friction2;
             [ReadOnly]
             private NativeArray<EdgeEdgeContactInfo> collisions;
 
@@ -122,6 +124,8 @@ namespace andywiecko.PBD2D.Systems
                 positions2 = triMesh2.PredictedPositions;
                 massesInv1 = triMesh1.MassesInv;
                 massesInv2 = triMesh2.MassesInv;
+                friction1 = triMesh1.AccumulatedFriction;
+                friction2 = triMesh2.AccumulatedFriction;
 
                 contactRadius = triMesh1.CollisionRadius + triMesh2.CollisionRadius;
 
@@ -198,6 +202,12 @@ namespace andywiecko.PBD2D.Systems
                 positions1[a1Id] -= lambda * a1mInv * a1grad;
                 positions2[b0Id] -= lambda * b0mInv * b0grad;
                 positions2[b1Id] -= lambda * b1mInv * b1grad;
+
+                // TODO: coeficients
+                friction1[a0Id] += new Friction(lambda * a0mInv * a0grad);
+                friction1[a1Id] += new Friction(lambda * a1mInv * a1grad);
+                friction2[b0Id] += new Friction(lambda * b0mInv * b0grad);
+                friction2[b1Id] += new Friction(lambda * b1mInv * b1grad);
             }
         }
 

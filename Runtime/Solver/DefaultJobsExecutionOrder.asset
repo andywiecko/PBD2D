@@ -65,6 +65,11 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: 9524172c6d9c1bb449f00373f3c017ab, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Friction System
+    <Guid>k__BackingField: 43f1fcd3521a4b249857f2969409bd17
+    script: {fileID: 11500000, guid: 43f1fcd3521a4b249857f2969409bd17, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.FrictionSystem, andywiecko.PBD2D.Systems,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   stepEnd:
   - tag: Position Based Dynamics Step End System
     <Guid>k__BackingField: 088831c1e88b859458a06401f038b333
