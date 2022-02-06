@@ -3,7 +3,6 @@ using andywiecko.PBD2D.Core;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
@@ -50,15 +49,16 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField, HideInInspector]
         public float2[] colliderPoints { get; private set; } = default;
 
+#if UNITY_EDITOR
         public void RegenerateMesh()
         {
             if (Mesh != null)
             {
-                AssetDatabase.RemoveObjectFromAsset(Mesh);
+                UnityEditor.AssetDatabase.RemoveObjectFromAsset(Mesh);
             }
             Mesh = CreateMesh();
             Mesh.name = "Generated Mesh";
-            AssetDatabase.AddObjectToAsset(Mesh, this);
+            UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
 
             Mesh CreateMesh()
             {
@@ -69,6 +69,7 @@ namespace andywiecko.PBD2D.Components
                 return mesh;
             }
         }
+#endif
 
         private void GetPointsFromCollider()
         {

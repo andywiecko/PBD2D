@@ -1,10 +1,14 @@
 using andywiecko.PBD2D.Core;
+#if UNITY_EDITOR
 using andywiecko.PBD2D.Core.Editor;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Solver
@@ -21,8 +25,10 @@ namespace andywiecko.PBD2D.Solver
         [field: HideInInspector, SerializeField]
         public SerializedType SerializedType { get; private set; } = default;
 
+#if UNITY_EDITOR
         [SerializeField]
         private MonoScript script = default;
+#endif
 
         public (MethodInfo MethodInfo, Type Type) Value => (SerializedType.Value.GetMethod(Name), SerializedType.Value);
 
@@ -39,8 +45,10 @@ namespace andywiecko.PBD2D.Solver
         public void Validate(Type type)
         {
             this.SerializedType.Validate(type);
+#if UNITY_EDITOR
             var path = AssetDatabase.GUIDToAssetPath(SerializedType.Guid);
             script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+#endif 
         }
     }
 

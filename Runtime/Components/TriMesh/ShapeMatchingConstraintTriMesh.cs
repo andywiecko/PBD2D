@@ -52,8 +52,6 @@ namespace andywiecko.PBD2D.Components
             CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, MassesInv, TotalMass);
             ShapeMatchingUtils.CalculateRelativePositions(initialRelativePositions, triMesh.Positions.Value, CenterOfMass.Value.Value);
             AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(initialRelativePositions, MassesInv);
-
-            var a = 4;
         }
 
         private void OnDrawGizmos()

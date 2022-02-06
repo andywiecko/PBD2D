@@ -21,8 +21,10 @@ namespace andywiecko.PBD2D.Solver
         [field: SerializeField, HideInInspector]
         public string Guid { get; private set; } = default;
 
+#if UNITY_EDITOR
         [SerializeField]
         private MonoScript script = default;
+#endif
 
         [HideInInspector, SerializeField]
         private string assemblyQualifiedName = "";
@@ -39,8 +41,10 @@ namespace andywiecko.PBD2D.Solver
         {
             tag = type.Name.ToNonPascal();
             assemblyQualifiedName = type.AssemblyQualifiedName;
+#if UNITY_EDITOR
             var path = AssetDatabase.GUIDToAssetPath(Guid);
             script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+#endif
         }
     }
 
