@@ -22,7 +22,7 @@ MonoBehaviour:
       script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
       assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
   - tag: Mouse Interaction Update (Mouse Interaction System)
     <Name>k__BackingField: MouseInteractionUpdate
     <SerializedType>k__BackingField:
@@ -31,5 +31,5 @@ MonoBehaviour:
       script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
       assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    assembly: andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
   undefinedMethods: []

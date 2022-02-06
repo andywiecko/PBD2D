@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Solver
         public SerializedType SerializedType { get; private set; } = default;
 
         [SerializeField]
-        private string assembly = "";
+        private MonoScript script = default;
 
         public (MethodInfo MethodInfo, Type Type) Value => (SerializedType.Value.GetMethod(Name), SerializedType.Value);
 
@@ -39,7 +39,8 @@ namespace andywiecko.PBD2D.Solver
         public void Validate(Type type)
         {
             this.SerializedType.Validate(type);
-            assembly = type.Assembly.FullName;
+            var path = AssetDatabase.GUIDToAssetPath(SerializedType.Guid);
+            script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
         }
     }
 
@@ -204,6 +205,18 @@ namespace andywiecko.PBD2D.Solver
                 if (!serializedMethods.Contains((m, t)))
                 {
                     undefinedMethods.Add(new(m, t, typeToGuid[t]));
+                }
+            }
+
+            foreach (var action in SystemExtensions.GetValues<SolverAction>())
+            {
+                var list = GetListAtAction(action);
+                if (list is not null)
+                {
+                    foreach (var l in list)
+                    {
+                        l.Validate(l.Value.Type);
+                    }
                 }
             }
         }
