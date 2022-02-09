@@ -2,8 +2,7 @@
     "name": "andywiecko.PBD2D.Solver",
     "rootNamespace": "",
     "references": [
-        "andywiecko.PBD2D.Core",
-        "andywiecko.PBD2D.Systems"
+        "andywiecko.PBD2D.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
