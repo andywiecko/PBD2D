@@ -1,4 +1,5 @@
 using andywiecko.PBD2D.Core;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
@@ -9,11 +10,22 @@ namespace andywiecko.PBD2D.Components
     {
         public Line Line => new (ground.Surface.Point, ground.Surface.Normal);
 
+        public float2 Displacement => pos - prevPos;
+
         private Ground ground;
+
+        private float2 pos;
+        private float2 prevPos;
 
         private void Start()
         {
             ground = GetComponent<Ground>();
+        }
+
+        private void Update()
+        {
+            prevPos = pos;
+            pos = transform.position.ToFloat2();
         }
     }
 }

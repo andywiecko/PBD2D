@@ -136,11 +136,14 @@ namespace andywiecko.PBD2D.Core
     {
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
+        float FrictionCoefficient { get; }
     }
 
     public interface ILineCollideWithPoint : IComponent
     {
         Line Line { get; }
+        float2 Displacement { get; }
     }
 
     public interface ITriMeshPointsCollideWithGroundLine : IPointCollideWithPlane { }

@@ -15,6 +15,9 @@ namespace andywiecko.PBD2D.Systems
         private struct PullPointsAboveSurfaceJob : IJobParallelFor
         {
             private NativeIndexedArray<Id<Point>, float2> positions;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions;
+            private readonly float2 dl;
+            private readonly float mu;
             private readonly float2 p;
             private readonly float2 n;
             private readonly float r;
@@ -24,8 +27,11 @@ namespace andywiecko.PBD2D.Systems
                 var (pointComponent, lineComponent) = tuple;
 
                 positions = pointComponent.PredictedPositions;
+                previousPositions = pointComponent.Positions;
                 r = pointComponent.CollisionRadius;
                 (p, n) = lineComponent.Line;
+                dl = lineComponent.Displacement;
+                mu = pointComponent.FrictionCoefficient;
             }
 
             public void Execute(int index)
@@ -42,6 +48,13 @@ namespace andywiecko.PBD2D.Systems
 
                 var dP = C * n;
                 positions[pointId] -= dP;
+
+                // friction
+                var dx = (positions[pointId] - previousPositions[pointId]) - dl;
+                var dxn = n * math.dot(n, dx);
+                var dxt = dx - dxn;
+                dx = math.min(math.length(dxt), mu * math.length(dP)) * math.normalizesafe(dxt);
+                positions[pointId] -= dx;
             }
 
             public JobHandle Schedule(JobHandle dependencies)
