@@ -15,6 +15,7 @@ namespace andywiecko.PBD2D.Components.Editor
 
         private Vector2 AreaValues { get => Data.AreaValues; set => Data.AreaValues = value; }
         private float AngleValue { get => Data.AngleValue; set => Data.AngleValue = value; }
+        private bool RefineMesh  => Data.RefineMesh;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -23,16 +24,10 @@ namespace andywiecko.PBD2D.Components.Editor
             root.Add(new IMGUIContainer(base.OnInspectorGUI));
 
             var areaSlider = new MinMaxSlider(minValue: AreaValues.x, maxValue: AreaValues.y, minLimit: 0, maxLimit: 2);
-            areaSlider.RegisterValueChangedCallback((minmax) =>
-            {
-                AreaValues = minmax.newValue;
-            });
+            areaSlider.RegisterValueChangedCallback(minmax => AreaValues = minmax.newValue);
 
             var angleSlider = new Slider(start: 10, end: 40);
-            angleSlider.RegisterValueChangedCallback(evt =>
-            {
-                AngleValue = evt.newValue;
-            });
+            angleSlider.RegisterValueChangedCallback(evt => AngleValue = evt.newValue);
 
             var triangulateButton = new Button(() =>
             {
@@ -42,7 +37,7 @@ namespace andywiecko.PBD2D.Components.Editor
                 triangulator.Settings.MinimumArea = AreaValues.x;
                 triangulator.Settings.MaximumArea = AreaValues.y;
                 triangulator.Settings.MinimumAngle = math.radians(AngleValue);
-
+                triangulator.Settings.RefineMesh = RefineMesh;
                 triangulator.Schedule(data.AsReadOnly(), default).Complete();
 
                 Data.CopyDataFromTriangulation(triangulator);

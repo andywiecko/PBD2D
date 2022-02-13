@@ -26,6 +26,9 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField]
         public float AngleValue { get; set; } = default;
 
+        [field: SerializeField]
+        public bool RefineMesh { get; private set; } = true;
+
         [field: SerializeField, HideInInspector]
         public override float[] MassesInv { get; protected set; } = default;
         [field: SerializeField, HideInInspector]
