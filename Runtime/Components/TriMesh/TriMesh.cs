@@ -16,6 +16,10 @@ namespace andywiecko.PBD2D.Components
         public TriMeshSerializedData SerializedData = default;
         private TriMeshSerializedData serializedData;
 
+        public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default.Instance;
+        [SerializeField]
+        private PhysicalMaterial physicalMaterial = default;
+
         private bool IsValid => SerializedData;
 
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; private set; }

@@ -31,7 +31,7 @@ namespace andywiecko.PBD2D.Systems
                 r = pointComponent.CollisionRadius;
                 (p, n) = lineComponent.Line;
                 dl = lineComponent.Displacement;
-                mu = pointComponent.FrictionCoefficient;
+                mu = pointComponent.Friction;
             }
 
             public void Execute(int index)

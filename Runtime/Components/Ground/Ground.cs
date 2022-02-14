@@ -6,6 +6,10 @@ namespace andywiecko.PBD2D.Components
 {
     public class Ground : BaseComponent
     {
+        public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default.Instance;
+        [SerializeField]
+        private PhysicalMaterial physicalMaterial = default;
+
         public Line Surface => new 
         (
             point: transform.position.ToFloat2(),

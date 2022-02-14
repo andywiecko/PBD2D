@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [PreferBinarySerialization]
-    [CreateAssetMenu(fileName = "TriMeshSerializedData (Triangulator)", menuName = "PBD2D/ScriptableObjects/TriMeshSerializedData (Triangulator)")]
+    [CreateAssetMenu(fileName = "TriMeshSerializedData (Triangulator)", menuName = "PBD2D/TriMesh/TriMeshSerializedData (Triangulator)")]
     public class TriMeshSerializedDataTriangulator : TriMeshSerializedData
     {
         [field: SerializeField, HideInInspector]

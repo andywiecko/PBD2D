@@ -128,6 +128,7 @@ namespace andywiecko.PBD2D.Core
     #region Point-line static collisions
     public interface IPointLineCollisionTuple : IComponent
     {
+        public float Friction { get; }
         IPointCollideWithPlane PointComponent { get; }
         ILineCollideWithPoint LineComponent { get; }
     }
@@ -137,7 +138,7 @@ namespace andywiecko.PBD2D.Core
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
-        float FrictionCoefficient { get; }
+        float Friction { get; }
     }
 
     public interface ILineCollideWithPoint : IComponent
@@ -147,7 +148,10 @@ namespace andywiecko.PBD2D.Core
     }
 
     public interface ITriMeshPointsCollideWithGroundLine : IPointCollideWithPlane { }
-    public interface IGroundLineCollideWithTriMeshPoints : ILineCollideWithPoint { }
+    public interface IGroundLineCollideWithTriMeshPoints : ILineCollideWithPoint
+    {
+        float Friction { get; }
+    }
 
     public static class PointLineCollisionTupleExtensions
     {

@@ -9,6 +9,7 @@ namespace andywiecko.PBD2D.Components
     public class GroundLineCollideWithTriMeshPoints : BaseComponent, IGroundLineCollideWithTriMeshPoints
     {
         public Line Line => new (ground.Surface.Point, ground.Surface.Normal);
+        public float Friction => ground.PhysicalMaterial.Friction;
 
         public float2 Displacement => pos - prevPos;
 
