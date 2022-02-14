@@ -6,7 +6,7 @@ namespace andywiecko.PBD2D.Components
 {
     public class Ground : BaseComponent
     {
-        public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default.Instance;
+        public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default;
         [SerializeField]
         private PhysicalMaterial physicalMaterial = default;
 
