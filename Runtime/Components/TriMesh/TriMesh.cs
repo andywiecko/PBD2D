@@ -31,8 +31,6 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 { get; private set; }
 
-        public Ref<NativeIndexedArray<Id<Point>, Friction>> AccumulatedFriction { get; private set; }
-
         private void Awake()
         {
             if (!IsValid)
@@ -53,8 +51,7 @@ namespace andywiecko.PBD2D.Components
                 Edges = new NativeIndexedArray<Id<Edge>, Edge>(SerializedData.Edges.ToEdgesArray(), allocator),
                 RestLengths = new NativeIndexedArray<Id<Edge>, float>(SerializedData.RestLengths, allocator),
                 Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.Triangles.ToTrianglesArray(), allocator),
-                RestAreas2 = new NativeIndexedArray<Id<Triangle>, float>(SerializedData.RestAreas2, allocator),
-                AccumulatedFriction = new NativeIndexedArray<Id<Point>, Friction>(Positions.Value.Length, allocator)
+                RestAreas2 = new NativeIndexedArray<Id<Triangle>, float>(SerializedData.RestAreas2, allocator)
             );
         }
 

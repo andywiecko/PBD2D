@@ -106,7 +106,6 @@ namespace andywiecko.PBD2D.Core
         NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
         NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly CollidableEdges { get; }
         NativeIndexedArray<Id<CollidableEdge>, AABB>.ReadOnly AABBs { get; }
-        Ref<NativeIndexedArray<Id<Point>, Friction>> AccumulatedFriction { get; }
     }
 
     public interface ITriMeshCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule { }
@@ -162,11 +161,4 @@ namespace andywiecko.PBD2D.Core
             => _ = (point = tuple.PointComponent, line = tuple.LineComponent);
     }
     #endregion
-
-    public interface IFrictionComponent : IComponent
-    {
-        Ref<NativeIndexedArray<Id<Point>, Friction>> AccumulatedFriction { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
-    }
 }
