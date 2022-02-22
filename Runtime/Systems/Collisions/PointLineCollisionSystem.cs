@@ -46,15 +46,15 @@ namespace andywiecko.PBD2D.Systems
                     return;
                 }
 
-                var dP = C * n;
-                positions[pointId] -= dP;
+                var dP = -C * n;
+                positions[pointId] += dP;
 
-                // friction
-                var dx = (positions[pointId] - previousPositions[pointId]) - dl;
-                var dxn = n * math.dot(n, dx);
-                var dxt = dx - dxn;
-                dx = math.min(math.length(dxt), mu * math.length(dP)) * math.normalizesafe(dxt);
-                positions[pointId] -= dx;
+                var (dx, _) = FrictionUtils.GetFrictionCorrections(
+                    pA: positions[pointId], qA: previousPositions[pointId], wA: 1, 
+                    pB: dl, qB: 0, wB: 0, 
+                    n, mu, fn: dP
+                );
+                positions[pointId] += dx;
             }
 
             public JobHandle Schedule(JobHandle dependencies)

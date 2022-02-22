@@ -98,8 +98,10 @@ namespace andywiecko.PBD2D.Core
     #region Capsule-capsule collisions
     public interface ICapsuleCollideWithCapsule : IComponent
     {
+        float Friction { get; }
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
         NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
         NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly CollidableEdges { get; }
@@ -113,6 +115,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface ICapsuleCapsuleCollisionTuple : IComponent
     {
+        float Friction { get; }
         Ref<NativeList<EdgePair>> PotentialCollisions { get; }
         Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; }
         ICapsuleCollideWithCapsule Component1 { get; }

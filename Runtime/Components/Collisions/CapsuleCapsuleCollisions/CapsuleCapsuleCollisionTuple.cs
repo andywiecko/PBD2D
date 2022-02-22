@@ -13,6 +13,8 @@ namespace andywiecko.PBD2D.Components
         public ICapsuleCollideWithCapsule Component1 => Item1;
         public ICapsuleCollideWithCapsule Component2 => Item2;
 
+        public float Friction => 0.5f * (Component1.Friction + Component2.Friction);
+
         protected override void Initialize()
         {
             var allocator = Allocator.Persistent;
@@ -38,6 +40,8 @@ namespace andywiecko.PBD2D.Components
 
         public ICapsuleCollideWithCapsule Component1 => Item1;
         public ICapsuleCollideWithCapsule Component2 => Item2;
+
+        public float Friction => 0.5f * (Component1.Friction + Component2.Friction);
 
         protected override void Initialize()
         {

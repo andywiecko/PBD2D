@@ -93,7 +93,9 @@ namespace andywiecko.PBD2D.Systems
 
                     if (math.distancesq(pA, pB) <= 4 * contactRadiusSq)
                     {
-                        collisions.Add(new(pA, pB, e1Id, e2Id));
+                        var barA = MathUtils.BarycentricSafe(a0, a1, pA, 0.5f);
+                        var barB = MathUtils.BarycentricSafe(b0, b1, pB, 0.5f);
+                        collisions.Add(new(barA, barB, e1Id, e2Id));
                     }
                 }
             }
@@ -108,8 +110,10 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2> positions2;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv1;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv2;
-            private NativeIndexedArray<Id<Point>, Friction> friction1;
-            private NativeIndexedArray<Id<Point>, Friction> friction2;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions1;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions2;
+            private readonly float mu;
+
             [ReadOnly]
             private NativeArray<EdgeEdgeContactInfo> collisions;
 
@@ -124,11 +128,10 @@ namespace andywiecko.PBD2D.Systems
                 positions2 = triMesh2.PredictedPositions;
                 massesInv1 = triMesh1.MassesInv;
                 massesInv2 = triMesh2.MassesInv;
-                friction1 = triMesh1.AccumulatedFriction;
-                friction2 = triMesh2.AccumulatedFriction;
-
+                previousPositions1 = triMesh1.Positions.Value.AsReadOnly();
+                previousPositions2 = triMesh2.Positions.Value.AsReadOnly();
+                mu = tuple.Friction;
                 contactRadius = triMesh1.CollisionRadius + triMesh2.CollisionRadius;
-
                 collisions = tuple.Collisions.Value.AsDeferredJobArray();
             }
 
@@ -142,55 +145,33 @@ namespace andywiecko.PBD2D.Systems
 
             private void ResolveCollision(EdgeEdgeContactInfo contactInfo)
             {
-                var (pA, pB, edgeIdA, edgeIdB) = contactInfo;
-
+                var (barA, barB, edgeIdA, edgeIdB) = contactInfo;
                 var ((a0Id, a1Id), (b0Id, b1Id)) = (edges1[edgeIdA], edges2[edgeIdB]);
 
-                var distance = math.distance(pA, pB);
-                var n = math.normalizesafe(pA - pB, math.float2(0, 1));
-                var C = distance - contactRadius;
+                var (a0, a1) = (positions1[a0Id], positions1[a1Id]);
+                var pA = a0 * barA.x + a1 * barA.y;
+                var (b0, b1) = (positions2[b0Id], positions2[b1Id]);
+                var pB = b0 * barB.x + b1 * barB.y;
 
+                var distance = math.distance(pA, pB);
+                if (distance <= math.EPSILON)
+                {
+                    return;
+                }
+
+                var C = distance - contactRadius;
                 if (C >= 0)
                 {
                     return;
                 }
 
-                float s, t;
-                var a0a1 = math.distance(positions1[a0Id], positions1[a1Id]);
-                var a0pA = math.distance(positions1[a0Id], pA);
-                if (a0pA != 0f)
-                {
-                    s = a0pA / a0a1;
-                }
-                else
-                {
-                    s = 0;
-                }
+                var n = math.normalize(pA - pB);
 
-                var b0b1 = math.distance(positions2[b0Id], positions2[b1Id]);
-                var b0pB = math.distance(positions2[b0Id], pB);
-                if (b0pB != 0f)
-                {
-                    t = b0pB / b0b1;
-                }
-                else
-                {
-                    t = 0;
-                }
-
-                s = math.clamp(s, 0, 1);
-                t = math.clamp(t, 0, 1);
-
-                var a0grad = n * (1f - s);
-                var a1grad = n * s;
-                var b0grad = -n * (1f - t);
-                var b1grad = -n * t;
-
-                var (a0mInv, a1mInv) = (massesInv1[a0Id], massesInv1[a1Id]);
-                var (b0mInv, b1mInv) = (massesInv2[b0Id], massesInv2[b1Id]);
-
-                var lambda = a0mInv * (1 - s) * (1 - s) + a1mInv * s * s + b0mInv * (1 - t) * (1 - t) + b1mInv * t * t;
-                if (lambda == 0.0)
+                var (wa0, wa1, wb0, wb1) = (massesInv1[a0Id], massesInv1[a1Id], massesInv2[b0Id], massesInv2[b1Id]);
+                var barASq = barA * barA;
+                var barBSq = barB * barB;
+                var lambda = wa0 * barASq.x + wa1 * barASq.y + wb0 * barBSq.x + wb1 * barBSq.y;
+                if (lambda == 0)
                 {
                     return;
                 }
@@ -198,20 +179,32 @@ namespace andywiecko.PBD2D.Systems
                 var stiffness = 1f;
                 lambda = stiffness * C / lambda;
 
-                positions1[a0Id] -= lambda * a0mInv * a0grad;
-                positions1[a1Id] -= lambda * a1mInv * a1grad;
-                positions2[b0Id] -= lambda * b0mInv * b0grad;
-                positions2[b1Id] -= lambda * b1mInv * b1grad;
+                positions1[a0Id] -= lambda * wa0 * barA.x * n;
+                positions1[a1Id] -= lambda * wa1 * barA.y * n;
+                positions2[b0Id] += lambda * wb0 * barB.x * n;
+                positions2[b1Id] += lambda * wb1 * barB.y * n;
 
-                // TODO: coeficients
-                friction1[a0Id] += new Friction(lambda * a0mInv * a0grad);
-                friction1[a1Id] += new Friction(lambda * a1mInv * a1grad);
-                friction2[b0Id] += new Friction(lambda * b0mInv * b0grad);
-                friction2[b1Id] += new Friction(lambda * b1mInv * b1grad);
+                var wA = wa0 * barASq.x + wa1 * barASq.y;
+                var wB = wb0 * barBSq.x + wb1 * barBSq.y;
+
+                var (dp1, dp2) = FrictionUtils.GetFrictionCorrections(
+                    pA: positions1[a0Id] * barA.x + positions1[a1Id] * barA.y,
+                    qA: previousPositions1[a0Id] * barA.x + previousPositions1[a1Id] * barA.y,
+                    wA,
+
+                    pB: positions2[b0Id] * barB.x + positions2[b1Id] * barB.y,
+                    qB: previousPositions2[b0Id] * barB.x + previousPositions2[b1Id] * barB.y,
+                    wB,
+                    n, mu, fn: math.float2(C, 0));
+
+                positions1[a0Id] += barA.x * wa0 / wA * dp1;
+                positions1[a1Id] += barA.y * wa1 / wA * dp1;
+                positions2[b0Id] += barB.x * wb0 / wB * dp2;
+                positions2[b1Id] += barB.y * wb1 / wB * dp2;
             }
         }
 
-        public override JobHandle Schedule(JobHandle dependencies)
+        public override JobHandle Schedule(JobHandle dependencies = default)
         {
             foreach (var component in References)
             {

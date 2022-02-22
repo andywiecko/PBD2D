@@ -13,6 +13,8 @@ namespace andywiecko.PBD2D.Components
         public NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly CollidableEdges => triMeshCollider.ExternalEdgeToEdgeId.Value.AsReadOnly();
         public NativeIndexedArray<Id<CollidableEdge>, AABB>.ReadOnly AABBs => triMeshCollider.AABBs.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, AABB>().AsReadOnly();
         public Ref<NativeIndexedArray<Id<Point>, Friction>> AccumulatedFriction => triMesh.AccumulatedFriction;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public float Friction => triMesh.PhysicalMaterial.Friction;
 
         private TriMesh triMesh;
         private ExternalEdgesColliderTriMesh triMeshCollider;
