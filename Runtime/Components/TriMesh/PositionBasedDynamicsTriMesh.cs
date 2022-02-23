@@ -9,7 +9,7 @@ namespace andywiecko.PBD2D.Components
     [AddComponentMenu("PBD2D:TriMesh.Components/Constraints/Position Based Dynamics")]
     public class PositionBasedDynamicsTriMesh : BaseComponent, IPositionBasedDynamics
     {
-        public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => TriMesh.MassesInv.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => TriMesh.PredictedPositions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities => TriMesh.Velocities;

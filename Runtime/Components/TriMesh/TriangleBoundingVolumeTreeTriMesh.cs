@@ -16,8 +16,8 @@ namespace andywiecko.PBD2D.Components
         public float Margin { get; private set; } = 0;
         public Ref<BoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs {get; private set;}
-        public NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions => triMesh.Positions.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles => triMesh.Triangles.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles => triMesh.Triangles;
 
         [SerializeField, Range(0, 30)]
         private int level = 0;

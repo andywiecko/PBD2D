@@ -17,7 +17,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface ITriMeshRenderer : IComponent
     {
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeArray<float3>> MeshVertices { get; }
         void Redraw();
     }

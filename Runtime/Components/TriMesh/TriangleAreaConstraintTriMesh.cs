@@ -10,9 +10,9 @@ namespace andywiecko.PBD2D.Components
     public class TriangleAreaConstraintTriMesh : BaseComponent, ITriangleAreaConstraint
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => TriMesh.PredictedPositions;
-        public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => TriMesh.MassesInv.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles => TriMesh.Triangles.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Triangle>, float>.ReadOnly RestAreas2 => TriMesh.RestAreas2.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles => TriMesh.Triangles;
+        public Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 => TriMesh.RestAreas2;
 
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1f;

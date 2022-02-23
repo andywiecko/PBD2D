@@ -60,9 +60,9 @@ namespace andywiecko.PBD2D.Core
         float CollisionRadius { get; }
         float Margin { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; }
-        NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly ExternalEdges { get; }
-        NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
+        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
 
     }
     public interface IFlowFieldTriMesh : IComponent
@@ -91,8 +91,8 @@ namespace andywiecko.PBD2D.Core
         float Margin { get; }
         Ref<BoundingVolumeTree<AABB>> Tree { get; }
         Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
-        NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
     }
 
     #region Capsule-capsule collisions
@@ -102,10 +102,10 @@ namespace andywiecko.PBD2D.Core
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-        NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
-        NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly CollidableEdges { get; }
-        NativeIndexedArray<Id<CollidableEdge>, AABB>.ReadOnly AABBs { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
+        Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; }
+        Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs { get; }
     }
 
     public interface ITriMeshCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule { }
@@ -139,7 +139,7 @@ namespace andywiecko.PBD2D.Core
     {
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         float Friction { get; }
     }
 

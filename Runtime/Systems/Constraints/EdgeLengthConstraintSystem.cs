@@ -22,9 +22,9 @@ namespace andywiecko.PBD2D.Systems
             public ApplyEdgeConstraintJob(IEdgeLengthConstraint constraint)
             {
                 predictedPositions = constraint.PredictedPositions;
-                edges = constraint.Edges;
-                massesInv = constraint.MassesInv;
-                restLengths = constraint.RestLengths;
+                edges = constraint.Edges.Value.AsReadOnly();
+                massesInv = constraint.MassesInv.Value.AsReadOnly();
+                restLengths = constraint.RestLengths.Value.AsReadOnly();
                 stiffness = constraint.Stiffness;
             }
 

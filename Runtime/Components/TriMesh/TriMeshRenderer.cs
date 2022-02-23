@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshRenderer : BaseComponent, ITriMeshRenderer
     {
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }
-        public NativeIndexedArray<Id<Point>, float2>.ReadOnly Positions => TriMesh.Positions.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
 
         private TriMesh TriMesh => triMesh == null ? triMesh = GetComponent<TriMesh>() : triMesh;
         private TriMesh triMesh;

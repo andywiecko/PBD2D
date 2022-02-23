@@ -20,7 +20,7 @@ namespace andywiecko.PBD2D.Systems
             public CopyPositionsToMeshVerticesJob(ITriMeshRenderer renderer)
             {
                 vertices = renderer.MeshVertices.Value;
-                positions = renderer.Positions;
+                positions = renderer.Positions.Value.AsReadOnly();
             }
 
             public JobHandle Schedule(JobHandle dependencies)

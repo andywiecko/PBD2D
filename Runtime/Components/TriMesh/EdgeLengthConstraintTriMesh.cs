@@ -10,9 +10,9 @@ namespace andywiecko.PBD2D.Components
     public class EdgeLengthConstraintTriMesh : BaseComponent, IEdgeLengthConstraint
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => TriMesh.PredictedPositions;
-        public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => TriMesh.MassesInv.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges => TriMesh.Edges.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Edge>, float>.ReadOnly RestLengths => TriMesh.RestLengths.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges => TriMesh.Edges;
+        public Ref<NativeIndexedArray<Id<Edge>, float>> RestLengths => TriMesh.RestLengths;
 
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1f;

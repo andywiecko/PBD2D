@@ -18,26 +18,22 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float Stiffness { get; set; } = 1;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
-            public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => massesInv.Value.AsReadOnly();
-            public NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges => edges.Value.AsReadOnly();
-            public NativeIndexedArray<Id<Edge>, float>.ReadOnly RestLengths => restLengths.Value.AsReadOnly();
-
-            private Ref<NativeIndexedArray<Id<Point>, float>> massesInv = new NativeIndexedArray<Id<Point>, float>(PointsCount, DataAllocator);
-            private Ref<NativeIndexedArray<Id<Edge>, Edge>> edges = new NativeIndexedArray<Id<Edge>, Edge>(EdgesCount, DataAllocator);
-            private Ref<NativeIndexedArray<Id<Edge>, float>> restLengths = new NativeIndexedArray<Id<Edge>, float>(EdgesCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(PointsCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; } = new NativeIndexedArray<Id<Edge>, Edge>(EdgesCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Edge>, float>> RestLengths { get; } = new NativeIndexedArray<Id<Edge>, float>(EdgesCount, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
                 PredictedPositions?.Dispose();
-                massesInv?.Dispose();
-                edges?.Dispose();
-                restLengths?.Dispose();
+                MassesInv?.Dispose();
+                Edges?.Dispose();
+                RestLengths?.Dispose();
             }
 
             public FakeEdgeLengthConstraint SetMassInv(int i, float mInv)
             {
-                massesInv.Value[(Id<Point>)i] = mInv;
+                MassesInv.Value[(Id<Point>)i] = mInv;
                 return this;
             }
 
@@ -58,8 +54,8 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public FakeEdgeLengthConstraint SetEdge(int i, int j, float restLength)
             {
-                edges.Value[Id<Edge>.Zero] = (i, j);
-                restLengths.Value[Id<Edge>.Zero] = restLength;
+                Edges.Value[Id<Edge>.Zero] = (i, j);
+                RestLengths.Value[Id<Edge>.Zero] = restLength;
                 return this;
             }
 

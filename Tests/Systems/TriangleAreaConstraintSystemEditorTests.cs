@@ -18,27 +18,23 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float Stiffness { get; set; } = 1;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
-            public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => massesInv.Value.AsReadOnly();
-            public NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles => triangles.Value.AsReadOnly();
-            public NativeIndexedArray<Id<Triangle>, float>.ReadOnly RestAreas2 => restAreas2.Value.AsReadOnly();
-
-            private Ref<NativeIndexedArray<Id<Point>, float>> massesInv = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
-            private Ref<NativeIndexedArray<Id<Triangle>, Triangle>> triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(new[] { (Triangle)(0, 1, 2) }, DataAllocator);
-            private Ref<NativeIndexedArray<Id<Triangle>, float>> restAreas2 = new NativeIndexedArray<Id<Triangle>, float>(TrianglesCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; } = new NativeIndexedArray<Id<Triangle>, Triangle>(new[] { (Triangle)(0, 1, 2) }, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 { get; } = new NativeIndexedArray<Id<Triangle>, float>(TrianglesCount, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
                 PredictedPositions?.Dispose();
-                massesInv?.Dispose();
-                triangles?.Dispose();
-                restAreas2?.Dispose();
+                MassesInv?.Dispose();
+                Triangles?.Dispose();
+                RestAreas2?.Dispose();
             }
 
             public FakeTriangleAreaConstraint(float2[] positions)
             {
                 SetPositions(positions);
-                restAreas2.Value[Id<Triangle>.Zero] = GetArea2();
+                RestAreas2.Value[Id<Triangle>.Zero] = GetArea2();
             }
 
             public void SetPositions(float2[] positions)
@@ -48,7 +44,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public void SetRestArea2(float area2)
             {
-                restAreas2.Value[Id<Triangle>.Zero] = area2;
+                RestAreas2.Value[Id<Triangle>.Zero] = area2;
             }
 
             public float GetArea2()

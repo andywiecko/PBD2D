@@ -24,9 +24,9 @@ namespace andywiecko.PBD2D.Systems
             {
                 stiffness = constraint.Stiffness;
                 positions = constraint.PredictedPositions;
-                massesInv = constraint.MassesInv;
-                triangles = constraint.Triangles;
-                restAreas2 = constraint.RestAreas2;
+                massesInv = constraint.MassesInv.Value.AsReadOnly();
+                triangles = constraint.Triangles.Value.AsReadOnly();
+                restAreas2 = constraint.RestAreas2.Value.AsReadOnly();
             }
 
             public void Execute()

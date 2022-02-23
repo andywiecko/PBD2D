@@ -21,8 +21,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
-            public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => massesInv.Value.AsReadOnly();
-            private Ref<NativeIndexedArray<Id<Point>, float>> massesInv = new NativeIndexedArray<Id<Point>, float>(new[] { 1f }, Allocator.Persistent);
+            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f }, Allocator.Persistent);
 
             public override void Dispose()
             {
@@ -31,7 +30,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 Positions?.Dispose();
                 PredictedPositions?.Dispose();
                 Velocities?.Dispose();
-                massesInv?.Dispose();
+                MassesInv?.Dispose();
             }
         }
 

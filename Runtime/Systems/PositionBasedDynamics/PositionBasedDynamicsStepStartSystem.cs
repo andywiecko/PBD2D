@@ -26,7 +26,7 @@ namespace andywiecko.PBD2D.Systems
 
             public ApplyExternalForcesJob(IPositionBasedDynamics component, float damping, float2 externalForce, float dt)
             {
-                massesInv = component.MassesInv;
+                massesInv = component.MassesInv.Value.AsReadOnly();
                 velocities = component.Velocities;
                 predictedPositions = component.PredictedPositions;
                 positions = component.Positions.Value.AsReadOnly();

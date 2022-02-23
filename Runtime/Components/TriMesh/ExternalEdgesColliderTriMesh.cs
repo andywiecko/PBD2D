@@ -16,9 +16,9 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField, Min(0)]
         public float Margin { get; private set; } = 0.05f;
         public Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; private set; }
-        public NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly ExternalEdges => externalEdgesTriMesh.ExternalEdges.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges => triMesh.Edges.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Point>, float2>.ReadOnly PredictedPositions => triMesh.PredictedPositions.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => externalEdgesTriMesh.ExternalEdges;
+        public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges => triMesh.Edges;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
 
         // TODO: refactor this
         public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> ExternalEdgeToEdgeId => externalEdgesTriMesh.ExternalEdgeToEdgeId;
@@ -32,7 +32,7 @@ namespace andywiecko.PBD2D.Components
             externalEdgesTriMesh = GetComponent<ExternalEdgesTriMesh>();
 
             DisposeOnDestroy(
-                AABBs = new NativeIndexedArray<Id<ExternalEdge>, AABB>(ExternalEdges.Length, Allocator.Persistent)
+                AABBs = new NativeIndexedArray<Id<ExternalEdge>, AABB>(ExternalEdges.Value.Length, Allocator.Persistent)
             );
         }
 
@@ -58,7 +58,7 @@ namespace andywiecko.PBD2D.Components
 
         private void DrawExternalEdgesCapsules()
         {
-            foreach (var externalEdge in ExternalEdges)
+            foreach (var externalEdge in ExternalEdges.Value)
             {
                 var (idA, idB) = externalEdge;
                 var pA = triMesh.PredictedPositions.Value[idA];

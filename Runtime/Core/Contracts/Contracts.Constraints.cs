@@ -9,9 +9,9 @@ namespace andywiecko.PBD2D.Core
     {
         float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-        NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
-        NativeIndexedArray<Id<Edge>, float>.ReadOnly RestLengths { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
+        Ref<NativeIndexedArray<Id<Edge>, float>> RestLengths { get; }
     }
 
     public interface IEdgeBendingConstraint : IComponent
@@ -67,9 +67,9 @@ namespace andywiecko.PBD2D.Core
     {
         float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-        NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
-        NativeIndexedArray<Id<Triangle>, float>.ReadOnly RestAreas2 { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
+        Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 { get; }
     }
 
     public interface IShapeMatchingConstraint : IComponent
@@ -77,8 +77,8 @@ namespace andywiecko.PBD2D.Core
         float Stiffness { get; }
         float Beta { get; }
         float TotalMass { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly InitialRelativePositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; }
         Ref<NativeReference<float2>> CenterOfMass { get; }

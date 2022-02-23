@@ -16,12 +16,10 @@ namespace andywiecko.PBD2D.Components
 
         public float TotalMass { get; private set; }
 
-        public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => triMesh.MassesInv.Value.AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
 
-        public NativeIndexedArray<Id<Point>, float2>.ReadOnly InitialRelativePositions => initialRelativePositions.AsReadOnly();
-        private NativeIndexedArray<Id<Point>, float2> initialRelativePositions;
-
+        public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; private set; }
         public Ref<NativeReference<float2>> CenterOfMass { get; private set; }
         public Ref<NativeReference<float2x2>> ApqMatrix { get; private set; }
@@ -40,7 +38,7 @@ namespace andywiecko.PBD2D.Components
             var pointsCount = triMesh.Positions.Value.Length;
 
             DisposeOnDestroy(
-                initialRelativePositions = new NativeIndexedArray<Id<Point>, float2>(pointsCount, Allocator.Persistent),
+                InitialRelativePositions = new NativeIndexedArray<Id<Point>, float2>(pointsCount, Allocator.Persistent),
                 RelativePositions = new NativeIndexedArray<Id<Point>, float2>(pointsCount, Allocator.Persistent),
                 CenterOfMass = new NativeReference<float2>(Allocator.Persistent),
                 ApqMatrix = new NativeReference<float2x2>(Allocator.Persistent),
@@ -48,10 +46,10 @@ namespace andywiecko.PBD2D.Components
                 Rotation = new NativeReference<Complex>(Complex.Identity, Allocator.Persistent)
             );
 
-            TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv);
-            CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, MassesInv, TotalMass);
-            ShapeMatchingUtils.CalculateRelativePositions(initialRelativePositions, triMesh.Positions.Value, CenterOfMass.Value.Value);
-            AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(initialRelativePositions, MassesInv);
+            TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv.Value);
+            CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, MassesInv.Value, TotalMass);
+            ShapeMatchingUtils.CalculateRelativePositions(InitialRelativePositions.Value, triMesh.Positions.Value, CenterOfMass.Value.Value);
+            AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, MassesInv.Value);
         }
 
         private void OnDrawGizmos()

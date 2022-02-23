@@ -21,8 +21,8 @@ namespace andywiecko.PBD2D.Systems
             public UpdateAABBsJob(IExternalEdgesColliderTriMesh triMesh)
             {
                 aabbs = triMesh.AABBs.Value;
-                externalEdges = triMesh.ExternalEdges;
-                positions = triMesh.PredictedPositions;
+                externalEdges = triMesh.ExternalEdges.Value.AsReadOnly();
+                positions = triMesh.PredictedPositions.Value.AsReadOnly();
                 radius = triMesh.CollisionRadius + triMesh.Margin;
             }
 

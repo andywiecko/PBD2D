@@ -23,7 +23,7 @@ namespace andywiecko.PBD2D.Systems
             public CalculateCenterOfMassJob(IShapeMatchingConstraint component)
             {
                 com = component.CenterOfMass;
-                massesInv = component.MassesInv;
+                massesInv = component.MassesInv.Value.AsReadOnly();
                 positions = component.PredictedPositions.Value.AsReadOnly();
                 M = component.TotalMass;
             }
@@ -72,8 +72,8 @@ namespace andywiecko.PBD2D.Systems
             {
                 Apq = component.ApqMatrix;
                 relativePositions = component.RelativePositions.Value.AsReadOnly();
-                initialRelativePositions = component.InitialRelativePositions;
-                massesInv = component.MassesInv;
+                initialRelativePositions = component.InitialRelativePositions.Value.AsReadOnly();
+                massesInv = component.MassesInv.Value.AsReadOnly();
             }
 
             public void Execute()
@@ -133,7 +133,7 @@ namespace andywiecko.PBD2D.Systems
                 positions = component.PredictedPositions;
                 k = component.Stiffness;
                 ARef = component.AMatrix.Value.AsReadOnly();
-                initialRelativePositions = component.InitialRelativePositions;
+                initialRelativePositions = component.InitialRelativePositions.Value.AsReadOnly();
                 comRef = component.CenterOfMass.Value.AsReadOnly();
             }
 

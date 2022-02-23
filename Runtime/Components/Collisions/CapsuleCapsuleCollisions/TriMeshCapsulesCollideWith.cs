@@ -8,10 +8,10 @@ namespace andywiecko.PBD2D.Components
     {
         public float CollisionRadius => triMeshCollider.CollisionRadius;
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
-        public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => triMesh.MassesInv.Value.AsReadOnly();
-        public NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges => triMesh.Edges.Value.AsReadOnly();
-        public NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly CollidableEdges => triMeshCollider.ExternalEdgeToEdgeId.Value.AsReadOnly();
-        public NativeIndexedArray<Id<CollidableEdge>, AABB>.ReadOnly AABBs => triMeshCollider.AABBs.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, AABB>().AsReadOnly();
+        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges => triMesh.Edges;
+        public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges => triMeshCollider.ExternalEdgeToEdgeId;
+        public Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs => triMeshCollider.AABBs.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, AABB>();
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
 

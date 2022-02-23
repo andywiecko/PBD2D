@@ -26,10 +26,10 @@ namespace andywiecko.PBD2D.Systems
             public CheckForPotentialCollisions(ICapsuleCapsuleCollisionTuple tuple)
             {
                 var (c1, c2) = tuple;
-                aabbs1 = c1.AABBs;
-                aabbs2 = c2.AABBs;
-                collidableEdges1 = c1.CollidableEdges;
-                collidableEdges2 = c2.CollidableEdges;
+                aabbs1 = c1.AABBs.Value.AsReadOnly();
+                aabbs2 = c2.AABBs.Value.AsReadOnly();
+                collidableEdges1 = c1.CollidableEdges.Value.AsReadOnly();
+                collidableEdges2 = c2.CollidableEdges.Value.AsReadOnly();
 
                 potentialCollisions = tuple.PotentialCollisions;
             }
@@ -67,8 +67,8 @@ namespace andywiecko.PBD2D.Systems
             public DetectCollisionsJob(ICapsuleCapsuleCollisionTuple tuple)
             {
                 var (triMesh1, triMesh2) = tuple;
-                edges1 = triMesh1.Edges;
-                edges2 = triMesh2.Edges;
+                edges1 = triMesh1.Edges.Value.AsReadOnly();
+                edges2 = triMesh2.Edges.Value.AsReadOnly();
                 positions1 = triMesh1.PredictedPositions;
                 positions2 = triMesh2.PredictedPositions;
                 var radius1 = triMesh1.CollisionRadius;
@@ -122,12 +122,12 @@ namespace andywiecko.PBD2D.Systems
             public ResolveCollisionsJob(ICapsuleCapsuleCollisionTuple tuple)
             {
                 var (triMesh1, triMesh2) = tuple;
-                edges1 = triMesh1.Edges;
-                edges2 = triMesh2.Edges;
+                edges1 = triMesh1.Edges.Value.AsReadOnly();
+                edges2 = triMesh2.Edges.Value.AsReadOnly();
                 positions1 = triMesh1.PredictedPositions;
                 positions2 = triMesh2.PredictedPositions;
-                massesInv1 = triMesh1.MassesInv;
-                massesInv2 = triMesh2.MassesInv;
+                massesInv1 = triMesh1.MassesInv.Value.AsReadOnly();
+                massesInv2 = triMesh2.MassesInv.Value.AsReadOnly();
                 previousPositions1 = triMesh1.Positions.Value.AsReadOnly();
                 previousPositions2 = triMesh2.Positions.Value.AsReadOnly();
                 mu = tuple.Friction;

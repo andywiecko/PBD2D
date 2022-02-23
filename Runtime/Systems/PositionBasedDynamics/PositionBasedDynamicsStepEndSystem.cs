@@ -25,7 +25,7 @@ namespace andywiecko.PBD2D.Systems
                 positions = component.Positions;
                 predictedPositions = component.PredictedPositions.Value.AsReadOnly();
                 this.dt = dt;
-                massesInv = component.MassesInv;
+                massesInv = component.MassesInv.Value.AsReadOnly();
             }
 
             public void Execute(int index)

@@ -9,7 +9,7 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         float2 ExternalForce { get; }
         float Damping { get; }
     }

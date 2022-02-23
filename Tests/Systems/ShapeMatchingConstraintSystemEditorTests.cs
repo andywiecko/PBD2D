@@ -26,17 +26,15 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeReference<float2x2>> ApqMatrix { get; } = new NativeReference<float2x2>(DataAllocator);
             public Ref<NativeReference<float2x2>> AMatrix { get; } = new NativeReference<float2x2>(float2x2.identity, DataAllocator);
             public Ref<NativeReference<Complex>> Rotation { get; } = new NativeReference<Complex>(Complex.Identity, DataAllocator);
-            public NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv => massesInv.Value.AsReadOnly();
-            public NativeIndexedArray<Id<Point>, float2>.ReadOnly InitialRelativePositions => initialRelativePositions.Value.AsReadOnly();
-            private Ref<NativeIndexedArray<Id<Point>, float>> massesInv = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
-            private Ref<NativeIndexedArray<Id<Point>, float2>> initialRelativePositions = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
 
             public FakeShapeMatchingConstraint(float2[] positions)
             {
-                TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv);
-                CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, MassesInv, TotalMass);
-                ShapeMatchingUtils.CalculateRelativePositions(initialRelativePositions.Value, positions, CenterOfMass.Value.Value);
-                AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(initialRelativePositions.Value, MassesInv);
+                TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv.Value);
+                CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, MassesInv.Value, TotalMass);
+                ShapeMatchingUtils.CalculateRelativePositions(InitialRelativePositions.Value, positions, CenterOfMass.Value.Value);
+                AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, MassesInv.Value);
 
                 SetPositions(positions);
             }
@@ -50,8 +48,8 @@ namespace andywiecko.PBD2D.Editor.Tests
                 ApqMatrix?.Dispose();
                 AMatrix?.Dispose();
                 Rotation?.Dispose();
-                massesInv?.Dispose();
-                initialRelativePositions?.Dispose();
+                MassesInv?.Dispose();
+                InitialRelativePositions?.Dispose();
             }
 
             public void SetPositions(float2[] positions) => PredictedPositions.Value.GetInnerArray().CopyFrom(positions);

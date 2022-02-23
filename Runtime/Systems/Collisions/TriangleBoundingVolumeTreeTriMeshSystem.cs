@@ -21,8 +21,8 @@ namespace andywiecko.PBD2D.Systems
             public UpdateAABBsJob(ITriangleBoundingVolumeTreeTriMesh component)
             {
                 aabbs = component.AABBs;
-                triangles = component.Triangles;
-                positions = component.Positions;
+                triangles = component.Triangles.Value.AsReadOnly();
+                positions = component.Positions.Value.AsReadOnly();
                 margin = component.Margin;
             }
 
