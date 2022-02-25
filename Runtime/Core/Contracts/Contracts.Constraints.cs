@@ -96,7 +96,7 @@ namespace andywiecko.PBD2D.Core
         NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Edge>, AABB>> AABBs { get; }
-        Ref<NativeIndexedList<Id<PotentialCollision>, EdgePair>> PotentialCollisions { get; }
+        Ref<NativeIndexedList<Id<PotentialCollision>, IdPair<Edge>>> PotentialCollisions { get; }
         Ref<NativeIndexedList<Id<ContactInfo>, ContactInfo>> ContactInfo { get; }
     }
 }

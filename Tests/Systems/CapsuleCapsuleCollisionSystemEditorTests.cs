@@ -49,7 +49,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         private class FakeTuple : FreeComponent, ICapsuleCapsuleCollisionTuple
         {
             public float Friction { get; set; } = 0;
-            public Ref<NativeList<EdgePair>> PotentialCollisions { get; } = new NativeList<EdgePair>(64, Allocator.Persistent);
+            public Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; } = new NativeList<IdPair<Edge>>(64, Allocator.Persistent);
             public Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; } = new NativeList<EdgeEdgeContactInfo>(64, Allocator.Persistent);
 
             public ICapsuleCollideWithCapsule Component1 { get; set; }
@@ -97,7 +97,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             system.Schedule().Complete();
 
-            EdgePair expectedPair = ((Id<Edge>)0, (Id<Edge>)0);
+            IdPair<Edge> expectedPair = ((Id<Edge>)0, (Id<Edge>)0);
             Assert.That(tuple.PotentialCollisions.Value.ToArray(), Is.EqualTo(new[] { expectedPair }));
         }
 

@@ -81,7 +81,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface ITriMeshTriMeshCollisionTuple : IComponent
     {
-        Ref<NativeIndexedList<Id<Contact>, ExternalEdgePair>> PotentialCollisions { get; }
+        Ref<NativeIndexedList<Id<Contact>, IdPair<ExternalEdge>>> PotentialCollisions { get; }
         Ref<NativeIndexedList<Id<Contact>, ExternalEdgesContactInfo>> Collisions { get; }
         void Deconstruct(out ITriMeshCollideWithTriMesh triMesh1, out ITriMeshCollideWithTriMesh trimesh2);
     }
@@ -115,7 +115,7 @@ namespace andywiecko.PBD2D.Core
     public interface ICapsuleCapsuleCollisionTuple : IComponent
     {
         float Friction { get; }
-        Ref<NativeList<EdgePair>> PotentialCollisions { get; }
+        Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; }
         Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; }
         ICapsuleCollideWithCapsule Component1 { get; }
         ICapsuleCollideWithCapsule Component2 { get; }
