@@ -14,14 +14,17 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs => triMeshCollider.AABBs.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, AABB>();
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
+        public Ref<BoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
 
         private TriMesh triMesh;
         private ExternalEdgesColliderTriMesh triMeshCollider;
+        private TriMeshExternalEdgeBoundingVolumeTree externalEdgeBVT;
 
         private void Start()
         {
             triMesh = GetComponent<TriMesh>();
             triMeshCollider = GetComponent<ExternalEdgesColliderTriMesh>();
+            externalEdgeBVT = GetComponent<TriMeshExternalEdgeBoundingVolumeTree>();
         }
     }
 }

@@ -22,6 +22,8 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float Friction => throw new System.NotImplementedException();
 
+            public Ref<BoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
+
             public override void Dispose()
             {
                 base.Dispose();

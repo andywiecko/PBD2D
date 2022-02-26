@@ -1,5 +1,6 @@
 using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -44,6 +45,10 @@ namespace andywiecko.PBD2D.Components
             Tree.Value.Construct(nativeAABB.AsReadOnly(), default).Complete();
         }
 
+        [SerializeField, Range(0, 30)]
+        private int level = 0;
+
+
         private void OnDrawGizmos()
         {
             if (!Application.isPlaying)
@@ -55,6 +60,52 @@ namespace andywiecko.PBD2D.Components
             foreach (var aabb in AABBs.Value)
             {
                 GizmosExtensions.DrawRectangle(aabb.Min, aabb.Max);
+            }
+
+            /*
+            Gizmos.color = Color.black;
+            foreach(var i in 0..AABBs.Value.Length)
+            {
+                var aabb = Tree.Value.Volumes[i];
+                GizmosExtensions.DrawRectangle(aabb.Min, aabb.Max);
+            }
+            */
+
+            var tree = Tree.Value;
+
+            var root = tree.RootId.Value;
+            var set = new HashSet<int>();
+            var tmpA = new Queue<int>();
+            var tmpB = new Queue<int>();
+            tmpA.Enqueue(root);
+            for (int i = 0; i < level + 1; i++)
+            {
+                while (tmpA.Count > 0)
+                {
+                    var parent = tmpA.Dequeue();
+                    if (i == level)
+                        set.Add(parent);
+                    var node = tree.Nodes[parent];
+                    if (!node.IsLeaf)
+                    {
+                        tmpB.Enqueue(node.LeftChildId);
+                        tmpB.Enqueue(node.RightChildId);
+                    }
+                    else
+                    {
+                        set.Add(parent);
+                    }
+                }
+                (tmpA, tmpB) = (tmpB, tmpA);
+            }
+
+            Gizmos.color = 0.3f * Color.white + 0.7f * Color.green;
+            foreach (var el in set)
+            {
+                var (min, max) = tree.Volumes[el];
+                GizmosExtensions.DrawRectangle(min, max);
+                //var (position, radius) = tree.Volumes[el];
+                //Gizmos.DrawWireSphere(position.ToFloat3(), radius);
             }
         }
     }
