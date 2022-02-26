@@ -46,6 +46,16 @@ namespace andywiecko.PBD2D.Core
             );
         }
 
+        public static AABB ToAABB(this Edge edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
+        {
+            var (pA, pB) = positions.At(edge);
+            return new AABB
+            (
+                min: math.min(pA, pB) - margin,
+                max: math.max(pA, pB) + margin
+            );
+        }
+
         public static Triangle[] ToTrianglesArray(this int[] tris) => Enumerable
             .Range(0, tris.Length / 3)
             .Select(i => (Triangle)(tris[3 * i], tris[3 * i + 1], tris[3 * i + 2]))

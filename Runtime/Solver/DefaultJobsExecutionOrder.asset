@@ -28,6 +28,11 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: cb49aaae5573b3943b31d821fa6f3360, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleBoundingVolumeTreeTriMeshSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: External Edge Bounding Volume Tree System
+    <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
+    script: {fileID: 11500000, guid: e18b797d352459e469c033bd08af7304, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.ExternalEdgeBoundingVolumeTreeSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Capsule Capsule Collision Broadphase System
     <Guid>k__BackingField: 7f4f329447aa8b741b3b8cdbc27e279e
     script: {fileID: 11500000, guid: 7f4f329447aa8b741b3b8cdbc27e279e, type: 3}

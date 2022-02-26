@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
+    [System.Obsolete]
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(ExternalEdgesTriMesh))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Collisions/External Edges Collider")]

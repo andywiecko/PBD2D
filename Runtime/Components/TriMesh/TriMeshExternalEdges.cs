@@ -1,19 +1,18 @@
 using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    [Obsolete]
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edges (Obsolete)")]
-    public class ExternalEdgesTriMesh : BaseComponent, IExternalEdgesTriMesh
+    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edges")]
+    public class TriMeshExternalEdges : BaseComponent
     {
-        public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; private set; }
-        public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> ExternalEdgeToEdgeId { get; private set; } // TODO: refactor this
+        public Ref<NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>> ExternalEdges { get; private set; }
+        public Ref<NativeIndexedArray<Id<ExternalEdge>, float2>> ExternalNormals => throw new System.NotImplementedException();
 
         private TriMesh triMesh;
 
@@ -21,12 +20,11 @@ namespace andywiecko.PBD2D.Components
         {
             triMesh = GetComponent<TriMesh>();
 
-            var edges = triMesh.SerializedData.Edges.ToEdgesArray();  //Value.AsReadOnly();
-            var triangles = triMesh.SerializedData.Triangles.ToTrianglesArray();// Value.AsReadOnly();
+            var edges = triMesh.SerializedData.Edges.ToEdgesArray();
+            var triangles = triMesh.SerializedData.Triangles.ToTrianglesArray();
 
             // TODO: cache this inside editor to draw it during editor?
-            var externalEdges = new List<ExternalEdge>();
-            var externalEdgeToEdge = new List<Id<Edge>>();
+            var externalEdges = new List<Id<Edge>>();
 
             var edgeId = Id<Edge>.Zero;
             foreach (var edge in edges)
@@ -49,8 +47,7 @@ namespace andywiecko.PBD2D.Components
                         var idB = triangle[j];
                         if (((Edge)(idA, idB)).Equals(edge))
                         {
-                            externalEdges.Add(new ExternalEdge(idB, idA));
-                            externalEdgeToEdge.Add(edgeId);
+                            externalEdges.Add(edgeId);
                         }
                     }
                 }
@@ -59,8 +56,7 @@ namespace andywiecko.PBD2D.Components
             }
 
             DisposeOnDestroy(
-                ExternalEdges = new NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>(externalEdges.ToArray(), Allocator.Persistent),
-                ExternalEdgeToEdgeId = new NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>(externalEdgeToEdge.ToArray(), Allocator.Persistent)
+                ExternalEdges = new NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>(externalEdges.ToArray(), Allocator.Persistent)
             );
         }
 
@@ -71,19 +67,20 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
+            Gizmos.color = Color.red;
             var positions = triMesh.PredictedPositions.Value.AsReadOnly();
-            foreach (var (_, externalEdge) in ExternalEdges.Value.AsReadOnly().IdsValues)
+            var edges = triMesh.Edges.Value.AsReadOnly();
+            foreach (var (_, edgeId) in ExternalEdges.Value.AsReadOnly().IdsValues)
             {
-                var (idA, idB) = externalEdge;
-                var pA = positions[idA];
-                var pB = positions[idB];
-
-                Gizmos.color = Color.red;
+                var edge = edges[edgeId];
+                var (pA, pB) = positions.At(edge);
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
 
-                var p = externalEdge.ToEdge().GetCenter(positions);
-                var n = externalEdge.GetNormal(positions);
+                /*
+                var p = edge.GetCenter(positions);
+                var n = math.normalizesafe(MathUtils.Rotate90CW(pB - pA));
                 GizmosExtensions.DrawArrow(p, p + 0.33f * n);
+                */
             }
         }
     }
