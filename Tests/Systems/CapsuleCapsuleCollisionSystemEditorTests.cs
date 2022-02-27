@@ -21,7 +21,6 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs { get; } = new NativeIndexedArray<Id<CollidableEdge>, AABB>(1, Allocator.Persistent);
 
             public float Friction => throw new System.NotImplementedException();
-
             public Ref<BoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
 
             public override void Dispose()
@@ -92,22 +91,11 @@ namespace andywiecko.PBD2D.Editor.Tests
         }
 
         [Test]
-        public void PotentialCollisionBufferTest()
-        {
-            component1.SetPredictedPositions(new[] { math.float2(0, 0), math.float2(10, 0) });
-            component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5f, 10f) });
-
-            system.Schedule().Complete();
-
-            IdPair<Edge> expectedPair = ((Id<Edge>)0, (Id<Edge>)0);
-            Assert.That(tuple.PotentialCollisions.Value.ToArray(), Is.EqualTo(new[] { expectedPair }));
-        }
-
-        [Test]
         public void CollisionBufferTest()
         {
             component1.SetPredictedPositions(new[] { math.float2(0, 0), math.float2(10, 0) });
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5f, 10f) });
+            tuple.PotentialCollisions.Value.Add(new(Id<Edge>.Zero, Id<Edge>.Zero));
 
             system.Schedule().Complete();
 
@@ -123,6 +111,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             component1.SetPredictedPositions(new[] { math.float2(0, 0), math.float2(10, 0) });
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5f, 10f) });
+            tuple.PotentialCollisions.Value.Add(new(Id<Edge>.Zero, Id<Edge>.Zero));
 
             system.Schedule().Complete();
 
@@ -142,6 +131,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             component1.SetPredictedPositions(new[] { math.float2(0, 0), math.float2(10, 0) });
             component2.SetPredictedPositions(new[] { math.float2(0, 1), math.float2(10, 1) });
+            tuple.PotentialCollisions.Value.Add(new(Id<Edge>.Zero, Id<Edge>.Zero));
 
             system.Schedule().Complete();
             // Should be run twice since method for finding closest point 
@@ -163,14 +153,9 @@ namespace andywiecko.PBD2D.Editor.Tests
             component2.SetPositions(new[] { math.float2(5, 2), math.float2(5f, 10f) });
             component1.SetPredictedPositions(new[] { math.float2(0, 0), math.float2(10, 0) });
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5, 10) });
+            tuple.PotentialCollisions.Value.Add(new(Id<Edge>.Zero, Id<Edge>.Zero));
 
             system.Schedule().Complete();
-
-            Debug.Log(component1.PredictedPositions.Value[(Id<Point>)0]);
-            Debug.Log(component1.PredictedPositions.Value[(Id<Point>)1]);
-            Debug.Log("");
-            Debug.Log(component2.PredictedPositions.Value[(Id<Point>)0]);
-            Debug.Log(component2.PredictedPositions.Value[(Id<Point>)1]);
 
             float2[] expectedPositions1 = { math.float2(0 - 1 / 3f, -1 / 3f), math.float2(10 - 1 / 3f, -1 / 3f) };
             Assert.That(PredictedPositions1, Is.EqualTo(expectedPositions1));
