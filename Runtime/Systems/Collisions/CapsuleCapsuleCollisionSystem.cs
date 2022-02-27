@@ -13,15 +13,15 @@ namespace andywiecko.PBD2D.Systems
     public class CapsuleCapsuleCollisionSystem : BaseSystem<ICapsuleCapsuleCollisionTuple>
     {
         [BurstCompile]
-        private struct DetectCollisionsJob : IJob
+        private struct DetectCollisionsJob : IJobParallelForDefer
         {
             [ReadOnly]
             private NativeArray<IdPair<Edge>> potentialCollisions;
-            private NativeList<EdgeEdgeContactInfo> collisions;
+            private NativeList<EdgeEdgeContactInfo>.ParallelWriter collisions;
             private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges1;
             private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges2;
-            private NativeIndexedArray<Id<Point>, float2> positions1;
-            private NativeIndexedArray<Id<Point>, float2> positions2;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions1;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions2;
             private readonly float contactRadiusSq;
 
             public DetectCollisionsJob(ICapsuleCapsuleCollisionTuple tuple)
@@ -29,34 +29,29 @@ namespace andywiecko.PBD2D.Systems
                 var (triMesh1, triMesh2) = tuple;
                 edges1 = triMesh1.Edges.Value.AsReadOnly();
                 edges2 = triMesh2.Edges.Value.AsReadOnly();
-                positions1 = triMesh1.PredictedPositions;
-                positions2 = triMesh2.PredictedPositions;
+                positions1 = triMesh1.PredictedPositions.Value.AsReadOnly();
+                positions2 = triMesh2.PredictedPositions.Value.AsReadOnly();
                 var radius1 = triMesh1.CollisionRadius;
                 var radius2 = triMesh2.CollisionRadius;
                 contactRadiusSq = (radius1 + radius2) * (radius1 + radius2);
 
                 potentialCollisions = tuple.PotentialCollisions.Value.AsDeferredJobArray();
-                collisions = tuple.Collisions;
+                collisions = tuple.Collisions.Value.AsParallelWriter();
             }
 
-            public void Execute()
+            public void Execute(int i)
             {
-                collisions.Clear();
+                var (e1Id, e2Id) = potentialCollisions[i];
+                var (a0, a1) = positions1.At(edges1[e1Id]);
+                var (b0, b1) = positions2.At(edges2[e2Id]);
 
-                foreach (var (e1Id, e2Id) in potentialCollisions)
+                MathUtils.ShortestLineSegmentBetweenLineSegments(a0, a1, b0, b1, out var pA, out var pB);
+
+                if (math.distancesq(pA, pB) <= 4 * contactRadiusSq)
                 {
-                    var (a0Id, a1Id) = edges1[e1Id];
-                    var (b0Id, b1Id) = edges2[e2Id];
-                    var (a0, a1, b0, b1) = (positions1[a0Id], positions1[a1Id], positions2[b0Id], positions2[b1Id]);
-
-                    MathUtils.ShortestLineSegmentBetweenLineSegments(a0, a1, b0, b1, out var pA, out var pB);
-
-                    if (math.distancesq(pA, pB) <= 4 * contactRadiusSq)
-                    {
-                        var barA = MathUtils.BarycentricSafe(a0, a1, pA, 0.5f);
-                        var barB = MathUtils.BarycentricSafe(b0, b1, pB, 0.5f);
-                        collisions.Add(new(barA, barB, e1Id, e2Id));
-                    }
+                    var barA = MathUtils.BarycentricSafe(a0, a1, pA, 0.5f);
+                    var barB = MathUtils.BarycentricSafe(b0, b1, pB, 0.5f);
+                    collisions.AddNoResize(new(barA, barB, e1Id, e2Id));
                 }
             }
         }
@@ -168,7 +163,8 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new DetectCollisionsJob(component).Schedule(dependencies);
+                dependencies = new CommonJobs.ClearListJob<EdgeEdgeContactInfo>(component.Collisions).Schedule(dependencies);
+                dependencies = new DetectCollisionsJob(component).Schedule(component.PotentialCollisions.Value, innerloopBatchCount: 64, dependencies);
                 dependencies = new ResolveCollisionsJob(component).Schedule(dependencies);
             }
 
