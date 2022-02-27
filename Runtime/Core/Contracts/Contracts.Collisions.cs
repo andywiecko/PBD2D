@@ -115,7 +115,6 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
         Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; }
-        Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs { get; }
         Ref<BoundingVolumeTree<AABB>> Tree { get; }
     }
 

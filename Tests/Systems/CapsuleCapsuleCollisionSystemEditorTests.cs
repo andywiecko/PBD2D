@@ -4,7 +4,6 @@ using andywiecko.PBD2D.Systems;
 using NUnit.Framework;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Editor.Tests
 {
@@ -18,7 +17,6 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f }, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; } = new NativeIndexedArray<Id<Edge>, Edge>(new[] { (Edge)(0, 1) }, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; } = new NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>(new[] { (Id<Edge>)0 }, Allocator.Persistent);
-            public Ref<NativeIndexedArray<Id<CollidableEdge>, AABB>> AABBs { get; } = new NativeIndexedArray<Id<CollidableEdge>, AABB>(1, Allocator.Persistent);
 
             public float Friction => throw new System.NotImplementedException();
             public Ref<BoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
@@ -26,12 +24,11 @@ namespace andywiecko.PBD2D.Editor.Tests
             public override void Dispose()
             {
                 base.Dispose();
-                Positions.Dispose();
-                PredictedPositions.Dispose();
-                MassesInv.Dispose();
-                Edges.Dispose();
-                CollidableEdges.Dispose();
-                AABBs.Dispose();
+                Positions?.Dispose();
+                PredictedPositions?.Dispose();
+                MassesInv?.Dispose();
+                Edges?.Dispose();
+                CollidableEdges?.Dispose();
             }
 
             public FakeComponent SetPositions(float2[] positions)
