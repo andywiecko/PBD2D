@@ -4,46 +4,6 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface ITriMeshCollideWithFluid : IComponent
-    {
-        float Weight { get; }
-        bool IsValid { get; } //HACK
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Triangle>, Id<ExternalEdge>>.ReadOnly TrianglesEdgesField { get; }
-        NativeIndexedArray<Id<Triangle>, AABB>.ReadOnly AABBs { get; }
-        NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
-        NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly ExternalEdges { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-    }
-    public interface IFluidCollideWithTriMesh : IComponent
-    {
-        float ParticleRadius { get; }
-        float2 CellSize { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        Ref<NativeHashSet<int2>> OccupiedGridCells { get; }
-        Ref<NativeHashMap<int2, FixedList4096Bytes<Id<Point>>>> Grid { get; }
-    }
-    public interface ITriMeshFluidCollisionTuple : IComponent
-    {
-        float Weight { get; }
-        bool IsValid { get; } // HACK: get rid of this shiet
-        Ref<NativeList<PointTrianglePair>> PotentialCollisions { get; }
-        Ref<NativeList<PointTrianglePair>> Collisions { get; }
-        Ref<NativeList<int2>> GridCellsToCheck { get; }
-
-        Ref<NativeIndexedArray<Id<Point>, float2>> TriMeshPredictedPositions { get; }
-        NativeIndexedArray<Id<Triangle>, Id<ExternalEdge>>.ReadOnly TrianglesEdgesField { get; }
-        NativeIndexedArray<Id<Triangle>, AABB>.ReadOnly AABBs { get; }
-        NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
-        NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly ExternalEdges { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly TriMeshMassesInv { get; }
-
-        float ParticleRadius { get; }
-        float2 CellSize { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> FluidPredictedPositions { get; }
-        Ref<NativeHashSet<int2>> OccupiedGridCells { get; }
-        Ref<NativeHashMap<int2, FixedList4096Bytes<Id<Point>>>> Grid { get; }
-    }
     public interface ITrianglesColliderTriMesh : IComponent
     {
         float Margin { get; }
@@ -55,37 +15,10 @@ namespace andywiecko.PBD2D.Core
     {
         Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
     }
-    public interface IExternalEdgesColliderTriMesh : IComponent
-    {
-        float CollisionRadius { get; }
-        float Margin { get; }
-        Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; }
-        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
-        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-
-    }
     public interface IFlowFieldTriMesh : IComponent
     {
         Ref<NativeIndexedArray<Id<Triangle>, Id<ExternalEdge>>> TrianglesEdgesField { get; }
     }
-    public interface ITriMeshCollideWithTriMesh : IComponent
-    {
-        float CollisionRadius { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
-        NativeIndexedArray<Id<Point>, float>.ReadOnly MassesInv { get; }
-        NativeIndexedArray<Id<ExternalEdge>, AABB>.ReadOnly AABBs { get; }
-        NativeIndexedArray<Id<Edge>, Edge>.ReadOnly Edges { get; }
-        NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly ExternalEdges { get; }
-    }
-
-    public interface ITriMeshTriMeshCollisionTuple : IComponent
-    {
-        Ref<NativeIndexedList<Id<Contact>, IdPair<ExternalEdge>>> PotentialCollisions { get; }
-        Ref<NativeIndexedList<Id<Contact>, ExternalEdgesContactInfo>> Collisions { get; }
-        void Deconstruct(out ITriMeshCollideWithTriMesh triMesh1, out ITriMeshCollideWithTriMesh trimesh2);
-    }
-
     public interface ITriangleBoundingVolumeTreeTriMesh : IComponent
     {
         float Margin { get; }
