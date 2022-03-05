@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
+    [System.Obsolete]
     [RequireComponent(typeof(ExternalEdgesTriMesh))]
     [RequireComponent(typeof(TriMesh))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Flow Field")]
