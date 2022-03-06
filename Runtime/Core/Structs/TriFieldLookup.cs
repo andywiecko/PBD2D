@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Core
         public readonly int Samples;
         public bool IsInitialized;
 
-        private NativeArray2d<Id<ExternalEdge>> externalEdges;
+        private NativeArray2d<Id<ExternalEdge>> mapping;
         private NativeArray<float3> barycoords;
 
         public TriFieldLookup(int trianglesCount, int samples, Allocator allocator)
@@ -31,28 +31,37 @@ namespace andywiecko.PBD2D.Core
 
             var barCount = samples * (samples + 1) / 2;
             barycoords = new(length: barCount, allocator);
-            externalEdges = new(rowsCount: trianglesCount, colsCount: barCount, allocator);
+            mapping = new(rowsCount: trianglesCount, colsCount: barCount, allocator);
             IsInitialized = false;
         }
 
-        public JobHandle Initialize(JobHandle dependencies) => new InitializeJob(this).Schedule(dependencies);
+        public JobHandle Initialize(JobHandle dependencies) => new InitializeBarycoordsJob(this).Schedule(dependencies);
         public void Initialize() => Initialize(default).Complete();
+        public JobHandle GenerateMapping(
+            NativeIndexedArray<Id<Point>, float2>.ReadOnly positions,
+            NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles,
+            NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges,
+            NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges,
+            JobHandle dependencies
+        ) => new GenerateEdgeMappingsJob(this, positions, triangles, edges, externalEdges).Schedule(dependencies);
+
         public ReadOnly AsReadOnly() => new(this);
         public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 bar) => AsReadOnly().GetExternalEdge(triId, bar);
-        public JobHandle Dispose(JobHandle dependencies) => externalEdges.Dispose(barycoords.Dispose(dependencies));
-        
+        public JobHandle Dispose(JobHandle dependencies) => mapping.Dispose(barycoords.Dispose(dependencies));
+
         public void Dispose()
         {
             barycoords.Dispose();
-            externalEdges.Dispose();
+            mapping.Dispose();
         }
 
+        #region Jobs
         [BurstCompile]
-        private struct InitializeJob : IJobParallelFor
+        private struct InitializeBarycoordsJob : IJobParallelFor
         {
             private NativeArray<float3> barycoords;
             private readonly float dx;
-            public InitializeJob(TriFieldLookup @this)
+            public InitializeBarycoordsJob(TriFieldLookup @this)
             {
                 barycoords = @this.barycoords;
                 dx = @this.dx;
@@ -71,18 +80,84 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
+        [BurstCompile]
+        private struct GenerateEdgeMappingsJob : IJobParallelFor
+        {
+            private NativeArray<float3>.ReadOnly barycoords;
+            private NativeArray2d<Id<ExternalEdge>> mapping;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
+            private NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles;
+            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges;
+            private NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges;
+
+            public GenerateEdgeMappingsJob(TriFieldLookup fieldLookup,
+                NativeIndexedArray<Id<Point>, float2>.ReadOnly positions,
+                NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles,
+                NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges,
+                NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges
+                )
+            {
+                barycoords = fieldLookup.barycoords.AsReadOnly();
+                mapping = fieldLookup.mapping;
+                this.positions = positions;
+                this.triangles = triangles;
+                this.edges = edges;
+                this.externalEdges = externalEdges;
+            }
+
+            public JobHandle Schedule(JobHandle dependencies)
+            {
+                return this.Schedule(mapping.RowsCount, innerloopBatchCount: 32, dependencies);
+            }
+
+            public void Execute(int index)
+            {
+                var row = mapping.GetRow(index);
+                var triId = (Id<Triangle>)index;
+                var (pA, pB, pC) = positions.At(triangles[triId]);
+                for (int i = 0; i < barycoords.Length; i++)
+                {
+                    var bar = barycoords[i];
+                    var p = bar.x * pA + bar.y * pB + bar.z * pC;
+                    var edgeId = FindClosestEdge(p);
+                    row[i] = edgeId;
+                }
+            }
+
+            // Brute force, should be done smarter using kd tree or voronoi
+            private Id<ExternalEdge> FindClosestEdge(float2 p)
+            {
+                var minDistanceSq = float.MaxValue;
+                var closestEdge = Id<ExternalEdge>.Invalid;
+
+                foreach (var (externalId, edgeId) in externalEdges.IdsValues)
+                {
+                    var (a0, a1) = positions.At(edges[edgeId]);
+                    MathUtils.PointClosestPointOnLineSegment(p, a0, a1, out var q);
+                    var distanceSq = math.distancesq(p, q);
+                    if (distanceSq <= minDistanceSq)
+                    {
+                        closestEdge = externalId;
+                        minDistanceSq = distanceSq;
+                    }
+                }
+                return closestEdge;
+            }
+        }
+        #endregion
+
+        #region ReadOnly
         public struct ReadOnly : ITriFieldLookup
         {
-            // seems to be unused?
-            //private NativeArray<float3>.ReadOnly barycoords;
-            private NativeArray2d<Id<ExternalEdge>>.ReadOnly externalEdges;
+            public NativeArray<float3>.ReadOnly Barycoords;
+            private NativeArray2d<Id<ExternalEdge>>.ReadOnly mapping;
             private readonly float dx => 1f / (Samples - 1);
             public readonly int Samples;
 
             public ReadOnly(TriFieldLookup owner)
             {
-                //barycoords = owner.barycoords.AsReadOnly();
-                externalEdges = owner.externalEdges.AsReadOnly();
+                Barycoords = owner.barycoords.AsReadOnly();
+                mapping = owner.mapping.AsReadOnly();
                 Samples = owner.Samples;
             }
 
@@ -92,8 +167,9 @@ namespace andywiecko.PBD2D.Core
                 p /= dx;
                 var (i, j) = (int2)math.round(p);
                 var index = MathUtils.ConvertToTriMatId(i, j);
-                return externalEdges[triId.Value, index];
+                return mapping[triId.Value, index];
             }
         }
+        #endregion
     }
 }
