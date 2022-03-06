@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Core
         public readonly int Samples;
         public bool IsInitialized;
 
-        private NativeArray<Id<ExternalEdge>> externalEdges;
+        private NativeArray2d<Id<ExternalEdge>> externalEdges;
         private NativeArray<float3> barycoords;
 
         public TriFieldLookup(int trianglesCount, int samples, Allocator allocator)
@@ -31,25 +31,14 @@ namespace andywiecko.PBD2D.Core
 
             var barCount = samples * (samples + 1) / 2;
             barycoords = new(length: barCount, allocator);
-            externalEdges = new(barCount * trianglesCount, allocator);
+            externalEdges = new(rowsCount: trianglesCount, colsCount: barCount, allocator);
             IsInitialized = false;
         }
 
         public JobHandle Initialize(JobHandle dependencies) => new InitializeJob(this).Schedule(dependencies);
         public void Initialize() => Initialize(default).Complete();
         public ReadOnly AsReadOnly() => new(this);
-
-        public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 bar)
-        {
-            var p = bar.x * a + bar.y * b + bar.z * c;
-            p /= dx;
-            var (i, j) = (int2)math.round(p);
-            var index = MathUtils.ConvertToTriMatId(i, j);
-
-
-            throw new System.NotImplementedException();
-        }
-
+        public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 bar) => AsReadOnly().GetExternalEdge(triId, bar);
         public JobHandle Dispose(JobHandle dependencies) => externalEdges.Dispose(barycoords.Dispose(dependencies));
         
         public void Dispose()
@@ -84,18 +73,26 @@ namespace andywiecko.PBD2D.Core
 
         public struct ReadOnly : ITriFieldLookup
         {
-            private NativeArray<float3>.ReadOnly barycoords;
-            private NativeArray<Id<ExternalEdge>>.ReadOnly externalEdges;
+            // seems to be unused?
+            //private NativeArray<float3>.ReadOnly barycoords;
+            private NativeArray2d<Id<ExternalEdge>>.ReadOnly externalEdges;
+            private readonly float dx => 1f / (Samples - 1);
+            public readonly int Samples;
 
             public ReadOnly(TriFieldLookup owner)
             {
-                barycoords = owner.barycoords.AsReadOnly();
+                //barycoords = owner.barycoords.AsReadOnly();
                 externalEdges = owner.externalEdges.AsReadOnly();
+                Samples = owner.Samples;
             }
 
-            public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 barycoords)
+            public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 bar)
             {
-                throw new System.NotImplementedException();
+                var p = bar.x * a + bar.y * b + bar.z * c;
+                p /= dx;
+                var (i, j) = (int2)math.round(p);
+                var index = MathUtils.ConvertToTriMatId(i, j);
+                return externalEdges[triId.Value, index];
             }
         }
     }
