@@ -11,6 +11,8 @@ namespace andywiecko.PBD2D.Components
     [CreateAssetMenu(fileName = "TriMeshSerializedData (Triangulator)", menuName = "PBD2D/TriMesh/TriMeshSerializedData (Triangulator)")]
     public class TriMeshSerializedDataTriangulator : TriMeshSerializedData
     {
+        public Triangulator.TriangulationSettings Settings;
+
         [field: SerializeField, HideInInspector]
         public override Mesh Mesh { get; protected set; } = default;
 
@@ -28,6 +30,12 @@ namespace andywiecko.PBD2D.Components
 
         [field: SerializeField]
         public bool RefineMesh { get; private set; } = true;
+
+        [field: SerializeField]
+        public bool ConstrainEdges { get; private set; } = false;
+
+        [field: SerializeField]
+        public int2[] ConstraintEdges { get; private set; } = { };
 
         [field: SerializeField, HideInInspector]
         public override float[] MassesInv { get; protected set; } = default;
@@ -65,7 +73,7 @@ namespace andywiecko.PBD2D.Components
 
             Mesh CreateMesh()
             {
-                var mesh = new Mesh(); 
+                var mesh = new Mesh();
                 mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
                 mesh.SetTriangles(Triangles, submesh: 0);
                 mesh.SetUVs(0, UVs);
@@ -87,6 +95,36 @@ namespace andywiecko.PBD2D.Components
 
                 colliderPoints = collider.points.Select(i => (float2)i).ToArray();
 
+                var n = colliderPoints.Length;
+                for (int i = 0; i < n; i++)
+                {
+                    var xi = colliderPoints[i].ToFloat3(1);
+                    var xj = colliderPoints[(i + 1) % n].ToFloat3(1);
+
+                    Debug.DrawLine(xi, xj, Color.red, duration: 10f);
+
+                    /*
+                    var dx = 0.025f;
+                    Debug.DrawLine(xi, xi + math.float3(+dx, 0, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(-dx, 0, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(0, +dx, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(0, -dx, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(+dx, +dx, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(+dx, -dx, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(-dx, +dx, 0), Color.red, duration: 10f);
+                    Debug.DrawLine(xi, xi + math.float3(-dx, -dx, 0), Color.red, duration: 10f);
+                    */
+                }
+
+                /*
+                var x0 = colliderPoints[0].ToFloat3(1);
+                var x1 = colliderPoints[(21) % n].ToFloat3(1);
+                Debug.DrawLine(x0, x1, Color.red, duration: 10f);
+                var x2 = colliderPoints[8].ToFloat3(1);
+                var x3 = colliderPoints[(19) % n].ToFloat3(1);
+                Debug.DrawLine(x2, x3, Color.red, duration: 10f);
+                */
+
                 DestroyImmediate(go);
             }
 #if UNITY_EDITOR
@@ -103,8 +141,8 @@ namespace andywiecko.PBD2D.Components
 
         public void CopyDataFromTriangulation(Triangulator triangulator)
         {
-            Triangles = triangulator.Triangles.ToArray();
-            Positions = triangulator.Positions.ToArray();
+            Triangles = triangulator.Output.Triangles.ToArray();
+            Positions = triangulator.Output.Positions.ToArray();
 
             var pointsCount = Positions.Length;
             var trianglesCount = Triangles.Length / 3;

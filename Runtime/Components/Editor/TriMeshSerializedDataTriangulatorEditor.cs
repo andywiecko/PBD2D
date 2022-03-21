@@ -1,4 +1,5 @@
 using andywiecko.BurstTriangulator;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEditor;
@@ -15,7 +16,7 @@ namespace andywiecko.PBD2D.Components.Editor
 
         private Vector2 AreaValues { get => Data.AreaValues; set => Data.AreaValues = value; }
         private float AngleValue { get => Data.AngleValue; set => Data.AngleValue = value; }
-        private bool RefineMesh  => Data.RefineMesh;
+        private bool RefineMesh => Data.RefineMesh;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -32,13 +33,21 @@ namespace andywiecko.PBD2D.Components.Editor
             var triangulateButton = new Button(() =>
             {
                 using var triangulator = new Triangulator(capacity: 64 * 1024, Allocator.Persistent);
-                using var data = new NativeArray<float2>(Data.colliderPoints, Allocator.TempJob);
+                using var data = new NativeArray<float2>(Data.colliderPoints, Allocator.Persistent);
+                using var constraints = new NativeArray<int>(
+                    Data.ConstraintEdges.SelectMany(i => new[] { i.x, i.y }).ToArray()
+                    , Allocator.Persistent);
 
-                triangulator.Settings.MinimumArea = AreaValues.x;
-                triangulator.Settings.MaximumArea = AreaValues.y;
-                triangulator.Settings.MinimumAngle = math.radians(AngleValue);
-                triangulator.Settings.RefineMesh = RefineMesh;
-                triangulator.Schedule(data.AsReadOnly(), default).Complete();
+                var settings = triangulator.Settings;
+                settings.MinimumArea = AreaValues.x;
+                settings.MaximumArea = AreaValues.y;
+                settings.MinimumAngle = math.radians(AngleValue);
+                settings.RefineMesh = RefineMesh;
+                settings.ConstrainEdges = Data.ConstrainEdges;
+
+                triangulator.Input.ConstraintEdges = constraints;
+                triangulator.Input.Positions = data;
+                triangulator.Run();
 
                 Data.CopyDataFromTriangulation(triangulator);
                 Data.RegenerateMesh();
