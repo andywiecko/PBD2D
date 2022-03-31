@@ -22,6 +22,10 @@ Unity Position Based Dynamics in two dimensions
   - [Components](#components)
     - [TriMesh](#trimesh)
     - [Ground](#ground)
+  - [Roadmap](#roadmap)
+    - [v.0.1.0](#v010)
+    - [v.1.0.0](#v100)
+    - [v.2.0.0](#v200)
   - [Dependencies](#dependencies)
   - [Contributors](#contributors)
   - [Bibliography](#bibliography)
@@ -133,6 +137,30 @@ As the name suggests, the component represent the plane surface.
 Implemented collisions:
 
 - with [TriMesh](#trimesh).
+
+## Roadmap
+
+### v.0.1.0
+
+- [ ] Reimport and refactor tri mesh structure.
+- [ ] Reimport and refactor rod structure.
+- [ ] Reimport and refactor position based fluid.
+- [ ] Sample scenes uploaded to a separate repo+build online.
+- [ ] Test for most of the systems.
+- [ ] Move math/collection related parts into custom packages.
+- [ ] Docs.
+- [ ] CI/CD, git dependencies for unity-test-runner?
+
+### v.1.0.0
+
+- [ ] Destructible bodies.
+- [ ] Continous collisions.
+- [ ] Fluid "fancy" shader.
+
+### v.2.0.0
+
+- [ ] GPU fluids.
+- [ ] Sign distance field collisions.
 
 ## Dependencies
 
