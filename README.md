@@ -22,6 +22,7 @@ Unity Position Based Dynamics in two dimensions
   - [Components](#components)
     - [TriMesh](#trimesh)
     - [Ground](#ground)
+  - [Architecture](#architecture)
   - [Roadmap](#roadmap)
     - [v.0.1.0](#v010)
     - [v.1.0.0](#v100)
@@ -138,6 +139,27 @@ Implemented collisions:
 
 - with [TriMesh](#trimesh).
 
+## Architecture
+
+```mermaid
+%%{init: {"theme": "neutral", "flowchart": {"curve": "stepBefore", "useMaxwidth": false}}}%%
+
+graph TB
+b --> a
+c --> a
+d --> a
+
+a[Core]
+b[Components]
+c[Solver]
+d[Systems]
+
+click a href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Core"
+click b href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Components"
+click c href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Solver"
+click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
+```
+
 ## Roadmap
 
 ### v.0.1.0
@@ -150,6 +172,7 @@ Implemented collisions:
 - [ ] Move math/collection related parts into custom packages.
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
+- [ ] Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.
 
 ### v.1.0.0
 
