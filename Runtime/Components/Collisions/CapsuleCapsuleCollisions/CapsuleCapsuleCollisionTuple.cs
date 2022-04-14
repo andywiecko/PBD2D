@@ -7,6 +7,11 @@ namespace andywiecko.PBD2D.Components
         ITriMeshCapsulesCollideWithTriMeshCapsules, ITriMeshCapsulesCollideWithTriMeshCapsules>,
         ICapsuleCapsuleCollisionTuple
     {
+        public TriMeshCapsulesTriMeshCapsulesCollisionTuple(ITriMeshCapsulesCollideWithTriMeshCapsules item1, ITriMeshCapsulesCollideWithTriMeshCapsules item2, World world) : base(item1, item2, world)
+        {
+
+        }
+
         public Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; private set; }
         public Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; private set; }
 
@@ -31,10 +36,15 @@ namespace andywiecko.PBD2D.Components
             => c1.Id < c2.Id;
     }
 
+    /*
     public class RodCapsulesTriMeshCapsulesCollisionTuple : ComponentsTuple<
         IRodCapsulesCollideWithTriMeshCapsules, ITriMeshCapsulesCollideWithRodCapsules>,
         ICapsuleCapsuleCollisionTuple
     {
+        public RodCapsulesTriMeshCapsulesCollisionTuple(IRodCapsulesCollideWithTriMeshCapsules item1, ITriMeshCapsulesCollideWithRodCapsules item2, World world) : base(item1, item2, world)
+        {
+        }
+
         public Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; private set; }
         public Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; private set; }
 
@@ -58,4 +68,5 @@ namespace andywiecko.PBD2D.Components
             ITriMeshCapsulesCollideWithRodCapsules c2)
             => c1.Id < c2.Id;
     }
+    */
 }

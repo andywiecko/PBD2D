@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Position Based Dynamics/Step End System")]
-    public class PositionBasedDynamicsStepEndSystem : SystemWithSimulationConfiguration<IPositionBasedDynamics>
+    public class PositionBasedDynamicsStepEndSystem : BaseSystem<IPositionBasedDynamics>
     {
         [BurstCompile]
         private struct MovePositionsAndUpdateVelocityJob : IJobParallelFor

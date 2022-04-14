@@ -59,8 +59,8 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             TestUtils.New(ref startSystem);
             TestUtils.New(ref endSystem);
-            startSystem.ConfigurationProvider = this;
-            endSystem.ConfigurationProvider = this;
+            //startSystem.ConfigurationProvider = this;
+            //endSystem.ConfigurationProvider = this;
 
             component = new();
 

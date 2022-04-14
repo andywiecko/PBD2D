@@ -27,7 +27,7 @@ namespace andywiecko.PBD2D.Solver
 
             foreach (var (method, type) in actionsOrder[SolverAction.OnScheduling])
             {
-                foreach (var system in SystemsRegistry.SystemsOf(type))
+                foreach (var system in solver.World.SystemsRegistry.SystemsOf(type))
                 {
                     solver.OnScheduling += () => method.Invoke(system, default);
                 }
@@ -35,7 +35,7 @@ namespace andywiecko.PBD2D.Solver
 
             foreach (var (method, type) in actionsOrder[SolverAction.OnJobsCompletion])
             {
-                foreach (var system in SystemsRegistry.SystemsOf(type))
+                foreach (var system in solver.World.SystemsRegistry.SystemsOf(type))
                 {
                     solver.OnJobsComplete += () => method.Invoke(system, default);
                 }

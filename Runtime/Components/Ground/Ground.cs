@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    public class Ground : BaseComponent
+    public class Ground : Entity
     {
         public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default;
         [SerializeField]
         private PhysicalMaterial physicalMaterial = default;
 
-        public Line Surface => new 
+        public Line Surface => new
         (
             point: transform.position.ToFloat2(),
             normal: transform.up.ToFloat2()

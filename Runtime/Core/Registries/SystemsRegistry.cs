@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 namespace andywiecko.PBD2D.Core
 {
-    public static class SystemsRegistry
+    public class SystemsRegistry
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void Initialize()
+        static SystemsRegistry()
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -15,32 +14,36 @@ namespace andywiecko.PBD2D.Core
                 {
                     if (typeof(ISystem).IsAssignableFrom(type) && !type.IsAbstract)
                     {
-                        systems.Add(type, new List<ISystem>());
+                        staticCachedSystems.Add(type, new List<ISystem>());
                     }
                 }
             }
         }
 
-        public static event Action OnRegistryChange;
+        private static readonly Dictionary<Type, List<ISystem>> staticCachedSystems = new();
 
-        private static readonly Dictionary<Type, List<ISystem>> systems = new();
+        public event Action OnRegistryChange;
+        private readonly Dictionary<Type, List<ISystem>> systems;
 
-        public static void InvokeRegistryChange() => OnRegistryChange?.Invoke();
+        public SystemsRegistry()
+        {
+            systems = staticCachedSystems.ToDictionary(i => i.Key, i => i.Value.ToList());
+        }
 
-        public static IReadOnlyList<ISystem> SystemsOf(Type type) => systems[type];
+        public IReadOnlyList<ISystem> SystemsOf(Type type) => systems[type];
 
-        public static void Add<T>(T system) where T : ISystem
+        public void Add<T>(T system) where T : ISystem
         {
             var type = system.GetType();
             systems[type].Add(system);
-            InvokeRegistryChange();
+            OnRegistryChange?.Invoke();
         }
 
-        public static void Remove<T>(T system) where T : ISystem
+        public void Remove<T>(T system) where T : ISystem
         {
             var type = system.GetType();
             systems[type].Remove(system);
-            InvokeRegistryChange();
+            OnRegistryChange?.Invoke();
         }
     }
 }

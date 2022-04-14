@@ -1,25 +1,18 @@
 using andywiecko.BurstCollections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    public abstract class BaseComponent : MonoBehaviour, IComponent
+    [DisallowMultipleComponent]
+    public abstract class Entity : MonoBehaviour
     {
         [field: SerializeField]
-        public Entity Entity { get; private set; } = default;
-        public World World => Entity.World;
-
-        public Id<IComponent> Id { get; } = ComponentIdCounter.GetNext();
+        public World World { get; private set; } = default;
 
         private readonly List<IDisposable> refsToDisposeOnDestroy = new();
-
-        // TODO
-        private void OnValidate()
-        {
-            Entity = GetComponent<Entity>();
-        }
 
         protected void DisposeOnDestroy(params IDisposable[] references)
         {
@@ -36,8 +29,5 @@ namespace andywiecko.PBD2D.Core
                 reference.Dispose();
             }
         }
-
-        protected virtual void OnEnable() => World.ComponentsRegistry.Register(this);
-        protected virtual void OnDisable() => World.ComponentsRegistry.Deregister(this);
     }
 }

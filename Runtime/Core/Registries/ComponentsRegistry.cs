@@ -1,33 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using UnityEngine;
+using System.Linq;
 
 namespace andywiecko.PBD2D.Core
 {
     public class ComponentsRegistry
     {
-        private static readonly Dictionary<Type, IReadOnlyList<(MethodInfo Add, MethodInfo Remove)>> derivedTypesInterfacesMethods = new();
+        private static readonly Dictionary<Type, IReadOnlyList<Type>> derivedTypesToInterfaces = new();
         private static readonly IReadOnlyList<Type> typesToCache = new[] { typeof(BaseComponent), typeof(ComponentsTuple), typeof(FreeComponent) };
 
-#if UNITY_EDITOR
-        [InitializeOnLoadMethod]
-        private static void EditorInitialization() => Initialize();
-#endif
+        private static readonly HashSet<Type> staticComponentInterfaces = new();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void Initialize()
+        static ComponentsRegistry()
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (var type in assembly.GetTypes())
                 {
-                    foreach (var typeToCache in typesToCache)
+                    //foreach (var typeToCache in typesToCache)
                     {
-                        if (typeToCache.IsAssignableFrom(type))
+                        //if (typeToCache.IsAssignableFrom(type))
                         {
                             RegisterTypeInterfaces(type);
                         }
@@ -38,59 +31,73 @@ namespace andywiecko.PBD2D.Core
 
         private static void RegisterTypeInterfaces(Type type)
         {
-            var list = new List<(MethodInfo, MethodInfo)>();
+            var list = new List<Type>();
             foreach (var @interface in type.GetInterfaces())
             {
                 if (typeof(IComponent).IsAssignableFrom(@interface))
                 {
-                    list.Add(GetMethods(@interface));
+                    list.Add(@interface);
+                    staticComponentInterfaces.Add(@interface);
                 }
             }
-            derivedTypesInterfacesMethods.TryAdd(type, list);
+            derivedTypesToInterfaces.TryAdd(type, list);
+        }
 
-            static (MethodInfo, MethodInfo) GetMethods(Type type)
+        public ComponentsRegistry()
+        {
+            components = staticComponentInterfaces.ToDictionary(i => i, i => CreateListOf(i));
+            onAddActions = staticComponentInterfaces.ToDictionary(i => i, i => default(Action<object>));
+            onRemoveActions = staticComponentInterfaces.ToDictionary(i => i, i => default(Action<object>));
+
+            static IList CreateListOf(Type t) => Activator.CreateInstance(typeof(List<>).MakeGenericType(t)) as IList;
+        }
+
+        public IEnumerable<T> GetComponents<T>() where T : IComponent => components[typeof(T)] as List<T>;
+        public IEnumerable GetComponents(Type type) => components[type];
+
+        public void Register(object instance)
+        {
+            var type = instance.GetType();
+            foreach (var @interface in derivedTypesToInterfaces[type])
             {
-                var registryType = typeof(ComponentsRegistry<>).MakeGenericType(type);
-                var flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy;
-                return (registryType.GetMethod("Add", flags), registryType.GetMethod("Remove", flags));
+                components[@interface].Add(instance);
+                onAddActions[@interface]?.Invoke(instance);
             }
         }
 
-        public static void Register(object instance)
+        public void Deregister(object instance)
         {
-            var @this = new[] { instance };
-            foreach (var (addMethod, _) in derivedTypesInterfacesMethods[instance.GetType()])
+            var type = instance.GetType();
+            foreach (var @interface in derivedTypesToInterfaces[type])
             {
-                addMethod.Invoke(null, @this);
+                components[@interface].Remove(instance);
+                onRemoveActions[@interface]?.Invoke(instance);
             }
         }
 
-        public static void Deregister(object instance)
+        public void SubscribeOnAdd<T>(Action<object> fun) where T : IComponent
         {
-            var @this = new[] { instance };
-            foreach (var (_, removeMethod) in derivedTypesInterfacesMethods[instance.GetType()])
-            {
-                removeMethod.Invoke(null, @this);
-            }
+            SubscribeOnAdd(typeof(T), fun);
         }
-    }
 
-    public class ComponentsRegistry<T> : ComponentsRegistry
-        where T : IComponent
-    {
-        public static event Action<T> OnAddComponent;
-        public static event Action<T> OnRemoveComponent;
-        private static readonly List<T> components = new ();
-        public static IReadOnlyList<T> Components() => components;
-        public static void Add(T component)
+        public void SubscribeOnAdd(Type type, Action<object> fun)
         {
-            components.Add(component);
-            OnAddComponent?.Invoke(component);
+            onAddActions[type] += fun;
         }
-        public static void Remove(T component)
+
+        public void SubscribeOnRemove<T>(Action<object> fun) where T : IComponent
         {
-            components.Remove(component);
-            OnRemoveComponent?.Invoke(component);
+            onRemoveActions[typeof(T)] += fun;
+
         }
+
+        public void UnsubscribeOnRemove<T>(Action<object> fun) where T : IComponent
+        {
+            onRemoveActions[typeof(T)] -= fun;
+        }
+
+        private readonly Dictionary<Type, IList> components = new();
+        private readonly Dictionary<Type, Action<object>> onAddActions = new();
+        private readonly Dictionary<Type, Action<object>> onRemoveActions = new();
     }
 }

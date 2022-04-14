@@ -9,6 +9,9 @@ namespace andywiecko.PBD2D.Solver
     public class Solver : MonoBehaviour, ISimulationConfigurationProvider
     {
         [field: SerializeField]
+        public World World { get; private set; } = default;
+
+        [field: SerializeField]
         public SolverJobsExecutionOrder JobsExecutionOrder { get; private set; } = default;
 
         [field: SerializeField]
@@ -33,10 +36,11 @@ namespace andywiecko.PBD2D.Solver
 
         private void Awake()
         {
-            jobsGenerator = new SolverJobsGenerator(JobsExecutionOrder);
+            jobsGenerator = new SolverJobsGenerator(this, JobsExecutionOrder);
             actionsGenerator = new SolverActionsGenerator(this, ActionsExecutionOrder);
 
-            SystemsRegistry.OnRegistryChange += RegenerateSolverTasks;
+            World.SystemsRegistry.OnRegistryChange += RegenerateSolverTasks;
+            World.Configuration = SimulationConfiguration;
         }
 
         public void Start()
@@ -62,7 +66,7 @@ namespace andywiecko.PBD2D.Solver
 
         public void OnDestroy()
         {
-            SystemsRegistry.OnRegistryChange -= RegenerateSolverTasks;
+            World.SystemsRegistry.OnRegistryChange -= RegenerateSolverTasks;
         }
 
         private void RegenerateSolverTasks()

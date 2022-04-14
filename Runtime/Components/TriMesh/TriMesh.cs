@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    public class TriMesh : BaseComponent
+    public class TriMesh : Entity
     {
         public event Action OnSerializedDataChange;
 
