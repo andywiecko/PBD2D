@@ -37,7 +37,7 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        protected virtual void OnEnable() => World.ComponentsRegistry.Register(this);
-        protected virtual void OnDisable() => World.ComponentsRegistry.Deregister(this);
+        protected virtual void OnEnable() => World.ComponentsRegistry.Add(this);
+        protected virtual void OnDisable() => World.ComponentsRegistry.Remove(this);
     }
 }

@@ -5,14 +5,7 @@ using System.Linq;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface IComponentsRegistry
-    {
-        IReadOnlyList<T> GetComponents<T>() where T : IComponent;
-        void Register(object instance);
-        void Deregister(object instance);
-    }
-
-    public class ComponentsRegistry : IComponentsRegistry
+    public class ComponentsRegistry
     {
         private static readonly Dictionary<Type, IReadOnlyList<Type>> derivedTypesToInterfaces = new();
         private static readonly HashSet<Type> staticComponentInterfaces = new();
@@ -42,6 +35,10 @@ namespace andywiecko.PBD2D.Core
             derivedTypesToInterfaces.TryAdd(type, list);
         }
 
+        private readonly Dictionary<Type, IList> components = new();
+        private readonly Dictionary<Type, Action<object>> onAddActions = new();
+        private readonly Dictionary<Type, Action<object>> onRemoveActions = new();
+
         public ComponentsRegistry()
         {
             components = staticComponentInterfaces.ToDictionary(i => i, i => CreateListOf(i));
@@ -54,7 +51,7 @@ namespace andywiecko.PBD2D.Core
         public IReadOnlyList<T> GetComponents<T>() where T : IComponent => components[typeof(T)] as List<T>;
         public IEnumerable GetComponents(Type type) => components[type];
 
-        public void Register(object instance)
+        public void Add(object instance)
         {
             var type = instance.GetType();
             foreach (var @interface in derivedTypesToInterfaces[type])
@@ -64,7 +61,7 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public void Deregister(object instance)
+        public void Remove(object instance)
         {
             var type = instance.GetType();
             foreach (var @interface in derivedTypesToInterfaces[type])
@@ -74,28 +71,13 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public void SubscribeOnAdd<T>(Action<object> fun) where T : IComponent
-        {
-            SubscribeOnAdd(typeof(T), fun);
-        }
-
-        public void SubscribeOnAdd(Type type, Action<object> fun)
-        {
-            onAddActions[type] += fun;
-        }
-
-        public void SubscribeOnRemove<T>(Action<object> fun) where T : IComponent
-        {
-            onRemoveActions[typeof(T)] += fun;
-        }
-
-        public void UnsubscribeOnRemove<T>(Action<object> fun) where T : IComponent
-        {
-            onRemoveActions[typeof(T)] -= fun;
-        }
-
-        private readonly Dictionary<Type, IList> components = new();
-        private readonly Dictionary<Type, Action<object>> onAddActions = new();
-        private readonly Dictionary<Type, Action<object>> onRemoveActions = new();
+        public void SubscribeOnAdd<T>(Action<object> fun) where T : IComponent => SubscribeOnAdd(typeof(T), fun);
+        public void UnsubscribeOnAdd<T>(Action<object> fun) where T : IComponent => UnsubscribeOnAdd(typeof(T), fun);
+        public void SubscribeOnAdd(Type type, Action<object> fun) => onAddActions[type] += fun;
+        public void UnsubscribeOnAdd(Type type, Action<object> fun) => onAddActions[type] -= fun;
+        public void SubscribeOnRemove<T>(Action<object> fun) where T : IComponent => SubscribeOnRemove(typeof(T), fun);
+        public void UnsubscribeOnRemove<T>(Action<object> fun) where T : IComponent => UnsubscribeOnRemove(typeof(T), fun);
+        public void SubscribeOnRemove(Type type, Action<object> fun) => onRemoveActions[type] += fun;
+        public void UnsubscribeOnRemove(Type type, Action<object> fun) => onRemoveActions[type] -= fun;
     }
 }

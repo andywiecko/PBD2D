@@ -4,17 +4,16 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    // TODO: check if we can reduce the abstraction
     public interface IWorld
     {
-        ISimulationConfiguration Configuration { get; }
-        IComponentsRegistry ComponentsRegistry { get; }
-        ISystemsRegistry SystemsRegistry { get; }
+        SimulationConfiguration Configuration { get; }
+        ComponentsRegistry ComponentsRegistry { get; }
+        SystemsRegistry SystemsRegistry { get; }
     }
 
     public class World : MonoBehaviour, IWorld
     {
-        private static List<(Type t, Type t1, Type t2)> tupleTypes = new();
+        private static readonly List<(Type t, Type t1, Type t2)> tupleTypes = new();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Initialize()
@@ -34,12 +33,9 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public ISimulationConfiguration Configuration { get; set; }
-        IComponentsRegistry IWorld.ComponentsRegistry => ComponentsRegistry;
+        public SimulationConfiguration Configuration { get; set; }
         public ComponentsRegistry ComponentsRegistry { get; } = new();
-        ISystemsRegistry IWorld.SystemsRegistry => SystemsRegistry;
         public SystemsRegistry SystemsRegistry { get; } = new();
-
 
         private void OnAddComponentItem1(object item1, Type t, Type t2)
         {

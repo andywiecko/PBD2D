@@ -46,7 +46,7 @@ namespace andywiecko.PBD2D.Core
             Item2 = item2;
 
             Initialize();
-            world.ComponentsRegistry.Register(this);
+            world.ComponentsRegistry.Add(this);
             world.ComponentsRegistry.SubscribeOnRemove<T1>(OnRemoveComponentItem1);
             world.ComponentsRegistry.SubscribeOnRemove<T2>(OnRemoveComponentItem2);
         }
@@ -72,7 +72,7 @@ namespace andywiecko.PBD2D.Core
 
         private void RemoveTuple()
         {
-            World.ComponentsRegistry.Deregister(this);
+            World.ComponentsRegistry.Remove(this);
             World.ComponentsRegistry.UnsubscribeOnRemove<T1>(OnRemoveComponentItem1);
             World.ComponentsRegistry.UnsubscribeOnRemove<T2>(OnRemoveComponentItem2);
             Destroy();
