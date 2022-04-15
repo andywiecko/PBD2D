@@ -4,7 +4,14 @@ using System.Linq;
 
 namespace andywiecko.PBD2D.Core
 {
-    public class SystemsRegistry
+    public interface ISystemsRegistry
+    {
+        IReadOnlyList<ISystem> SystemsOf(Type type);
+        void Add<T>(T system) where T : ISystem;
+        void Remove<T>(T system) where T : ISystem;
+    }
+
+    public class SystemsRegistry : ISystemsRegistry
     {
         static SystemsRegistry()
         {

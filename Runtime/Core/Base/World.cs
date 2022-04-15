@@ -4,7 +4,15 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    public class World : MonoBehaviour
+    // TODO: check if we can reduce the abstraction
+    public interface IWorld
+    {
+        ISimulationConfiguration Configuration { get; }
+        IComponentsRegistry ComponentsRegistry { get; }
+        ISystemsRegistry SystemsRegistry { get; }
+    }
+
+    public class World : MonoBehaviour, IWorld
     {
         private static List<(Type t, Type t1, Type t2)> tupleTypes = new();
 
@@ -26,9 +34,12 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public SimulationConfiguration Configuration { get; set; }
+        public ISimulationConfiguration Configuration { get; set; }
+        IComponentsRegistry IWorld.ComponentsRegistry => ComponentsRegistry;
         public ComponentsRegistry ComponentsRegistry { get; } = new();
+        ISystemsRegistry IWorld.SystemsRegistry => SystemsRegistry;
         public SystemsRegistry SystemsRegistry { get; } = new();
+
 
         private void OnAddComponentItem1(object item1, Type t, Type t2)
         {
