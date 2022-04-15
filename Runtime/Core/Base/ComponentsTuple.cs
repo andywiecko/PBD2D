@@ -26,7 +26,7 @@ namespace andywiecko.PBD2D.Core
         }
     }
 
-    public abstract class ComponentsTuple<T1, T2> : ComponentsTuple
+    public abstract class ComponentsTuple<T1, T2> : ComponentsTuple, IComponent
         where T1 : IComponent
         where T2 : IComponent
     {

@@ -7,7 +7,7 @@ namespace andywiecko.PBD2D.Core
         public SimulationConfiguration Configuration { get; } = new();
         public SystemsRegistry SystemsRegistry { get; } = new();
 
-        public FakeWorld(params object[] components)
+        public FakeWorld(params IComponent[] components)
         {
             foreach (var c in components)
             {

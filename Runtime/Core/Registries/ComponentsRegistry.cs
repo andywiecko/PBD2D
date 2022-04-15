@@ -51,7 +51,7 @@ namespace andywiecko.PBD2D.Core
         public IReadOnlyList<T> GetComponents<T>() where T : IComponent => components[typeof(T)] as List<T>;
         public IEnumerable GetComponents(Type type) => components[type];
 
-        public void Add(object instance)
+        public void Add<T>(T instance) where T : IComponent
         {
             var type = instance.GetType();
             foreach (var @interface in derivedTypesToInterfaces[type])
@@ -61,7 +61,7 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public void Remove(object instance)
+        public void Remove<T>(T instance) where T : IComponent
         {
             var type = instance.GetType();
             foreach (var @interface in derivedTypesToInterfaces[type])
