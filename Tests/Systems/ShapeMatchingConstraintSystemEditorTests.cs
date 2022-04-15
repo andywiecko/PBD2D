@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class ShapeMatchingConstraintSystemEditorTests
     {
-        private class FakeShapeMatchingConstraint : FreeComponent, IShapeMatchingConstraint
+        private class FakeShapeMatchingConstraint : TestComponent, IShapeMatchingConstraint
         {
             private const int PointsCount = 3;
             private const Allocator DataAllocator = Allocator.Persistent;
@@ -57,10 +57,16 @@ namespace andywiecko.PBD2D.Editor.Tests
 
         private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
 
+        private FakeWorld world;
         private ShapeMatchingConstraintSystem system;
         private FakeShapeMatchingConstraint component;
 
-        [SetUp] public void SetUp() => TestUtils.New(ref system);
+        [SetUp]
+        public void SetUp()
+        {
+            TestUtils.New(ref system);
+            system.World = world = new FakeWorld();
+        }
         [TearDown] public void TearDown() => component?.Dispose();
 
         [Test]
@@ -69,7 +75,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             float2[] initialPositions = { new(0, 0), new(1, 0), new(0, 1) };
             component = new(initialPositions);
 
-            system.Schedule().Complete();
+            Run();
 
             Assert.That(Positions, Is.EqualTo(initialPositions));
         }
@@ -82,7 +88,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             var expectedPositions = initialPositions.Select(i => i + 0.1f).ToArray();
             component.SetPositions(expectedPositions);
-            system.Schedule().Complete();
+            Run();
 
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
         }
@@ -95,7 +101,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             float2[] expectedPositions = { new(0, 0), new(0, -1), new(1, 0) };
             component.SetPositions(expectedPositions);
-            system.Schedule().Complete();
+            Run();
 
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
         }
@@ -110,7 +116,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             var t = math.float2(3, 4);
             var expectedPositions = initialPositions.Select(i => (R * i).Value + t).ToArray();
             component.SetPositions(expectedPositions);
-            system.Schedule().Complete();
+            Run();
 
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
         }
@@ -124,7 +130,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             var dx = (float2)0.1f;
             float2[] positions = { dx, new(1, 0), new(0, 1) };
             component.SetPositions(positions);
-            system.Schedule().Complete();
+            Run();
 
             float2[] expectedPositions = initialPositions.Select(i => i + dx / 3).ToArray();
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
@@ -141,11 +147,17 @@ namespace andywiecko.PBD2D.Editor.Tests
             var dx = (float2)0.1f;
             float2[] positions = { dx, new(1, 0), new(0, 1) };
             component.SetPositions(positions);
-            system.Schedule().Complete();
+            Run();
 
             float2[] expectedPositions = initialPositions.Select(i => i + (1 - beta) * dx / 3).ToArray();
             expectedPositions[0] = 0.1f - 2 / 3f * (1 - beta) * dx;
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
+        }
+
+        private void Run()
+        {
+            world.ComponentsRegistry.Register(component);
+            system.Schedule().Complete();
         }
     }
 }

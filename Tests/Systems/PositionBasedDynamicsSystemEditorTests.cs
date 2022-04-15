@@ -7,11 +7,9 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Editor.Tests
 {
-    public class PositionBasedDynamicsSystemEditorTests : ISimulationConfigurationProvider
+    public class PositionBasedDynamicsSystemEditorTests
     {
-        public SimulationConfiguration SimulationConfiguration { get; private set; }
-
-        private class FakePositionBasedDynamics : FreeComponent, IPositionBasedDynamics
+        private class FakePositionBasedDynamics : TestComponent, IPositionBasedDynamics
         {
             private const int PointsCount = 1;
             private const Allocator DataAllocator = Allocator.Persistent;
@@ -50,6 +48,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             set => component.PredictedPositions.Value[Id<Point>.Zero] = value;
         }
 
+        private FakeWorld world;
         private PositionBasedDynamicsStepStartSystem startSystem;
         private PositionBasedDynamicsStepEndSystem endSystem;
         private FakePositionBasedDynamics component;
@@ -59,17 +58,20 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             TestUtils.New(ref startSystem);
             TestUtils.New(ref endSystem);
-            //startSystem.ConfigurationProvider = this;
-            //endSystem.ConfigurationProvider = this;
 
             component = new();
 
-            SimulationConfiguration = new()
+            world = new FakeWorld(component)
             {
-                DeltaTime = 1e-9f,
-                GlobalDamping = 0,
-                GlobalExternalForce = 0
+                Configuration = {
+                    DeltaTime = 1e-9f,
+                    GlobalDamping = 0,
+                    GlobalExternalForce = 0
+                }
             };
+
+            startSystem.World = world;
+            endSystem.World = world;
         }
 
         [TearDown]
@@ -82,7 +84,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void StepStartTest()
         {
             component.ExternalForce = new(0, -10);
-            SimulationConfiguration.DeltaTime = 1;
+            world.Configuration.DeltaTime = 1;
             Position = new(0, 10);
 
             startSystem.Schedule().Complete();
@@ -95,7 +97,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void StepEndTest()
         {
             component.ExternalForce = new(0, -10);
-            SimulationConfiguration.DeltaTime = 1;
+            world.Configuration.DeltaTime = 1;
             Position = new(0, 10);
             PredictedPosition = new(0, 8);
 
@@ -113,7 +115,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             float2 a = new(0, -1);
             var t = 15f;
             component.ExternalForce = a;
-            SimulationConfiguration.DeltaTime = 1e-2f;
+            world.Configuration.DeltaTime = 1e-2f;
             Position = x0;
             PredictedPosition = x0;
             Velocity = v0;
@@ -132,7 +134,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         private void SimulateFor(float seconds)
         {
             var t = 0f;
-            var dt = SimulationConfiguration.DeltaTime;
+            var dt = world.Configuration.DeltaTime;
             while (t < seconds)
             {
                 startSystem.Schedule().Complete();

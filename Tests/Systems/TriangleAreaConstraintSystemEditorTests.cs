@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class TriangleAreaConstraintSystemEditorTests
     {
-        private class FakeTriangleAreaConstraint : FreeComponent, ITriangleAreaConstraint
+        private class FakeTriangleAreaConstraint : TestComponent, ITriangleAreaConstraint
         {
             private const Allocator DataAllocator = Allocator.Persistent;
             private const int PointsCount = 3;
@@ -56,6 +56,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
         private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
 
+        private FakeWorld world;
         private TriangleAreaConstraintSystem system;
         private FakeTriangleAreaConstraint component;
 
@@ -63,6 +64,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void SetUp()
         {
             TestUtils.New(ref system);
+            system.World = world = new();
         }
 
         [TearDown]
@@ -75,7 +77,8 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void StationaryTest()
         {
             float2[] initialPositions = { new(0, 0), new(1, 0), new(0, 1) };
-            component = new FakeTriangleAreaConstraint(initialPositions);
+            component = new(initialPositions);
+            world.ComponentsRegistry.Register(component);
             system.Schedule().Complete();
             Assert.That(Positions, Is.EqualTo(initialPositions));
         }
@@ -84,7 +87,8 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void RightTriangleTest()
         {
             float2[] initialPositions = { new(0, 0), new(1, 0), new(0, 1) };
-            component = new FakeTriangleAreaConstraint(initialPositions);
+            component = new(initialPositions);
+            world.ComponentsRegistry.Register(component);
             var initialArea2 = component.GetArea2();
             Assert.That(initialArea2, Is.EqualTo(1));
 
@@ -102,7 +106,8 @@ namespace andywiecko.PBD2D.Editor.Tests
         public void EquilateralTriangleTest()
         {
             float2[] initialPositions = { new(0, 0), new(1, 0), new(0.5f, math.sqrt(3) / 2) };
-            component = new FakeTriangleAreaConstraint(initialPositions);
+            component = new(initialPositions);
+            world.ComponentsRegistry.Register(component);
             var expectedArea2 = math.sqrt(3) / 8;
             component.SetRestArea2(expectedArea2);
 

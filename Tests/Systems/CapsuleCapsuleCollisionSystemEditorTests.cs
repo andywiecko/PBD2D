@@ -9,7 +9,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class CapsuleCapsuleCollisionSystemEditorTests
     {
-        private class FakeComponent : FreeComponent, ICapsuleCollideWithCapsule
+        private class FakeComponent : TestComponent, ICapsuleCollideWithCapsule
         {
             public float CollisionRadius { get; set; } = 1f;
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);
@@ -44,7 +44,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             }
         }
 
-        private class FakeTuple : FreeComponent, ICapsuleCapsuleCollisionTuple
+        private class FakeTuple : TestComponent, ICapsuleCapsuleCollisionTuple
         {
             public float Friction { get; set; } = 0;
             public Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; } = new NativeList<IdPair<Edge>>(64, Allocator.Persistent);
@@ -77,6 +77,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             component1 = new();
             component2 = new();
             tuple = new() { Component1 = component1, Component2 = component2 };
+            system.World = new FakeWorld(component1, component2, tuple);
         }
 
         [TearDown]

@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class EdgeLengthConstraintSystemEditorTests
     {
-        private class FakeEdgeLengthConstraint : FreeComponent, IEdgeLengthConstraint
+        private class FakeEdgeLengthConstraint : TestComponent, IEdgeLengthConstraint
         {
             private const Allocator DataAllocator = Allocator.Persistent;
             private const int PointsCount = 5;
@@ -89,6 +89,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             TestUtils.New(ref system);
             component = new();
+            system.World = new FakeWorld(component);
         }
 
         [TearDown]
