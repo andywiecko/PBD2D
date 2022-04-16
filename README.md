@@ -141,6 +141,17 @@ Implemented collisions:
 
 ## Architecture
 
+The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern.
+The package is divided into three separate assemblies and the _Core_ one, which defines relations between them:
+
+- `andywiecko.PBD2D.Core` contains all contracts, common structs, and all required abstractions.
+- `andywiecko.PBD2D.Components` which consists of components contracts implementations.
+- `andywiecko.PBD2D.Systems` contains all available systems for components, i.e. all logic can be found here.
+- `andywiecko.PBD2D.Solver` where one can find logic for system scheduling and execution order.
+
+Below one can find a dependency graph for the main project assemblies.
+Click on the selected graph element to see the details.
+
 ```mermaid
 %%{init: {"theme": "neutral", "flowchart": {"curve": "stepBefore", "useMaxwidth": false}}}%%
 
@@ -166,19 +177,21 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 - [ ] Reimport and refactor tri mesh structure.
 - [ ] Reimport and refactor rod structure.
-- [ ] Reimport and refactor position based fluid.
 - [ ] Sample scenes uploaded to a separate repo+build online.
 - [ ] Test for most of the systems.
 - [ ] Move math/collection related parts into custom packages.
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [ ] Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.
+- [X] Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.
+- [ ] Refactor system class to not be derived from `MonoBehaviour`. 
+- [ ] Introduce list of constraints.
 
 ### v.1.0.0
 
 - [ ] Destructible bodies.
 - [ ] Continous collisions.
 - [ ] Fluid "fancy" shader.
+- [ ] Reimport and refactor position based fluid.
 
 ### v.2.0.0
 
