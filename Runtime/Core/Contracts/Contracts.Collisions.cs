@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Core
     public interface ITriangleBoundingVolumeTreeTriMesh : IComponent
     {
         float Margin { get; }
-        Ref<BoundingVolumeTree<AABB>> Tree { get; }
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
         Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
@@ -32,7 +32,7 @@ namespace andywiecko.PBD2D.Core
     {
         float Margin { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<BoundingVolumeTree<AABB>> Tree { get; }
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; }
         Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>> ExternalEdges { get; }
@@ -48,7 +48,7 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
         Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; }
-        Ref<BoundingVolumeTree<AABB>> Tree { get; }
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
     }
 
     public interface ITriMeshCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule { }

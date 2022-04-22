@@ -19,7 +19,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; } = new NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>(new[] { (Id<Edge>)0 }, Allocator.Persistent);
 
             public float Friction => throw new System.NotImplementedException();
-            public Ref<BoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
+            public Ref<NativeBoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
 
             public override void Dispose()
             {

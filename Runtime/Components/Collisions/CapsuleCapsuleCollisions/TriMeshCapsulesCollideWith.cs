@@ -18,7 +18,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges => triMeshExternalEdges.ExternalEdges.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, Id<Edge>>();
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
-        public Ref<BoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
+        public Ref<NativeBoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges triMeshExternalEdges;

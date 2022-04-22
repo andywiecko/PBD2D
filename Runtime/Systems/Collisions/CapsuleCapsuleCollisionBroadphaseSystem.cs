@@ -16,8 +16,8 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct CheckForPotentialCollisionsTree : IJob
         {
-            private BoundingVolumeTree<AABB> tree1;
-            private BoundingVolumeTree<AABB> tree2;
+            private NativeBoundingVolumeTree<AABB> tree1;
+            private NativeBoundingVolumeTree<AABB> tree2;
             private NativeList<IdPair<Edge>> potentialCollisions;
             private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge1;
             private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge2;
@@ -33,17 +33,19 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute()
             {
-                foreach(var i in 0..tree1.LeavesCount)
+                using var queue = new NativeQueue<int>(Allocator.Temp);
+                foreach (var i in 0..tree1.LeavesCount)
                 {
-                    Execute(i);
+                    Execute(i, queue);
                 }
             }
 
-            public void Execute(int i)
+            public void Execute(int i, NativeQueue<int> queue)
             {
+                queue.Clear();
                 var aabb1 = tree1.Volumes[i];
                 var edgeId1 = collidableEdge1[(Id<CollidableEdge>)i];
-                var bfs = tree2.BreadthFirstSearch;
+                var bfs = tree2.BreadthFirstSearch(queue);
                 foreach (var (j, aabb2) in bfs)
                 {
                     if (aabb1.Intersects(aabb2))

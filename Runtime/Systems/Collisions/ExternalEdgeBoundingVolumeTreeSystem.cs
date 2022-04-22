@@ -46,7 +46,7 @@ namespace andywiecko.PBD2D.Systems
             foreach (var component in References)
             {
                 dependencies = new UpdateAABBsJob(component).Schedule(dependencies);
-                dependencies = component.Tree.Value.UpdateLeafesVolumes(
+                dependencies = component.Tree.Value.UpdateLeavesVolumes(
                     volumes: component.AABBs.Value.GetInnerArray().AsReadOnly(), dependencies);
             }
 

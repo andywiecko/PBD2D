@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Components
     {
         [field: SerializeField, Min(0)]
         public float Margin { get; private set; } = 0;
-        public Ref<BoundingVolumeTree<AABB>> Tree { get; private set; }
+        public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs {get; private set;}
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles => triMesh.Triangles;
@@ -33,7 +33,7 @@ namespace andywiecko.PBD2D.Components
         {
             var trianglesCount = triMesh.Triangles.Value.Length;
             DisposeOnDestroy(
-                Tree = new BoundingVolumeTree<AABB>(leavesCount: trianglesCount, Allocator.Persistent),
+                Tree = new NativeBoundingVolumeTree<AABB>(leavesCount: trianglesCount, Allocator.Persistent),
                 AABBs = new NativeIndexedArray<Id<Triangle>, AABB>(triMesh.Triangles.Value.Length, Allocator.Persistent)
             );
             
