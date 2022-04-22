@@ -3,6 +3,7 @@ using andywiecko.PBD2D.Core;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
@@ -10,22 +11,19 @@ namespace andywiecko.PBD2D.Systems
     [AddComponentMenu("PBD2D:Systems/Collisions/Capsule Capsule Collision System (Broadphase)")]
     public class CapsuleCapsuleCollisionBroadphaseSystem : BaseSystem<ICapsuleCapsuleCollisionTuple>
     {
-        // TODOs:
-        // - Schedule for smaller tree (with smaller leaf count)
-        // - Can be parallized or optimized, learn how to intersect two trees
         [BurstCompile]
         private struct CheckForPotentialCollisionsTree : IJob
         {
-            private NativeBoundingVolumeTree<AABB> tree1;
-            private NativeBoundingVolumeTree<AABB> tree2;
+            private NativeBoundingVolumeTree<AABB>.ReadOnly tree1;
+            private NativeBoundingVolumeTree<AABB>.ReadOnly tree2;
             private NativeList<IdPair<Edge>> potentialCollisions;
             private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge1;
             private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge2;
 
             public CheckForPotentialCollisionsTree(ICapsuleCapsuleCollisionTuple tuple)
             {
-                tree1 = tuple.Component1.Tree;
-                tree2 = tuple.Component2.Tree;
+                tree1 = tuple.Component1.Tree.Value.AsReadOnly();
+                tree2 = tuple.Component2.Tree.Value.AsReadOnly();
                 potentialCollisions = tuple.PotentialCollisions;
                 collidableEdge1 = tuple.Component1.CollidableEdges.Value.AsReadOnly();
                 collidableEdge2 = tuple.Component2.CollidableEdges.Value.AsReadOnly();
@@ -33,30 +31,14 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute()
             {
-                using var queue = new NativeQueue<int>(Allocator.Temp);
-                foreach (var i in 0..tree1.LeavesCount)
+                // TODO: remove temporary allocation
+                using var result = new NativeList<int2>(Allocator.Temp);
+                tree1.GetIntersectionsWithTree(tree2, result);
+                foreach (var p in result)
                 {
-                    Execute(i, queue);
-                }
-            }
-
-            public void Execute(int i, NativeQueue<int> queue)
-            {
-                queue.Clear();
-                var aabb1 = tree1.Volumes[i];
-                var edgeId1 = collidableEdge1[(Id<CollidableEdge>)i];
-                var bfs = tree2.BreadthFirstSearch(queue);
-                foreach (var (j, aabb2) in bfs)
-                {
-                    if (aabb1.Intersects(aabb2))
-                    {
-                        if (bfs.IsLeaf(j))
-                        {
-                            var edgeId2 = collidableEdge2[(Id<CollidableEdge>)j];
-                            potentialCollisions.AddNoResize((edgeId1, edgeId2));
-                        }
-                        bfs.Traverse(j);
-                    }
+                    var i = collidableEdge1[(Id<CollidableEdge>)p.x];
+                    var j = collidableEdge2[(Id<CollidableEdge>)p.y];
+                    potentialCollisions.Add(new(i, j));
                 }
             }
         }
