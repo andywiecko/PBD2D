@@ -28,7 +28,7 @@ namespace andywiecko.PBD2D.Core.Editor
 
             foreach (var type in types)
             {
-                var name = (type.GetCustomAttribute(typeof(AddComponentMenu)) as AddComponentMenu)?.componentMenu ?? type.Name;
+                var name = type.GetCustomAttribute<AddComponentMenu>()?.componentMenu ?? type.Name;
                 var subnames = name.Split('/');
 
                 var typeName = subnames.Last();
