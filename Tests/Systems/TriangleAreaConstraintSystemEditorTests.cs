@@ -14,27 +14,24 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             private const Allocator DataAllocator = Allocator.Persistent;
             private const int PointsCount = 3;
-            private const int TrianglesCount = 1;
 
             public float Stiffness { get; set; } = 1;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; } = new NativeIndexedArray<Id<Triangle>, Triangle>(new[] { (Triangle)(0, 1, 2) }, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 { get; } = new NativeIndexedArray<Id<Triangle>, float>(TrianglesCount, DataAllocator);
+            public Ref<NativeList<TriangleAreaConstraint>> Constraints { get; } = new NativeList<TriangleAreaConstraint>(64, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
                 PredictedPositions?.Dispose();
                 MassesInv?.Dispose();
-                Triangles?.Dispose();
-                RestAreas2?.Dispose();
+                Constraints?.Dispose();
             }
 
             public FakeTriangleAreaConstraint(float2[] positions)
             {
                 SetPositions(positions);
-                RestAreas2.Value[Id<Triangle>.Zero] = GetArea2();
+                Constraints.Value.Add((0, 1, 2, GetArea2()));
             }
 
             public void SetPositions(float2[] positions)
@@ -44,7 +41,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public void SetRestArea2(float area2)
             {
-                RestAreas2.Value[Id<Triangle>.Zero] = area2;
+                Constraints.Value[default] = Constraints.Value[default].With(area2);
             }
 
             public float GetArea2()

@@ -114,7 +114,7 @@ namespace andywiecko.PBD2D.Core
             {
                 var row = mapping.GetRow(index);
                 var triId = (Id<Triangle>)index;
-                var (pA, pB, pC) = positions.At(triangles[triId]);
+                var (pA, pB, pC) = positions.At3(triangles[triId]);
                 for (int i = 0; i < barycoords.Length; i++)
                 {
                     var bar = barycoords[i];
@@ -132,7 +132,7 @@ namespace andywiecko.PBD2D.Core
 
                 foreach (var (externalId, edgeId) in externalEdges.IdsValues)
                 {
-                    var (a0, a1) = positions.At(edges[edgeId]);
+                    var (a0, a1) = positions.At2(edges[edgeId]);
                     MathUtils.PointClosestPointOnLineSegment(p, a0, a1, out var q);
                     var distanceSq = math.distancesq(p, q);
                     if (distanceSq <= minDistanceSq)

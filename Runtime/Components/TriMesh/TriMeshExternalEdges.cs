@@ -73,7 +73,7 @@ namespace andywiecko.PBD2D.Components
             foreach (var (_, edgeId) in ExternalEdges.Value.AsReadOnly().IdsValues)
             {
                 var edge = edges[edgeId];
-                var (pA, pB) = positions.At(edge);
+                var (pA, pB) = positions.At2(edge);
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
 
                 /*

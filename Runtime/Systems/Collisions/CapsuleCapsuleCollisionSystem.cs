@@ -42,8 +42,8 @@ namespace andywiecko.PBD2D.Systems
             public void Execute(int i)
             {
                 var (e1Id, e2Id) = potentialCollisions[i];
-                var (a0, a1) = positions1.At(edges1[e1Id]);
-                var (b0, b1) = positions2.At(edges2[e2Id]);
+                var (a0, a1) = positions1.At2(edges1[e1Id]);
+                var (b0, b1) = positions2.At2(edges2[e2Id]);
 
                 MathUtils.ShortestLineSegmentBetweenLineSegments(a0, a1, b0, b1, out var pA, out var pB);
 

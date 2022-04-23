@@ -67,8 +67,7 @@ namespace andywiecko.PBD2D.Core
         float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
-        Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
-        Ref<NativeIndexedArray<Id<Triangle>, float>> RestAreas2 { get; }
+        Ref<NativeList<TriangleAreaConstraint>> Constraints { get; }
     }
 
     public interface IShapeMatchingConstraint : IComponent

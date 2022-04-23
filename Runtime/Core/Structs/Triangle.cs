@@ -3,16 +3,29 @@ using System;
 
 namespace andywiecko.PBD2D.Core
 {
+    public interface ITriangle
+    {
+        Id<Point> IdA { get; }
+        Id<Point> IdB { get; }
+        Id<Point> IdC { get; }
+    }
+
+    public static class ITriangleExtensions
+    {
+        public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC) where T : struct, ITriangle
+            => (idA, idB, idC) = (triangle.IdA, triangle.IdB, triangle.IdC);
+    }
+
     [Serializable]
-    public readonly struct Triangle : IEquatable<Triangle>
+    public readonly struct Triangle : IEquatable<Triangle>, ITriangle
     {
         public static Triangle Disabled => new Triangle(Id<Point>.Invalid, Id<Point>.Invalid, Id<Point>.Invalid);
 
         public bool IsEnabled => !Equals(Disabled);
 
-        public readonly Id<Point> IdA;
-        public readonly Id<Point> IdB;
-        public readonly Id<Point> IdC;
+        public readonly Id<Point> IdA { get; }
+        public readonly Id<Point> IdB { get; }
+        public readonly Id<Point> IdC { get; }
 
         public Id<Point> this[int pId] => pId switch
         {

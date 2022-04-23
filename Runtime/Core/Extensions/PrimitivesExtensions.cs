@@ -48,7 +48,7 @@ namespace andywiecko.PBD2D.Core
 
         public static AABB ToAABB(this Edge edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
         {
-            var (pA, pB) = positions.At(edge);
+            var (pA, pB) = positions.At2(edge);
             return new AABB
             (
                 min: math.min(pA, pB) - margin,
