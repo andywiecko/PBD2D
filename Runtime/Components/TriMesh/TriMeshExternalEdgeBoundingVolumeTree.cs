@@ -23,8 +23,10 @@ namespace andywiecko.PBD2D.Components
         private TriMesh triMesh;
         private TriMeshExternalEdges externalEdges;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             triMesh = GetComponent<TriMesh>();
             externalEdges = GetComponent<TriMeshExternalEdges>();
         }
@@ -47,7 +49,6 @@ namespace andywiecko.PBD2D.Components
 
         [SerializeField, Range(0, 30)]
         private int level = 0;
-
 
         private void OnDrawGizmos()
         {

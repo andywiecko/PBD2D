@@ -16,8 +16,9 @@ namespace andywiecko.PBD2D.Components
 
         private TriMesh triMesh;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             triMesh = GetComponent<TriMesh>();
 
             var edges = triMesh.SerializedData.Edges.ToEdgesArray();

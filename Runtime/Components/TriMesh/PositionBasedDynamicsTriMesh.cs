@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Components
 
         private TriMesh TriMesh { get; set; }
 
-        private void Awake()
+        private void Start()
         {
             TriMesh = GetComponent<TriMesh>();
         }
