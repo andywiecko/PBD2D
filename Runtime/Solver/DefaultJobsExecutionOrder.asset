@@ -13,11 +13,6 @@ MonoBehaviour:
   m_Name: DefaultJobsExecutionOrder
   m_EditorClassIdentifier: 
   frameStart:
-  - tag: External Edges Collider Tri Mesh System
-    <Guid>k__BackingField: d4fd831654392cd4f877bb83a422b160
-    script: {fileID: 11500000, guid: d4fd831654392cd4f877bb83a422b160, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.ExternalEdgesColliderTriMeshSystem,
-      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Triangles Collider Tri Mesh System
     <Guid>k__BackingField: 46de8ccdbefab934c9bf9fa6dd180b42
     script: {fileID: 11500000, guid: 46de8ccdbefab934c9bf9fa6dd180b42, type: 3}
@@ -45,11 +40,11 @@ MonoBehaviour:
     assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepStartSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   subStep:
-  - tag: Edge Length Constraint System
+  - tag: Edge Length Constraints System
     <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
     script: {fileID: 11500000, guid: d2118c6b0d6718840bcfafa82c8b8cb3, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.EdgeLengthConstraintSystem, andywiecko.PBD2D.Systems,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.EdgeLengthConstraintsSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Triangle Area Constraint System
     <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
     script: {fileID: 11500000, guid: 73cc6ccdd8744f841947e4cf8086776d, type: 3}

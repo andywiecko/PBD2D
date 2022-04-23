@@ -5,13 +5,12 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface IEdgeLengthConstraint : IComponent
+    public interface IEdgeLengthConstraints : IComponent
     {
         float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
-        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
-        Ref<NativeIndexedArray<Id<Edge>, float>> RestLengths { get; }
+        Ref<NativeList<EdgeLengthConstraint>> Constraints { get; }
     }
 
     public interface IEdgeBendingConstraint : IComponent

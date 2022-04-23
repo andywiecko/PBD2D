@@ -22,7 +22,19 @@ namespace andywiecko.PBD2D.Core
             return (array[idA], array[idB]);
         }
 
+        public static (T a, T b) At<T, E>(this NativeIndexedArray<Id<Point>, T> array, E edge) where T : unmanaged where E : struct, IEdge
+        {
+            var (idA, idB) = edge;
+            return (array[idA], array[idB]);
+        }
+
         public static (T a, T b) At<T>(this NativeIndexedArray<Id<Point>, T>.ReadOnly array, Edge edge) where T : unmanaged
+        {
+            var (idA, idB) = edge;
+            return (array[idA], array[idB]);
+        }
+
+        public static (T a, T b) At<T, E>(this NativeIndexedArray<Id<Point>, T>.ReadOnly array, E edge) where T : unmanaged where E : struct, IEdge
         {
             var (idA, idB) = edge;
             return (array[idA], array[idB]);

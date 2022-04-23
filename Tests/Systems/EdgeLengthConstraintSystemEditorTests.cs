@@ -10,25 +10,22 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class EdgeLengthConstraintSystemEditorTests
     {
-        private class FakeEdgeLengthConstraint : TestComponent, IEdgeLengthConstraint
+        private class FakeEdgeLengthConstraint : TestComponent, IEdgeLengthConstraints
         {
             private const Allocator DataAllocator = Allocator.Persistent;
             private const int PointsCount = 5;
-            private const int EdgesCount = 1;
 
             public float Stiffness { get; set; } = 1;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(PointsCount, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; } = new NativeIndexedArray<Id<Edge>, Edge>(EdgesCount, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Edge>, float>> RestLengths { get; } = new NativeIndexedArray<Id<Edge>, float>(EdgesCount, DataAllocator);
+            public Ref<NativeList<EdgeLengthConstraint>> Constraints { get; } = new NativeList<EdgeLengthConstraint>(64, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
                 PredictedPositions?.Dispose();
                 MassesInv?.Dispose();
-                Edges?.Dispose();
-                RestLengths?.Dispose();
+                Constraints?.Dispose();
             }
 
             public FakeEdgeLengthConstraint SetMassInv(int i, float mInv)
@@ -54,8 +51,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public FakeEdgeLengthConstraint SetEdge(int i, int j, float restLength)
             {
-                Edges.Value[Id<Edge>.Zero] = (i, j);
-                RestLengths.Value[Id<Edge>.Zero] = restLength;
+                Constraints.Value.Add((i, j, restLength));
                 return this;
             }
 
@@ -81,7 +77,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
         private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
 
-        private EdgeLengthConstraintSystem system;
+        private EdgeLengthConstraintsSystem system;
         private FakeEdgeLengthConstraint component;
 
         [SetUp]

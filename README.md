@@ -183,11 +183,11 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
 - [X] Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.
-- [ ] Refactor system class to not be derived from `MonoBehaviour`. 
 - [ ] Introduce list of constraints.
 
 ### v.1.0.0
 
+- [ ] Refactor system class to not be derived from `MonoBehaviour`. 
 - [ ] Destructible bodies.
 - [ ] Continous collisions.
 - [ ] Fluid "fancy" shader.

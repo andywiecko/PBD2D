@@ -4,6 +4,18 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
+    public interface IEdge
+    {
+        Id<Point> IdA { get; }
+        Id<Point> IdB { get; }
+    }
+
+    public static class IEdgeExtensions
+    {
+        public static void Deconstruct<T>(this T edge, out Id<Point> idA, out Id<Point> idB) where T : struct, IEdge
+            => (idA, idB) = (edge.IdA, edge.IdB);
+    }
+
     [Serializable]
     public readonly struct Edge : IEquatable<Edge>
     {
