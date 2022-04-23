@@ -4,9 +4,9 @@ namespace andywiecko.PBD2D.Core
 {
     public readonly struct EdgeLengthConstraint : IEdge
     {
-        public Id<Point> IdA { get; }
-        public Id<Point> IdB { get; }
-        public float RestLength { get; }
+        public readonly Id<Point> IdA { get; }
+        public readonly Id<Point> IdB { get; }
+        public readonly float RestLength { get; }
         private readonly int layout { get; }
 
         public EdgeLengthConstraint(Id<Point> idA, Id<Point> idB, float restLength) =>

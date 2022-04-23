@@ -17,14 +17,14 @@ namespace andywiecko.PBD2D.Core
     }
 
     [Serializable]
-    public readonly struct Edge : IEquatable<Edge>
+    public readonly struct Edge : IEquatable<Edge>, IEdge
     {
         public static Edge Disabled => new Edge(Id<Point>.Invalid, Id<Point>.Invalid);
 
         public bool IsEnabled => !Equals(Disabled);
 
-        public readonly Id<Point> IdA;
-        public readonly Id<Point> IdB;
+        public readonly Id<Point> IdA { get; }
+        public readonly Id<Point> IdB { get; }
 
         public Edge(Id<Point> idA, Id<Point> idB) : this((int)idA, (int)idB)
         {
