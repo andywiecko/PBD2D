@@ -72,17 +72,29 @@ namespace andywiecko.PBD2D.Components.Editor
         protected VisualElement ComponentsList()
         {
             var root = new VisualElement();
+            root.Add(new Label());
+            var components = new Foldout()
+            {
+                text = "Components",
+                style = { unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Bold) }
+            };
+            root.Add(components);
+
             foreach (var (category, typeTonNames) in categoryToTypes)
             {
-                var label = new Label(category);
-                label.style.color = new StyleColor(new Color(.678f, .847f, .902f));
-                root.Add(label);
+                var foldout = new Foldout()
+                {
+                    text = category,
+                    style = { color = new StyleColor(new Color(.678f, .847f, .902f)) }
+                };
 
                 foreach (var (type, name) in typeTonNames)
                 {
                     var toggle = CreateToggleButtonForType(type, name);
-                    root.Add(toggle);
+                    foldout.Add(toggle);
                 }
+
+                components.Add(foldout);
             }
 
             return root;
@@ -91,7 +103,11 @@ namespace andywiecko.PBD2D.Components.Editor
         protected VisualElement CreateToggleButtonForType(Type type, string name)
         {
             var value = Target.GetComponent(type) != null;
-            var toggle = new Toggle(name) { value = value };
+            var toggle = new Toggle(name)
+            {
+                value = value,
+                style = { unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Normal) }
+            };
             toggle.RegisterValueChangedCallback((evt) =>
             {
                 switch (targetStatus)
