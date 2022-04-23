@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class TriangleAreaConstraintSystemEditorTests
     {
-        private class FakeTriangleAreaConstraint : TestComponent, ITriangleAreaConstraint
+        private class FakeComponent : TestComponent, ITriangleAreaConstraints
         {
             private const Allocator DataAllocator = Allocator.Persistent;
             private const int PointsCount = 3;
@@ -28,7 +28,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 Constraints?.Dispose();
             }
 
-            public FakeTriangleAreaConstraint(float2[] positions)
+            public FakeComponent(float2[] positions)
             {
                 SetPositions(positions);
                 Constraints.Value.Add((0, 1, 2, GetArea2()));
@@ -54,8 +54,8 @@ namespace andywiecko.PBD2D.Editor.Tests
         private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
 
         private FakeWorld world;
-        private TriangleAreaConstraintSystem system;
-        private FakeTriangleAreaConstraint component;
+        private FakeComponent component;
+        private TriangleAreaConstraintsSystem system;
 
         [SetUp]
         public void SetUp()

@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Constraints/Triangle Area Constraint System")]
-    public class TriangleAreaConstraintSystem : BaseSystem<ITriangleAreaConstraint>
+    [AddComponentMenu("PBD2D:Systems/Constraints/Triangle Area Constraints System")]
+    public class TriangleAreaConstraintsSystem : BaseSystem<ITriangleAreaConstraints>
     {
         [BurstCompile]
         private struct ApplyAreaConstraintJob : IJob
@@ -21,12 +21,12 @@ namespace andywiecko.PBD2D.Systems
             [ReadOnly]
             private NativeArray<TriangleAreaConstraint> constraints;
 
-            public ApplyAreaConstraintJob(ITriangleAreaConstraint constraint)
+            public ApplyAreaConstraintJob(ITriangleAreaConstraints component)
             {
-                stiffness = constraint.Stiffness;
-                positions = constraint.PredictedPositions;
-                massesInv = constraint.MassesInv.Value.AsReadOnly();
-                constraints = constraint.Constraints.Value.AsDeferredJobArray();
+                stiffness = component.Stiffness;
+                positions = component.PredictedPositions;
+                massesInv = component.MassesInv.Value.AsReadOnly();
+                constraints = component.Constraints.Value.AsDeferredJobArray();
             }
 
             public void Execute()
@@ -69,11 +69,11 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies = default)
         {
-            foreach (var constraint in References)
+            foreach (var component in References)
             {
-                if (constraint.Stiffness != 0)
+                if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyAreaConstraintJob(constraint).Schedule(dependencies);
+                    dependencies = new ApplyAreaConstraintJob(component).Schedule(dependencies);
                 }
             }
 

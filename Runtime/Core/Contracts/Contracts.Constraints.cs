@@ -62,7 +62,7 @@ namespace andywiecko.PBD2D.Core
         NativeIndexedArray<Id<Edge>, Edge>.ReadOnly ConnecteeEdges { get; }
     }
 
-    public interface ITriangleAreaConstraint : IComponent
+    public interface ITriangleAreaConstraints : IComponent
     {
         float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }

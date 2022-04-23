@@ -45,10 +45,10 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: d2118c6b0d6718840bcfafa82c8b8cb3, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.EdgeLengthConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Triangle Area Constraint System
+  - tag: Triangle Area Constraints System
     <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
     script: {fileID: 11500000, guid: 73cc6ccdd8744f841947e4cf8086776d, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleAreaConstraintSystem,
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleAreaConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Shape Matching Constraint System
     <Guid>k__BackingField: 538b76c4234524e4b8b9b7faa5d6e9aa

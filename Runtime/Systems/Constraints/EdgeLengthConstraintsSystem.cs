@@ -64,11 +64,11 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies = default)
         {
-            foreach (var constraint in References)
+            foreach (var component in References)
             {
-                if (constraint.Stiffness != 0)
+                if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyEdgeConstraintJob(constraint).Schedule(dependencies);
+                    dependencies = new ApplyEdgeConstraintJob(component).Schedule(dependencies);
                 }
             }
 
