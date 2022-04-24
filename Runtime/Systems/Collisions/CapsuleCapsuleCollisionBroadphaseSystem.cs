@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -27,17 +28,8 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute()
             {
-                // TODO: remove temporary allocation
-                using var result = new NativeList<int2>(Allocator.Temp);
+                var result = UnsafeUtility.As<NativeList<IdPair<CollidableEdge>>, NativeList<int2>>(ref potentialCollisions);
                 tree1.GetIntersectionsWithTree(tree2, result);
-
-                // TODO Reinterpret?
-                foreach (var p in result)
-                {
-                    var i = (Id<CollidableEdge>)p.x;
-                    var j = (Id<CollidableEdge>)p.y;
-                    potentialCollisions.Add(new(i, j));
-                }
             }
         }
 
@@ -51,5 +43,20 @@ namespace andywiecko.PBD2D.Systems
 
             return dependencies;
         }
+
+#if UNITY_EDITOR
+        [UnityEditor.InitializeOnLoadMethod]
+        private static void CheckStructLayouts()
+        {
+            if (UnsafeUtility.SizeOf<IdPair<CollidableEdge>>() != UnsafeUtility.SizeOf<int2>())
+            {
+                Debug.LogError(
+                    $"[{nameof(CapsuleCapsuleCollisionBroadphaseSystem)}]: " +
+                    $"{nameof(IdPair<CollidableEdge>)} has different layout than {nameof(int2)}. " +
+                    "Buffer after reinterpretion will contain garbage data!"
+                );
+            }
+        }
+#endif
     }
 }
