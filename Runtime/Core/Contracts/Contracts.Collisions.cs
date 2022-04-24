@@ -4,21 +4,6 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface ITrianglesColliderTriMesh : IComponent
-    {
-        float Margin { get; }
-        Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs { get; }
-        NativeIndexedArray<Id<Point>, float2>.ReadOnly PredictedPositions { get; }
-        NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly Triangles { get; }
-    }
-    public interface IExternalEdgesTriMesh : IComponent
-    {
-        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
-    }
-    public interface IFlowFieldTriMesh : IComponent
-    {
-        Ref<NativeIndexedArray<Id<Triangle>, Id<ExternalEdge>>> TrianglesEdgesField { get; }
-    }
     public interface ITriangleBoundingVolumeTreeTriMesh : IComponent
     {
         float Margin { get; }
@@ -34,8 +19,7 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; }
-        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
-        Ref<NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>> ExternalEdges { get; }
+        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
     }
 
     #region Capsule-capsule collisions
@@ -46,8 +30,7 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
-        Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; }
-        Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges { get; }
+        Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; }
         Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
     }
 
@@ -58,7 +41,7 @@ namespace andywiecko.PBD2D.Core
     public interface ICapsuleCapsuleCollisionTuple : IComponent
     {
         float Friction { get; }
-        Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; }
+        Ref<NativeList<IdPair<CollidableEdge>>> PotentialCollisions { get; }
         Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; }
         ICapsuleCollideWithCapsule Component1 { get; }
         ICapsuleCollideWithCapsule Component2 { get; }

@@ -17,8 +17,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; private set; }
-        public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges => triMesh.Edges;
-        public Ref<NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>> ExternalEdges => externalEdges.ExternalEdges;
+        public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => externalEdges.ExternalEdges;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges externalEdges;
@@ -38,7 +37,7 @@ namespace andywiecko.PBD2D.Components
 
             var positions = triMesh.Positions.Value.AsReadOnly();
             var edges = triMesh.Edges.Value.AsReadOnly();
-            var aabbs = ExternalEdges.Value.Select(i => edges[i].ToAABB(positions, Margin)).ToArray();
+            var aabbs = ExternalEdges.Value.Select(i => i.ToAABB(positions, Margin)).ToArray();
             DisposeOnDestroy(
                 AABBs = new NativeIndexedArray<Id<ExternalEdge>, AABB>(aabbs, Allocator),
                 Tree = new NativeBoundingVolumeTree<AABB>(count, Allocator)

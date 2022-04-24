@@ -5,25 +5,11 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
-    public readonly struct ExternalEdge : IEquatable<ExternalEdge>
+    public readonly struct ExternalEdge : IEquatable<ExternalEdge>, IEdge
     {
-        public static ExternalEdge Disabled => new ExternalEdge(Id<Point>.Invalid, Id<Point>.Invalid);
-        public bool IsEnabled => !Equals(Disabled);
-
-        public readonly Id<Point> IdA;
-        public readonly Id<Point> IdB;
-
-        public ExternalEdge(Id<Point> idA, Id<Point> idB)
-        {
-            IdA = idA;
-            IdB = idB;
-        }
-
-        public void Deconstruct(out Id<Point> idA, out Id<Point> idB)
-        {
-            idA = IdA;
-            idB = IdB;
-        }
+        public readonly Id<Point> IdA { get; }
+        public readonly Id<Point> IdB { get; }
+        public ExternalEdge(Id<Point> idA, Id<Point> idB) => (IdA, IdB) = (idA, idB);
 
         public float2 GetNormal(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
         {

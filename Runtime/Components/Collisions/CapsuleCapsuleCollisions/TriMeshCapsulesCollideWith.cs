@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [RequireComponent(typeof(TriMeshExternalEdgesCapsuleCollider))]
     [RequireComponent(typeof(TriMeshExternalEdgeBoundingVolumeTree))]
@@ -14,8 +13,7 @@ namespace andywiecko.PBD2D.Components
         public float CollisionRadius => triMeshCollider.CollisionRadius;
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
-        public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges => triMesh.Edges;
-        public Ref<NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>> CollidableEdges => triMeshExternalEdges.ExternalEdges.Value.RenameId<Id<ExternalEdge>, Id<CollidableEdge>, Id<Edge>>();
+        public Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
@@ -31,6 +29,8 @@ namespace andywiecko.PBD2D.Components
             triMeshExternalEdges = GetComponent<TriMeshExternalEdges>();
             triMeshCollider = GetComponent<TriMeshExternalEdgesCapsuleCollider>();
             externalEdgeBVT = GetComponent<TriMeshExternalEdgeBoundingVolumeTree>();
+
+            CollidableEdges = new(triMeshExternalEdges.ExternalEdges.Value.Reinterpret<Id<CollidableEdge>, CollidableEdge>());
         }
     }
 }

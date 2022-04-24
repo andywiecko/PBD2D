@@ -14,15 +14,13 @@ namespace andywiecko.PBD2D.Systems
         private struct UpdateAABBsJob : IJobParallelFor
         {
             private NativeIndexedArray<Id<ExternalEdge>, AABB> aabbs;
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges;
-            private NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges;
+            private NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private readonly float margin;
 
             public UpdateAABBsJob(IExternalEdgeBoundingVolumeTree component)
             {
                 aabbs = component.AABBs.Value;
-                edges = component.Edges.Value.AsReadOnly();
                 externalEdges = component.ExternalEdges.Value.AsReadOnly();
                 positions = component.Positions.Value.AsReadOnly();
                 margin = component.Margin;
@@ -35,9 +33,8 @@ namespace andywiecko.PBD2D.Systems
 
             public void Execute(int i)
             {
-                var externalId = (Id<ExternalEdge>)i;
-                var edgeId = externalEdges[externalId];
-                aabbs[externalId] = edges[edgeId].ToAABB(positions, margin);
+                var eId = (Id<ExternalEdge>)i;
+                aabbs[eId] = externalEdges[eId].ToAABB(positions, margin);
             }
         }
 

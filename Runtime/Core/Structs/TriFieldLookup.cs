@@ -40,10 +40,9 @@ namespace andywiecko.PBD2D.Core
         public JobHandle GenerateMapping(
             NativeIndexedArray<Id<Point>, float2>.ReadOnly positions,
             NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles,
-            NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges,
-            NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges,
+            NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges,
             JobHandle dependencies
-        ) => new GenerateEdgeMappingsJob(this, positions, triangles, edges, externalEdges).Schedule(dependencies);
+        ) => new GenerateEdgeMappingsJob(this, positions, triangles, externalEdges).Schedule(dependencies);
 
         public ReadOnly AsReadOnly() => new(this);
         public Id<ExternalEdge> GetExternalEdge(Id<Triangle> triId, float3 bar) => AsReadOnly().GetExternalEdge(triId, bar);
@@ -87,21 +86,18 @@ namespace andywiecko.PBD2D.Core
             private NativeArray2d<Id<ExternalEdge>> mapping;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles;
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges;
-            private NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges;
+            private NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges;
 
             public GenerateEdgeMappingsJob(TriFieldLookup fieldLookup,
                 NativeIndexedArray<Id<Point>, float2>.ReadOnly positions,
                 NativeIndexedArray<Id<Triangle>, Triangle>.ReadOnly triangles,
-                NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges,
-                NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>.ReadOnly externalEdges
+                NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges
                 )
             {
                 barycoords = fieldLookup.barycoords.AsReadOnly();
                 mapping = fieldLookup.mapping;
                 this.positions = positions;
                 this.triangles = triangles;
-                this.edges = edges;
                 this.externalEdges = externalEdges;
             }
 
@@ -130,9 +126,9 @@ namespace andywiecko.PBD2D.Core
                 var minDistanceSq = float.MaxValue;
                 var closestEdge = Id<ExternalEdge>.Invalid;
 
-                foreach (var (externalId, edgeId) in externalEdges.IdsValues)
+                foreach (var (externalId, externalEdge) in externalEdges.IdsValues)
                 {
-                    var (a0, a1) = positions.At2(edges[edgeId]);
+                    var (a0, a1) = positions.At2(externalEdge);
                     MathUtils.PointClosestPointOnLineSegment(p, a0, a1, out var q);
                     var distanceSq = math.distancesq(p, q);
                     if (distanceSq <= minDistanceSq)

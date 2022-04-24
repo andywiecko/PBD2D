@@ -1,8 +1,6 @@
 using andywiecko.BurstMathUtils;
 using andywiecko.PBD2D.Core;
-using System.Collections.Generic;
 using Unity.Collections;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
@@ -38,7 +36,6 @@ namespace andywiecko.PBD2D.Components
             TriFieldLookup.Value.GenerateMapping(
                 triMesh.Positions.Value.AsReadOnly(),
                 triMesh.Triangles.Value.AsReadOnly(),
-                triMesh.Edges.Value.AsReadOnly(),
                 externalEdges.ExternalEdges.Value.AsReadOnly(),
                 dependencies
             ).Complete();
@@ -71,8 +68,8 @@ namespace andywiecko.PBD2D.Components
                 foreach (var b in lookup.Barycoords)
                 {
                     var externalId = lookup.GetExternalEdge(tId, b);
-                    var edgeId = external[externalId];
-                    var (e0, e1) = positions.At2(edges[edgeId]);
+                    var edge = external[externalId];
+                    var (e0, e1) = positions.At2(edge);
                     var p = pA * b.x + pB * b.y + pC * b.z;
                     // TODO: this should be cached, it can be valuable!
                     MathUtils.PointClosestPointOnLineSegment(p, e0, e1, out var q);

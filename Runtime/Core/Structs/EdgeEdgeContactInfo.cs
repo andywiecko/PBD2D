@@ -7,10 +7,10 @@ namespace andywiecko.PBD2D.Core
     {
         public readonly float2 BarPointA;
         public readonly float2 BarPointB;
-        public readonly Id<Edge> EdgeIdA;
-        public readonly Id<Edge> EdgeIdB;
+        public readonly Id<CollidableEdge> EdgeIdA;
+        public readonly Id<CollidableEdge> EdgeIdB;
 
-        public EdgeEdgeContactInfo(float2 barPointA, float2 barPointB, Id<Edge> edgeIdA, Id<Edge> edgeIdB)
+        public EdgeEdgeContactInfo(float2 barPointA, float2 barPointB, Id<CollidableEdge> edgeIdA, Id<CollidableEdge> edgeIdB)
         {
             BarPointA = barPointA;
             BarPointB = barPointB;
@@ -18,7 +18,7 @@ namespace andywiecko.PBD2D.Core
             EdgeIdB = edgeIdB;
         }
 
-        public void Deconstruct(out float2 pointA, out float2 pointB, out Id<Edge> edgeIdA, out Id<Edge> edgeIdB)
+        public void Deconstruct(out float2 pointA, out float2 pointB, out Id<CollidableEdge> edgeIdA, out Id<CollidableEdge> edgeIdB)
         {
             pointA = BarPointA;
             pointB = BarPointB;

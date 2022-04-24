@@ -16,10 +16,10 @@ namespace andywiecko.PBD2D.Systems
         private struct DetectCollisionsJob : IJobParallelForDefer
         {
             [ReadOnly]
-            private NativeArray<IdPair<Edge>> potentialCollisions;
+            private NativeArray<IdPair<CollidableEdge>> potentialCollisions;
             private NativeList<EdgeEdgeContactInfo>.ParallelWriter collisions;
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges1;
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges2;
+            private NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>.ReadOnly collidableEdges1;
+            private NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>.ReadOnly collidableEdges2;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions1;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions2;
             private readonly float contactRadiusSq;
@@ -27,8 +27,8 @@ namespace andywiecko.PBD2D.Systems
             public DetectCollisionsJob(ICapsuleCapsuleCollisionTuple tuple)
             {
                 var (triMesh1, triMesh2) = tuple;
-                edges1 = triMesh1.Edges.Value.AsReadOnly();
-                edges2 = triMesh2.Edges.Value.AsReadOnly();
+                collidableEdges1 = triMesh1.CollidableEdges.Value.AsReadOnly();
+                collidableEdges2 = triMesh2.CollidableEdges.Value.AsReadOnly();
                 positions1 = triMesh1.PredictedPositions.Value.AsReadOnly();
                 positions2 = triMesh2.PredictedPositions.Value.AsReadOnly();
                 var radius1 = triMesh1.CollisionRadius;
@@ -42,8 +42,8 @@ namespace andywiecko.PBD2D.Systems
             public void Execute(int i)
             {
                 var (e1Id, e2Id) = potentialCollisions[i];
-                var (a0, a1) = positions1.At2(edges1[e1Id]);
-                var (b0, b1) = positions2.At2(edges2[e2Id]);
+                var (a0, a1) = positions1.At2(collidableEdges1[e1Id]);
+                var (b0, b1) = positions2.At2(collidableEdges2[e2Id]);
 
                 MathUtils.ShortestLineSegmentBetweenLineSegments(a0, a1, b0, b1, out var pA, out var pB);
 
@@ -59,8 +59,8 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct ResolveCollisionsJob : IJob
         {
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges1;
-            private NativeIndexedArray<Id<Edge>, Edge>.ReadOnly edges2;
+            private NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>.ReadOnly collidableEdges1;
+            private NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>.ReadOnly collidableEdges2;
             private NativeIndexedArray<Id<Point>, float2> positions1;
             private NativeIndexedArray<Id<Point>, float2> positions2;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv1;
@@ -77,8 +77,8 @@ namespace andywiecko.PBD2D.Systems
             public ResolveCollisionsJob(ICapsuleCapsuleCollisionTuple tuple)
             {
                 var (triMesh1, triMesh2) = tuple;
-                edges1 = triMesh1.Edges.Value.AsReadOnly();
-                edges2 = triMesh2.Edges.Value.AsReadOnly();
+                collidableEdges1 = triMesh1.CollidableEdges.Value.AsReadOnly();
+                collidableEdges2 = triMesh2.CollidableEdges.Value.AsReadOnly();
                 positions1 = triMesh1.PredictedPositions;
                 positions2 = triMesh2.PredictedPositions;
                 massesInv1 = triMesh1.MassesInv.Value.AsReadOnly();
@@ -101,7 +101,7 @@ namespace andywiecko.PBD2D.Systems
             private void ResolveCollision(EdgeEdgeContactInfo contactInfo)
             {
                 var (barA, barB, edgeIdA, edgeIdB) = contactInfo;
-                var ((a0Id, a1Id), (b0Id, b1Id)) = (edges1[edgeIdA], edges2[edgeIdB]);
+                var ((a0Id, a1Id), (b0Id, b1Id)) = (collidableEdges1[edgeIdA], collidableEdges2[edgeIdB]);
 
                 var (a0, a1) = (positions1[a0Id], positions1[a1Id]);
                 var pA = a0 * barA.x + a1 * barA.y;

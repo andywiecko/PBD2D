@@ -16,17 +16,13 @@ namespace andywiecko.PBD2D.Systems
         {
             private NativeBoundingVolumeTree<AABB>.ReadOnly tree1;
             private NativeBoundingVolumeTree<AABB>.ReadOnly tree2;
-            private NativeList<IdPair<Edge>> potentialCollisions;
-            private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge1;
-            private NativeIndexedArray<Id<CollidableEdge>, Id<Edge>>.ReadOnly collidableEdge2;
+            private NativeList<IdPair<CollidableEdge>> potentialCollisions;
 
             public CheckForPotentialCollisionsTree(ICapsuleCapsuleCollisionTuple tuple)
             {
                 tree1 = tuple.Component1.Tree.Value.AsReadOnly();
                 tree2 = tuple.Component2.Tree.Value.AsReadOnly();
                 potentialCollisions = tuple.PotentialCollisions;
-                collidableEdge1 = tuple.Component1.CollidableEdges.Value.AsReadOnly();
-                collidableEdge2 = tuple.Component2.CollidableEdges.Value.AsReadOnly();
             }
 
             public void Execute()
@@ -34,10 +30,12 @@ namespace andywiecko.PBD2D.Systems
                 // TODO: remove temporary allocation
                 using var result = new NativeList<int2>(Allocator.Temp);
                 tree1.GetIntersectionsWithTree(tree2, result);
+
+                // TODO Reinterpret?
                 foreach (var p in result)
                 {
-                    var i = collidableEdge1[(Id<CollidableEdge>)p.x];
-                    var j = collidableEdge2[(Id<CollidableEdge>)p.y];
+                    var i = (Id<CollidableEdge>)p.x;
+                    var j = (Id<CollidableEdge>)p.y;
                     potentialCollisions.Add(new(i, j));
                 }
             }
@@ -47,7 +45,7 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new CommonJobs.ClearListJob<IdPair<Edge>>(component.PotentialCollisions.Value).Schedule(dependencies);
+                dependencies = new CommonJobs.ClearListJob<IdPair<CollidableEdge>>(component.PotentialCollisions.Value).Schedule(dependencies);
                 dependencies = new CheckForPotentialCollisionsTree(component).Schedule(dependencies);
             }
 

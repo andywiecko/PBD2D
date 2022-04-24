@@ -12,7 +12,7 @@ namespace andywiecko.PBD2D.Components
 
         }
 
-        public Ref<NativeList<IdPair<Edge>>> PotentialCollisions { get; private set; }
+        public Ref<NativeList<IdPair<CollidableEdge>>> PotentialCollisions { get; private set; }
         public Ref<NativeList<EdgeEdgeContactInfo>> Collisions { get; private set; }
 
         public ICapsuleCollideWithCapsule Component1 => Item1;
@@ -25,7 +25,7 @@ namespace andywiecko.PBD2D.Components
             var allocator = Allocator.Persistent;
 
             DisposeOnDestroy(
-                PotentialCollisions = new NativeList<IdPair<Edge>>(initialCapacity: 256, allocator),
+                PotentialCollisions = new NativeList<IdPair<CollidableEdge>>(initialCapacity: 256, allocator),
                 Collisions = new NativeList<EdgeEdgeContactInfo>(initialCapacity: 256, allocator)
             );
         }

@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edges")]
     public class TriMeshExternalEdges : BaseComponent
     {
-        public Ref<NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>> ExternalEdges { get; private set; }
+        public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; private set; }
         public Ref<NativeIndexedArray<Id<ExternalEdge>, float2>> ExternalNormals => throw new System.NotImplementedException();
 
         private TriMesh triMesh;
@@ -25,7 +25,7 @@ namespace andywiecko.PBD2D.Components
             var triangles = triMesh.SerializedData.Triangles.ToTrianglesArray();
 
             // TODO: cache this inside editor to draw it during editor?
-            var externalEdges = new List<Id<Edge>>();
+            var externalEdges = new List<ExternalEdge>();
 
             var edgeId = Id<Edge>.Zero;
             foreach (var edge in edges)
@@ -48,7 +48,7 @@ namespace andywiecko.PBD2D.Components
                         var idB = triangle[j];
                         if (((Edge)(idA, idB)).Equals(edge))
                         {
-                            externalEdges.Add(edgeId);
+                            externalEdges.Add(new(idA, idB));
                         }
                     }
                 }
@@ -57,7 +57,7 @@ namespace andywiecko.PBD2D.Components
             }
 
             DisposeOnDestroy(
-                ExternalEdges = new NativeIndexedArray<Id<ExternalEdge>, Id<Edge>>(externalEdges.ToArray(), Allocator.Persistent)
+                ExternalEdges = new NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>(externalEdges.ToArray(), Allocator.Persistent)
             );
         }
 
@@ -71,9 +71,8 @@ namespace andywiecko.PBD2D.Components
             Gizmos.color = Color.red;
             var positions = triMesh.PredictedPositions.Value.AsReadOnly();
             var edges = triMesh.Edges.Value.AsReadOnly();
-            foreach (var (_, edgeId) in ExternalEdges.Value.AsReadOnly().IdsValues)
+            foreach (var edge in ExternalEdges.Value.AsReadOnly())
             {
-                var edge = edges[edgeId];
                 var (pA, pB) = positions.At2(edge);
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
 

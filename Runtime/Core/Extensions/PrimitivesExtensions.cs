@@ -46,7 +46,8 @@ namespace andywiecko.PBD2D.Core
             );
         }
 
-        public static AABB ToAABB(this Edge edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
+        public static AABB ToAABB<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
+            where T : struct, IEdge
         {
             var (pA, pB) = positions.At2(edge);
             return new AABB
