@@ -16,9 +16,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f }, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; } = new NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>(new CollidableEdge[] { (0, 1) }, Allocator.Persistent);
-
-            public float Friction => throw new System.NotImplementedException();
-            public Ref<NativeBoundingVolumeTree<AABB>> Tree => throw new System.NotImplementedException();
+            public float Friction => throw new System.NotImplementedException(); // Used friction from tuple explicitly
 
             public override void Dispose()
             {
@@ -131,7 +129,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             system.Schedule().Complete();
             // Should be run twice since method for finding closest point 
-            // currenty returns arbitrary solution for parrallel lines
+            // currently returns arbitrary solution for parallel lines
             // (since there are infinite correct solutions).
             system.Schedule().Complete();
 

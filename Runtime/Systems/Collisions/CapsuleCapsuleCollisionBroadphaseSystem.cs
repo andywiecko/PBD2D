@@ -10,7 +10,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Collisions/Capsule Capsule Collision System (Broadphase)")]
-    public class CapsuleCapsuleCollisionBroadphaseSystem : BaseSystem<ICapsuleCapsuleCollisionTuple>
+    public class CapsuleCapsuleCollisionBroadphaseSystem : BaseSystem<ICapsuleCapsuleCollisionBroadphaseTuple>
     {
         [BurstCompile]
         private struct CheckForPotentialCollisionsTree : IJob
@@ -19,7 +19,7 @@ namespace andywiecko.PBD2D.Systems
             private NativeBoundingVolumeTree<AABB>.ReadOnly tree2;
             private NativeList<IdPair<CollidableEdge>> potentialCollisions;
 
-            public CheckForPotentialCollisionsTree(ICapsuleCapsuleCollisionTuple tuple)
+            public CheckForPotentialCollisionsTree(ICapsuleCapsuleCollisionBroadphaseTuple tuple)
             {
                 tree1 = tuple.Component1.Tree.Value.AsReadOnly();
                 tree2 = tuple.Component2.Tree.Value.AsReadOnly();

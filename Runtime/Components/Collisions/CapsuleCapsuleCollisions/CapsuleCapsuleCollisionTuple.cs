@@ -5,7 +5,7 @@ namespace andywiecko.PBD2D.Components
 {
     public class TriMeshCapsulesTriMeshCapsulesCollisionTuple : ComponentsTuple<
         ITriMeshCapsulesCollideWithTriMeshCapsules, ITriMeshCapsulesCollideWithTriMeshCapsules>,
-        ICapsuleCapsuleCollisionTuple
+        ICapsuleCapsuleCollisionTuple, ICapsuleCapsuleCollisionBroadphaseTuple
     {
         public TriMeshCapsulesTriMeshCapsulesCollisionTuple(ITriMeshCapsulesCollideWithTriMeshCapsules item1, ITriMeshCapsulesCollideWithTriMeshCapsules item2, World world) : base(item1, item2, world)
         {
@@ -17,6 +17,8 @@ namespace andywiecko.PBD2D.Components
 
         public ICapsuleCollideWithCapsule Component1 => Item1;
         public ICapsuleCollideWithCapsule Component2 => Item2;
+        ICapsuleCollideWithCapsuleBroadphase ICapsuleCapsuleCollisionBroadphaseTuple.Component1 => Item1;
+        ICapsuleCollideWithCapsuleBroadphase ICapsuleCapsuleCollisionBroadphaseTuple.Component2 => Item2;
 
         public float Friction => 0.5f * (Component1.Friction + Component2.Friction);
 
