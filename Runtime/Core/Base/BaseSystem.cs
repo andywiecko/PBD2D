@@ -11,6 +11,7 @@ namespace andywiecko.PBD2D.Core
         protected ISimulationConfiguration Configuration => World.Configuration;
         protected IReadOnlyList<TComponent> References => World.ComponentsRegistry.GetComponents<TComponent>();
         public abstract JobHandle Schedule(JobHandle dependencies);
+        public void Run() => Schedule(default).Complete();
         protected void Awake() => World = GetComponentInParent<SystemsManager>().World;
         protected void OnEnable() => World.SystemsRegistry.Add(this);
         protected void OnDisable() => World.SystemsRegistry.Remove(this);

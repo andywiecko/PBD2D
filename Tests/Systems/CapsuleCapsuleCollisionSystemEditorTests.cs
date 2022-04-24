@@ -91,7 +91,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5f, 10f) });
             tuple.PotentialCollisions.Value.Add(new(Id<CollidableEdge>.Zero, Id<CollidableEdge>.Zero));
 
-            system.Schedule().Complete();
+            system.Run();
 
             var expectedContact = new EdgeEdgeContactInfo(
                 barPointA: 0.5f, barPointB: math.float2(1, 0),
@@ -107,7 +107,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5f, 10f) });
             tuple.PotentialCollisions.Value.Add(new(Id<CollidableEdge>.Zero, Id<CollidableEdge>.Zero));
 
-            system.Schedule().Complete();
+            system.Run();
 
             var expectedContact = new EdgeEdgeContactInfo(
                 barPointA: 0.5f, barPointB: math.float2(1, 0),
@@ -127,11 +127,11 @@ namespace andywiecko.PBD2D.Editor.Tests
             component2.SetPredictedPositions(new[] { math.float2(0, 1), math.float2(10, 1) });
             tuple.PotentialCollisions.Value.Add(new(Id<CollidableEdge>.Zero, Id<CollidableEdge>.Zero));
 
-            system.Schedule().Complete();
+            system.Run();
             // Should be run twice since method for finding closest point 
             // currently returns arbitrary solution for parallel lines
             // (since there are infinite correct solutions).
-            system.Schedule().Complete();
+            system.Run();
 
             float2[] expectedPositions1 = { math.float2(0, -0.5f), math.float2(10, -0.5f) };
             Assert.That(PredictedPositions1, Is.EqualTo(expectedPositions1));
@@ -149,7 +149,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             component2.SetPredictedPositions(new[] { math.float2(5, 1), math.float2(5, 10) });
             tuple.PotentialCollisions.Value.Add(new(Id<CollidableEdge>.Zero, Id<CollidableEdge>.Zero));
 
-            system.Schedule().Complete();
+            system.Run();
 
             float2[] expectedPositions1 = { math.float2(0 - 1 / 3f, -1 / 3f), math.float2(10 - 1 / 3f, -1 / 3f) };
             Assert.That(PredictedPositions1, Is.EqualTo(expectedPositions1));

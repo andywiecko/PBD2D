@@ -157,7 +157,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         private void Run()
         {
             world.ComponentsRegistry.Add(component);
-            system.Schedule().Complete();
+            system.Run();
         }
     }
 }

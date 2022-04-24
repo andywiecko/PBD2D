@@ -102,7 +102,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 .SetPosition(1, new(1, 0))
                 .SetPosition(2, new(2, 0))
             ;
-            system.Schedule().Complete();
+            system.Run();
             Assert.That(Positions, Is.EqualTo(defaultInitialPositions));
         }
 
@@ -114,7 +114,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 .SetPosition(1, new(0.9f, 0))
                 .SetPosition(2, new(2.1f, 0))
             ;
-            system.Schedule().Complete();
+            system.Run();
             Assert.That(Positions, Is.EqualTo(defaultInitialPositions).Using(Float2Comparer.Instance));
         }
 
@@ -126,7 +126,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 .SetPosition(1, new(1.1f, 0))
                 .SetPosition(2, new(1.9f, 0))
             ;
-            system.Schedule().Complete();
+            system.Run();
             Assert.That(Positions, Is.EqualTo(defaultInitialPositions).Using(Float2Comparer.Instance));
         }
 
@@ -139,7 +139,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 .SetPosition(2, new(1.9f, 0))
                 .SetMassInv(1, 0f)
             ;
-            system.Schedule().Complete();
+            system.Run();
             var expectedPositions = defaultInitialPositions.ToArray();
             expectedPositions[1] = new(1.1f, 0);
             expectedPositions[2] = new(2.1f, 0);
@@ -155,7 +155,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 .SetPosition(2, new(1.9f, 0))
                 .Stiffness = 0.5f
             ;
-            system.Schedule().Complete();
+            system.Run();
             var expectedPositions = defaultInitialPositions.ToArray();
             expectedPositions[1] = new(1.05f, 0);
             expectedPositions[2] = new(1.95f, 0);

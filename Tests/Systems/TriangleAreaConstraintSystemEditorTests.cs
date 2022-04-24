@@ -76,7 +76,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             float2[] initialPositions = { new(0, 0), new(1, 0), new(0, 1) };
             component = new(initialPositions);
             world.ComponentsRegistry.Add(component);
-            system.Schedule().Complete();
+            system.Run();
             Assert.That(Positions, Is.EqualTo(initialPositions));
         }
 
@@ -93,7 +93,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             component.SetPositions(positions);
             foreach (var _ in 0..5)
             {
-                system.Schedule().Complete();
+                system.Run();
             }
 
             Assert.That(component.GetArea2(), Is.EqualTo(initialArea2));
@@ -110,7 +110,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             foreach (var _ in 0..5)
             {
-                system.Schedule().Complete();
+                system.Run();
             }
 
             float2[] expectedPositions =

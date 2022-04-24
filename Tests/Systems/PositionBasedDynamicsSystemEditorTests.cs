@@ -87,7 +87,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             world.Configuration.DeltaTime = 1;
             Position = new(0, 10);
 
-            startSystem.Schedule().Complete();
+            startSystem.Run();
 
             Assert.That(Velocity, Is.EqualTo(math.float2(0, -10)));
             Assert.That(PredictedPosition, Is.EqualTo(float2.zero));
@@ -101,7 +101,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             Position = new(0, 10);
             PredictedPosition = new(0, 8);
 
-            endSystem.Schedule().Complete();
+            endSystem.Run();
 
             Assert.That(Position, Is.EqualTo(PredictedPosition));
             Assert.That(Velocity, Is.EqualTo(math.float2(0, -2)));
@@ -137,8 +137,8 @@ namespace andywiecko.PBD2D.Editor.Tests
             var dt = world.Configuration.DeltaTime;
             while (t < seconds)
             {
-                startSystem.Schedule().Complete();
-                endSystem.Schedule().Complete();
+                startSystem.Run();
+                endSystem.Run();
                 t += dt;
             }
         }
