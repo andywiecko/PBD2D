@@ -7,8 +7,8 @@ using andywiecko.BurstCollections;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Extended Data/Triangle Bounding Volume Tree TriMesh System")]
-    public class TriangleBoundingVolumeTreeTriMeshSystem : BaseSystem<ITriangleBoundingVolumeTreeTriMesh>
+    [AddComponentMenu("PBD2D:Systems/Extended Data/Triangle Bounding Volume Tree System")]
+    public class TriangleBoundingVolumeTreeSystem : BaseSystem<ITriangleBoundingVolumeTreeTriMesh>
     {
         [BurstCompile]
         private struct UpdateAABBsJob : IJobParallelFor

@@ -22,10 +22,6 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
     }
 
-    public interface IExternalEdgeBoundingVolumeTree : IBoundingVolumeTreeComponent<ExternalEdge>
-    {
-    }
-
     #region Capsule-capsule collisions
     public interface ICapsuleCollideWithCapsuleBroadphase : IComponent
     {

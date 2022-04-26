@@ -7,7 +7,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [RequireComponent(typeof(TriMeshExternalEdgesCapsuleCollider))]
-    [RequireComponent(typeof(TriMeshExternalEdgeBoundingVolumeTree))]
+    [RequireComponent(typeof(TriMeshBoundingVolumeTreeExternalEdges))]
     public abstract class TriMeshCapsulesCollideWith : BaseComponent, ICapsuleCollideWithCapsule
     {
         public float CollisionRadius => triMeshCollider.CollisionRadius;
@@ -21,14 +21,14 @@ namespace andywiecko.PBD2D.Components
         private TriMesh triMesh;
         private TriMeshExternalEdges triMeshExternalEdges;
         private TriMeshExternalEdgesCapsuleCollider triMeshCollider;
-        private TriMeshExternalEdgeBoundingVolumeTree externalEdgeBVT;
+        private TriMeshBoundingVolumeTreeExternalEdges externalEdgeBVT;
 
         private void Start()
         {
             triMesh = GetComponent<TriMesh>();
             triMeshExternalEdges = GetComponent<TriMeshExternalEdges>();
             triMeshCollider = GetComponent<TriMeshExternalEdgesCapsuleCollider>();
-            externalEdgeBVT = GetComponent<TriMeshExternalEdgeBoundingVolumeTree>();
+            externalEdgeBVT = GetComponent<TriMeshBoundingVolumeTreeExternalEdges>();
 
             CollidableEdges = new(triMeshExternalEdges.ExternalEdges.Value.Reinterpret<Id<CollidableEdge>, CollidableEdge>());
         }
