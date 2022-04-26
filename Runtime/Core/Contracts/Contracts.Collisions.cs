@@ -4,6 +4,15 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
+    public interface IBoundingVolumeTreeComponent<T> : IComponent where T : struct, IConvertableToAABB
+    {
+        float Margin { get; }
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
+        Ref<NativeArray<AABB>> Volumes { get; }
+        Ref<NativeArray<T>> Objects { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+    }
+
     public interface ITriangleBoundingVolumeTreeTriMesh : IComponent
     {
         float Margin { get; }
@@ -13,13 +22,8 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
     }
 
-    public interface IExternalEdgeBoundingVolumeTree : IComponent
+    public interface IExternalEdgeBoundingVolumeTree : IBoundingVolumeTreeComponent<ExternalEdge>
     {
-        float Margin { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
-        Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; }
-        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
     }
 
     #region Capsule-capsule collisions

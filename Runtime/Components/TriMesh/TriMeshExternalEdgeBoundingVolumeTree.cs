@@ -11,13 +11,18 @@ namespace andywiecko.PBD2D.Components
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edge Bounding Volume Tree")]
-    public class TriMeshExternalEdgeBoundingVolumeTree : BaseComponent, IExternalEdgeBoundingVolumeTree
+    public class TriMeshExternalEdgeBoundingVolumeTree : BaseComponent, IExternalEdgeBoundingVolumeTree, IBoundingVolumeTreeComponent<ExternalEdge>
     {
         public float Margin { get; set; } = 0.2f;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; private set; }
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => externalEdges.ExternalEdges;
+
+        Ref<NativeArray<AABB>> IBoundingVolumeTreeComponent<ExternalEdge>.Volumes => volumes;
+        private Ref<NativeArray<AABB>> volumes;
+        Ref<NativeArray<ExternalEdge>> IBoundingVolumeTreeComponent<ExternalEdge>.Objects => objects;
+        private Ref<NativeArray<ExternalEdge>> objects;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges externalEdges;
@@ -44,6 +49,9 @@ namespace andywiecko.PBD2D.Components
             );
             using var nativeAABB = new NativeArray<AABB>(aabbs, Allocator.TempJob);
             Tree.Value.Construct(nativeAABB.AsReadOnly(), default).Complete();
+
+            volumes = AABBs.Value.GetInnerArray();
+            objects = ExternalEdges.Value.GetInnerArray();
         }
 
         [SerializeField, Range(0, 30)]
