@@ -3,6 +3,7 @@ using andywiecko.PBD2D.Core;
 using System;
 using System.Linq;
 using Unity.Collections;
+using Unity.Collections.NotBurstCompatible;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace andywiecko.PBD2D.Components
 
         private bool IsValid => SerializedData;
 
+        public Ref<NativeArray<Point>> Points { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; private set; }
@@ -42,8 +44,10 @@ namespace andywiecko.PBD2D.Components
                 .Select(i => ((float3)transform.TransformPoint(i.x, i.y, 0)).xy)
                 .ToArray();
 
+            var points = Enumerable.Range(0, SerializedData.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
             var allocator = Allocator.Persistent;
             DisposeOnDestroy(
+                Points = new NativeArray<Point>(points, allocator),
                 MassesInv = new NativeIndexedArray<Id<Point>, float>(SerializedData.MassesInv, allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 PredictedPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),

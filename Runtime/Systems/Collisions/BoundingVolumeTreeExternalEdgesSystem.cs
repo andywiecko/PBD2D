@@ -4,5 +4,5 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Extended Data/Bounding Volume Tree System (External Edges)")]
-    public class ExternalEdgeBoundingVolumeTreeSystem : BoundingVolumeTreeSystem<ExternalEdge> { }
+    public class BoundingVolumeTreeExternalEdgesSystem : BoundingVolumeTreeSystem<ExternalEdge> { }
 }

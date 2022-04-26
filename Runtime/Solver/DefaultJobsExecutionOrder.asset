@@ -13,25 +13,20 @@ MonoBehaviour:
   m_Name: DefaultJobsExecutionOrder
   m_EditorClassIdentifier: 
   frameStart:
-  - tag: Triangles Collider Tri Mesh System
-    <Guid>k__BackingField: 46de8ccdbefab934c9bf9fa6dd180b42
-    script: {fileID: 11500000, guid: 46de8ccdbefab934c9bf9fa6dd180b42, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.TrianglesColliderTriMeshSystem,
-      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Triangle Bounding Volume Tree Tri Mesh System
-    <Guid>k__BackingField: cb49aaae5573b3943b31d821fa6f3360
-    script: {fileID: 11500000, guid: cb49aaae5573b3943b31d821fa6f3360, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleBoundingVolumeTreeTriMeshSystem,
-      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: External Edge Bounding Volume Tree System
-    <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
-    script: {fileID: 11500000, guid: e18b797d352459e469c033bd08af7304, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.ExternalEdgeBoundingVolumeTreeSystem,
-      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Capsule Capsule Collision Broadphase System
     <Guid>k__BackingField: 7f4f329447aa8b741b3b8cdbc27e279e
     script: {fileID: 11500000, guid: 7f4f329447aa8b741b3b8cdbc27e279e, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionBroadphaseSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Bounding Volume Tree External Edges System
+    <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
+    script: {fileID: 11500000, guid: e18b797d352459e469c033bd08af7304, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreeExternalEdgesSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Bounding Volume Tree Points System
+    <Guid>k__BackingField: bcd551dc94f7eb04b9f65ebcd9f33df7
+    script: {fileID: 11500000, guid: bcd551dc94f7eb04b9f65ebcd9f33df7, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreePointsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   stepStart:
   - tag: Position Based Dynamics Step Start System
@@ -82,4 +77,12 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  undefinedTypes: []
+  undefinedTypes:
+  - tag: Triangle Bounding Volume Tree System
+    <Type>k__BackingField:
+      tag: Triangle Bounding Volume Tree System
+      <Guid>k__BackingField: cb49aaae5573b3943b31d821fa6f3360
+      script: {fileID: 11500000, guid: cb49aaae5573b3943b31d821fa6f3360, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleBoundingVolumeTreeSystem,
+        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    <Step>k__BackingField: -1
