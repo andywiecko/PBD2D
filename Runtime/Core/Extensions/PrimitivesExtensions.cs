@@ -33,30 +33,6 @@ namespace andywiecko.PBD2D.Core
             return 0.5f * (positions[idA] + positions[idB]);
         }
 
-        public static Edge ToEdge(this ExternalEdge edge) => (edge.IdA, edge.IdB);
-
-        public static AABB ToAABB(this Triangle triangle, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
-        {
-            var (idA, idB, idC) = triangle;
-            var (pA, pB, pC) = (positions[idA], positions[idB], positions[idC]);
-            return new AABB
-            (
-                min: MathUtils.Min(pA, pB, pC) - margin,
-                max: MathUtils.Max(pA, pB, pC) + margin
-            );
-        }
-
-        public static AABB ToAABB<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
-            where T : struct, IEdge
-        {
-            var (pA, pB) = positions.At2(edge);
-            return new AABB
-            (
-                min: math.min(pA, pB) - margin,
-                max: math.max(pA, pB) + margin
-            );
-        }
-
         public static Triangle[] ToTrianglesArray(this int[] tris) => Enumerable
             .Range(0, tris.Length / 3)
             .Select(i => (Triangle)(tris[3 * i], tris[3 * i + 1], tris[3 * i + 2]))

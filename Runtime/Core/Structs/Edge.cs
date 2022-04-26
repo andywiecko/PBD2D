@@ -12,12 +12,13 @@ namespace andywiecko.PBD2D.Core
 
     public static class IEdgeExtensions
     {
+        public static Edge ToEdge<T>(this T edge) where T : struct, IEdge => (edge.IdA, edge.IdB);
         public static void Deconstruct<T>(this T edge, out Id<Point> idA, out Id<Point> idB) where T : struct, IEdge
             => (idA, idB) = (edge.IdA, edge.IdB);
     }
 
     [Serializable]
-    public readonly struct Edge : IEquatable<Edge>, IEdge
+    public readonly struct Edge : IEquatable<Edge>, IEdge, IConvertableToAABB
     {
         public static Edge Disabled => new Edge(Id<Point>.Invalid, Id<Point>.Invalid);
 
@@ -53,5 +54,15 @@ namespace andywiecko.PBD2D.Core
         public bool Contains(Id<Point> id) => IdA == id || IdB == id;
 
         public override string ToString() => $"({nameof(Edge)})({IdA}, {IdB})";
+
+        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
+        {
+            var (pA, pB) = positions.At2(this);
+            return new
+            (
+                min: math.min(pA, pB) - margin,
+                max: math.max(pA, pB) + margin
+            );
+        }
     }
 }

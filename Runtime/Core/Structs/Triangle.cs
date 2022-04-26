@@ -1,5 +1,7 @@
 using andywiecko.BurstCollections;
+using andywiecko.BurstMathUtils;
 using System;
+using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
@@ -12,12 +14,13 @@ namespace andywiecko.PBD2D.Core
 
     public static class ITriangleExtensions
     {
+        public static Triangle ToTriangle<T>(this T triangle) where T : struct, ITriangle => (triangle.IdA, triangle.IdB, triangle.IdC);
         public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC) where T : struct, ITriangle
             => (idA, idB, idC) = (triangle.IdA, triangle.IdB, triangle.IdC);
     }
 
     [Serializable]
-    public readonly struct Triangle : IEquatable<Triangle>, ITriangle
+    public readonly struct Triangle : IEquatable<Triangle>, ITriangle, IConvertableToAABB
     {
         public static Triangle Disabled => new Triangle(Id<Point>.Invalid, Id<Point>.Invalid, Id<Point>.Invalid);
 
@@ -101,5 +104,15 @@ namespace andywiecko.PBD2D.Core
         }
 
         public override string ToString() => $"{nameof(Triangle)}({IdA}, {IdB}, {IdC})";
+
+        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
+        {
+            var (pA, pB, pC) = (positions[IdA], positions[IdB], positions[IdC]);
+            return new
+            (
+                min: MathUtils.Min(pA, pB, pC) - margin,
+                max: MathUtils.Max(pA, pB, pC) + margin
+            );
+        }
     }
 }

@@ -20,9 +20,6 @@ namespace andywiecko.PBD2D.Core
         public static implicit operator ExternalEdge((int i, int j) tuple) => new((Id<Point>)tuple.i, (Id<Point>)tuple.j);
         public bool Equals(ExternalEdge other) => IdA == other.IdA && IdB == other.IdB;
 
-        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
-        {
-            return this.ToAABB<ExternalEdge>(positions, margin);
-        }
+        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0) => this.ToEdge().ToAABB(positions, margin);
     }
 }
