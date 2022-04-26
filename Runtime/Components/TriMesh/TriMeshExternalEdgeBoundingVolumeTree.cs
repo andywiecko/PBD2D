@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edge Bounding Volume Tree")]
-    public class TriMeshExternalEdgeBoundingVolumeTree : BaseComponent, IExternalEdgeBoundingVolumeTree, IBoundingVolumeTreeComponent<ExternalEdge>
+    public class TriMeshExternalEdgeBoundingVolumeTree : BaseComponent, IExternalEdgeBoundingVolumeTree
     {
         public float Margin { get; set; } = 0.2f;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;

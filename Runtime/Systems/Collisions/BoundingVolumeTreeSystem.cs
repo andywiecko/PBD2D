@@ -7,8 +7,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    public abstract class BoundingVolumeTreeSystem<TComponent, TObject> : BaseSystem<TComponent>
-        where TComponent : IBoundingVolumeTreeComponent<TObject>
+    public abstract class BoundingVolumeTreeSystem<TObject> : BaseSystem<IBoundingVolumeTreeComponent<TObject>>
         where TObject : struct, IConvertableToAABB
     {
         [BurstCompile]
@@ -19,7 +18,7 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private readonly float margin;
 
-            public UpdateAABBsJob(TComponent component)
+            public UpdateAABBsJob(IBoundingVolumeTreeComponent<TObject> component)
             {
                 aabbs = component.Volumes.Value;
                 objects = component.Objects.Value.AsReadOnly();
