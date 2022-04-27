@@ -9,41 +9,42 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Triangle Bounding Volume Tree")]
-    public class TriangleBoundingVolumeTreeTriMesh : BaseComponent, ITriangleBoundingVolumeTreeTriMesh
+    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Bounding Volume Tree (Triangles)")]
+    public class TriMeshBoundingVolumeTreeTriangles : BaseComponent, IBoundingVolumeTreeComponent<Triangle>
     {
-        [field: SerializeField, Min(0)]
-        public float Margin { get; private set; } = 0;
+        public float Margin { get; set; } = 0.2f;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
-        public Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs {get; private set;}
-        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Triangle>, AABB>> Volumes { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles => triMesh.Triangles;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
-        [SerializeField, Range(0, 30)]
-        private int level = 0;
+        Ref<NativeArray<AABB>> IBoundingVolumeTreeComponent<Triangle>.Volumes => volumes;
+        private Ref<NativeArray<AABB>> volumes;
+        Ref<NativeArray<Triangle>> IBoundingVolumeTreeComponent<Triangle>.Objects => triangles;
+        private Ref<NativeArray<Triangle>> triangles;
 
         private TriMesh triMesh;
 
-        private void Awake()
-        {
-            triMesh = GetComponent<TriMesh>();
-        }
-
         private void Start()
         {
-            var trianglesCount = triMesh.Triangles.Value.Length;
-            DisposeOnDestroy(
-                Tree = new NativeBoundingVolumeTree<AABB>(leavesCount: trianglesCount, Allocator.Persistent),
-                AABBs = new NativeIndexedArray<Id<Triangle>, AABB>(triMesh.Triangles.Value.Length, Allocator.Persistent)
-            );
-            
+            triMesh = GetComponent<TriMesh>();
+
+            var count = Triangles.Value.Length;
             var positions = triMesh.Positions.Value.AsReadOnly();
-            var triangles = triMesh.Triangles.Value.AsReadOnly();
-            var aabbs = triangles.ToArray().Select(i => i.ToAABB(positions)).ToArray();
-            //var aabbs = triangles.ToArray().Select(i => i.ToBoundingCircle(positions)).ToArray();//ToAABB(positions).ToAABR()).ToArray();
-            using var nativeAABB = new NativeArray<AABB>(aabbs, Allocator.Persistent);
+            var aabbs = Triangles.Value.Select(i => i.ToAABB(positions, Margin)).ToArray();
+            DisposeOnDestroy(
+                Volumes = new NativeIndexedArray<Id<Triangle>, AABB>(aabbs, Allocator.Persistent),
+                Tree = new NativeBoundingVolumeTree<AABB>(count, Allocator.Persistent)
+            );
+            using var nativeAABB = new NativeArray<AABB>(aabbs, Allocator.TempJob);
             Tree.Value.Construct(nativeAABB.AsReadOnly(), default).Complete();
+
+            volumes = Volumes.Value.GetInnerArray();
+            triangles = Triangles.Value.GetInnerArray();
         }
+
+        [SerializeField, Range(0, 30)]
+        private int level = 0;
 
         private void OnDrawGizmos()
         {
@@ -51,6 +52,22 @@ namespace andywiecko.PBD2D.Components
             {
                 return;
             }
+
+            Gizmos.color = Color.yellow;
+            foreach (var aabb in Volumes.Value)
+            {
+                GizmosExtensions.DrawRectangle(aabb.Min, aabb.Max);
+            }
+
+            /*
+            Gizmos.color = Color.black;
+            foreach(var i in 0..AABBs.Value.Length)
+            {
+                var aabb = Tree.Value.Volumes[i];
+                GizmosExtensions.DrawRectangle(aabb.Min, aabb.Max);
+            }
+            */
+
             var tree = Tree.Value;
 
             var root = tree.RootId.Value;

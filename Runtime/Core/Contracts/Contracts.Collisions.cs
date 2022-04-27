@@ -13,15 +13,6 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
     }
 
-    public interface ITriangleBoundingVolumeTreeTriMesh : IComponent
-    {
-        float Margin { get; }
-        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
-        Ref<NativeIndexedArray<Id<Triangle>, AABB>> AABBs { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
-    }
-
     #region Capsule-capsule collisions
     public interface ICapsuleCollideWithCapsuleBroadphase : IComponent
     {
