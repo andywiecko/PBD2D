@@ -40,14 +40,14 @@ namespace andywiecko.PBD2D.Systems
             {
                 var (idA, idB, restLength) = c;
 
-                var (wA, wB) = massesInv.At2(c);
+                var (wA, wB) = massesInv.At(c);
                 var wAB = wA + wB;
                 if (wAB <= math.EPSILON)
                 {
                     return;
                 }
 
-                var (pA, pB) = predictedPositions.At2(c);
+                var (pA, pB) = predictedPositions.At(c);
                 var pAB = pB - pA;
                 var length = math.length(pAB);
                 if (length < math.EPSILON)

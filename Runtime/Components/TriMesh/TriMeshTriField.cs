@@ -48,12 +48,11 @@ namespace andywiecko.PBD2D.Components
             var lookup = TriFieldLookup.Value.AsReadOnly();
             var positions = triMesh.Positions.Value.AsReadOnly();
             var external = externalEdges.ExternalEdges.Value.AsReadOnly();
-            var edges = triMesh.Edges.Value.AsReadOnly();
 
             Gizmos.color = Color.red;
             foreach (var t in triMesh.Triangles.Value.AsReadOnly())
             {
-                var (pA, pB, pC) = positions.At3(t);
+                var (pA, pB, pC) = positions.At(t);
                 foreach (var b in lookup.Barycoords)
                 {
                     var p = pA * b.x + pB * b.y + pC * b.z;
@@ -64,12 +63,12 @@ namespace andywiecko.PBD2D.Components
             Gizmos.color = Color.blue;
             foreach (var (tId, t) in triMesh.Triangles.Value.AsReadOnly().IdsValues)
             {
-                var (pA, pB, pC) = positions.At3(t);
+                var (pA, pB, pC) = positions.At(t);
                 foreach (var b in lookup.Barycoords)
                 {
                     var externalId = lookup.GetExternalEdge(tId, b);
                     var edge = external[externalId];
-                    var (e0, e1) = positions.At2(edge);
+                    var (e0, e1) = positions.At(edge);
                     var p = pA * b.x + pB * b.y + pC * b.z;
                     // TODO: this should be cached, it can be valuable!
                     MathUtils.PointClosestPointOnLineSegment(p, e0, e1, out var q);

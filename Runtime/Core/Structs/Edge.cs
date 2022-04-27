@@ -43,12 +43,6 @@ namespace andywiecko.PBD2D.Core
         private Edge((int idA, int idB) ids) : this((Id<Point>)ids.idA, (Id<Point>)ids.idB) { }
         private Edge((Id<Point> idA, Id<Point> idB) ids) : this(ids.idA, ids.idB) { }
 
-        public void Deconstruct(out Id<Point> idA, out Id<Point> idB)
-        {
-            idA = IdA;
-            idB = IdB;
-        }
-
         public bool Equals(Edge other) => IdA == other.IdA && IdB == other.IdB;
 
         public bool Contains(Id<Point> id) => IdA == id || IdB == id;
@@ -57,7 +51,7 @@ namespace andywiecko.PBD2D.Core
 
         public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
         {
-            var (pA, pB) = positions.At2(this);
+            var (pA, pB) = positions.At(this);
             return new
             (
                 min: math.min(pA, pB) - margin,

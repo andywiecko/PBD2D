@@ -15,6 +15,8 @@ namespace andywiecko.PBD2D.Core
         public void Deconstruct(out Id<Point> idA, out Id<Point> idB, out Id<Point> idC, out float restArea2) =>
              (idA, idB, idC, restArea2) = (IdA, IdB, IdC, RestArea2);
 
+        public static implicit operator Triangle(TriangleAreaConstraint c) => c.ToTriangle();
+
         public static implicit operator TriangleAreaConstraint((int idA, int idB, int idC, float restArea2) tuple) =>
              new((Id<Point>)tuple.idA, (Id<Point>)tuple.idB, (Id<Point>)tuple.idC, tuple.restArea2);
 

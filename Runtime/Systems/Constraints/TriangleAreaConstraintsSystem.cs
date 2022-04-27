@@ -40,8 +40,8 @@ namespace andywiecko.PBD2D.Systems
             private void ApplyAreaConstraint(TriangleAreaConstraint c)
             {
                 var (idA, idB, idC, restArea2) = c;
-                var (pA, pB, pC) = positions.At3(c);
-                var (wA, wB, wC) = massesInv.At3(c);
+                var (pA, pB, pC) = positions.At(c);
+                var (wA, wB, wC) = massesInv.At(c);
 
                 var pAB = pB - pA;
                 var pAC = pC - pA;

@@ -73,7 +73,7 @@ namespace andywiecko.PBD2D.Components
             var edges = triMesh.Edges.Value.AsReadOnly();
             foreach (var edge in ExternalEdges.Value.AsReadOnly())
             {
-                var (pA, pB) = positions.At2(edge);
+                var (pA, pB) = positions.At(edge);
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
 
                 /*
