@@ -5,6 +5,7 @@ using andywiecko.PBD2D.Core.Editor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -88,7 +89,7 @@ namespace andywiecko.PBD2D.Solver
         {
             types = TypeCache
                 .GetTypesDerivedFrom<ISystem>().ToArray()
-                .Where(s => !s.IsAbstract)
+                .Where(s => !s.IsAbstract && s.GetCustomAttributes<FakeSystemAttribute>().Count() == 0)
                 .ToArray();
 
             static void RegisterMapping(Type type, string guid)

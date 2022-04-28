@@ -82,12 +82,4 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  undefinedTypes:
-  - tag: Triangle Bounding Volume Tree System
-    <Type>k__BackingField:
-      tag: Triangle Bounding Volume Tree System
-      <Guid>k__BackingField: cb49aaae5573b3943b31d821fa6f3360
-      script: {fileID: 11500000, guid: cb49aaae5573b3943b31d821fa6f3360, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleBoundingVolumeTreeSystem,
-        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    <Step>k__BackingField: -1
+  undefinedTypes: []
