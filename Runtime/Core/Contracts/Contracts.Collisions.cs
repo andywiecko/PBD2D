@@ -89,4 +89,42 @@ namespace andywiecko.PBD2D.Core
             => _ = (point = tuple.PointComponent, line = tuple.LineComponent);
     }
     #endregion
+
+    #region Point-TriField collisions
+    public interface IPointCollideWithTriFieldBroadphase : IEntityComponent
+    {
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
+    }
+
+    public interface IPointCollideWithTriField : IEntityComponent
+    {
+        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+    }
+
+    public interface ITriFieldCollideWithPointBroadphase : IEntityComponent
+    {
+        Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
+    }
+
+    public interface ITriFieldCollideWithPoint : IEntityComponent
+    {
+        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
+        Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
+        Ref<TriFieldLookup> TriFieldLookup { get; }
+    }
+
+    public interface IPointTriFieldCollisionTuple : IComponent
+    {
+        Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; }
+        Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; }
+        IPointCollideWithTriField PointsComponent { get; }
+        ITriFieldCollideWithPoint TriFieldComponent { get; }
+    }
+
+    public interface ITriMeshPointsCollideWithTriMeshTriField : IPointCollideWithTriField, IPointCollideWithTriFieldBroadphase { }
+    public interface ITriMeshTriFieldCollideWithTriMeshPoints : ITriFieldCollideWithPoint, ITriFieldCollideWithPointBroadphase { }
+    #endregion
 }

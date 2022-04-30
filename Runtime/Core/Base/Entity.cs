@@ -7,8 +7,11 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Core
 {
     [DisallowMultipleComponent]
-    public abstract class Entity : MonoBehaviour
+    public abstract class Entity : MonoBehaviour, IEntity
     {
+        private static int id = 0; // TODO: extract counter global
+        public Id<IEntity> Id { get; } = new(id++);
+
         [field: SerializeField]
         public World World { get; private set; } = default;
 

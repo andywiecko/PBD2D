@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    public abstract class BaseComponent : MonoBehaviour, IComponent
+    public abstract class BaseComponent : MonoBehaviour, IEntityComponent
     {
         public Entity Entity { get; private set; } = default;
         public World World => Entity.World;
 
+        public Id<IEntity> EntityId => Entity.Id;
         public Id<IComponent> Id { get; } = ComponentIdCounter.GetNext();
 
         private readonly List<IDisposable> refsToDisposeOnDestroy = new();

@@ -65,6 +65,11 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: 2ed1a7a66d14f2d42a1643f489f93c4e, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.PointLineCollisionSystem, andywiecko.PBD2D.Systems,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Point Tri Field Collision System
+    <Guid>k__BackingField: 26302bb49924c4547aac45396fb3d34f
+    script: {fileID: 11500000, guid: 26302bb49924c4547aac45396fb3d34f, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.PointTriFieldCollisionSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Capsule Capsule Collision System
     <Guid>k__BackingField: 9524172c6d9c1bb449f00373f3c017ab
     script: {fileID: 11500000, guid: 9524172c6d9c1bb449f00373f3c017ab, type: 3}
@@ -82,12 +87,4 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  undefinedTypes:
-  - tag: Point Tri Field Collision System
-    <Type>k__BackingField:
-      tag: Point Tri Field Collision System
-      <Guid>k__BackingField: 26302bb49924c4547aac45396fb3d34f
-      script: {fileID: 11500000, guid: 26302bb49924c4547aac45396fb3d34f, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.PointTriFieldCollisionSystem,
-        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    <Step>k__BackingField: -1
+  undefinedTypes: []

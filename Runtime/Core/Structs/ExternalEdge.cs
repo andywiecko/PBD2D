@@ -11,10 +11,12 @@ namespace andywiecko.PBD2D.Core
         public readonly Id<Point> IdB { get; }
         public ExternalEdge(Id<Point> idA, Id<Point> idB) => (IdA, IdB) = (idA, idB);
 
+        public float2 GetNormal(NativeIndexedArray<Id<Point>, float2> positions) => GetNormal(positions.AsReadOnly());
+
         public float2 GetNormal(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
         {
             var (pA, pB) = (positions[IdA], positions[IdB]);
-            return math.normalizesafe(MathUtils.Rotate90CW(pB - pA));
+            return -math.normalizesafe(MathUtils.Rotate90CW(pB - pA));
         }
 
         public static implicit operator Edge(ExternalEdge edge) => edge.ToEdge();

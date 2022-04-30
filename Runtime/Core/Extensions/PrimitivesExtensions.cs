@@ -27,12 +27,6 @@ namespace andywiecko.PBD2D.Core
             return (positions[idA] + positions[idB] + positions[idC]) / 3;
         }
 
-        public static float2 GetCenter(this Edge edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
-        {
-            var (idA, idB) = edge;
-            return 0.5f * (positions[idA] + positions[idB]);
-        }
-
         public static Triangle[] ToTrianglesArray(this int[] tris) => Enumerable
             .Range(0, tris.Length / 3)
             .Select(i => (Triangle)(tris[3 * i], tris[3 * i + 1], tris[3 * i + 2]))

@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.BurstMathUtils;
 using andywiecko.PBD2D.Core;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -12,7 +13,7 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshExternalEdges : BaseComponent
     {
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; private set; }
-        public Ref<NativeIndexedArray<Id<ExternalEdge>, float2>> ExternalNormals => throw new System.NotImplementedException();
+        // TODO: store normals?
 
         private TriMesh triMesh;
 
@@ -46,7 +47,7 @@ namespace andywiecko.PBD2D.Components
                     {
                         var idA = triangle[i];
                         var idB = triangle[j];
-                        if (((Edge)(idA, idB)).Equals(edge))
+                        if (((Edge)(idA, idB)).Equals(edge) || ((Edge)(idB, idA)).Equals(edge))
                         {
                             externalEdges.Add(new(idA, idB));
                         }
@@ -76,11 +77,9 @@ namespace andywiecko.PBD2D.Components
                 var (pA, pB) = positions.At(edge);
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
 
-                /*
                 var p = edge.GetCenter(positions);
-                var n = math.normalizesafe(MathUtils.Rotate90CW(pB - pA));
+                var n = edge.GetNormal(positions);
                 GizmosExtensions.DrawArrow(p, p + 0.33f * n);
-                */
             }
         }
     }

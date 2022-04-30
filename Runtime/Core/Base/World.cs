@@ -37,6 +37,9 @@ namespace andywiecko.PBD2D.Core
         public ComponentsRegistry ComponentsRegistry { get; } = new();
         public SystemsRegistry SystemsRegistry { get; } = new();
 
+        [SerializeField]
+        private bool verbose = false;
+
         private void OnAddComponentItem1(object item1, Type t, Type t2)
         {
             foreach (var item2 in ComponentsRegistry.GetComponents(t2))
@@ -59,6 +62,11 @@ namespace andywiecko.PBD2D.Core
             {
                 ComponentsRegistry.SubscribeOnAdd(t1, (object i) => OnAddComponentItem1(i, t, t2));
                 ComponentsRegistry.SubscribeOnAdd(t2, (object i) => OnAddComponentItem2(i, t, t1));
+
+                if(verbose)
+                {
+                    Debug.Log($"Register tuple {t} for types: {t1} and {t2}");
+                }
             }
         }
     }
