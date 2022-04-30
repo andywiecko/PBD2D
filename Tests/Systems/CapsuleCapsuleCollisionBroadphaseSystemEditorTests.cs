@@ -4,12 +4,13 @@ using andywiecko.PBD2D.Systems;
 using NUnit.Framework;
 using System.Linq;
 using Unity.Collections;
+using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Editor.Tests
 {
     public class CapsuleCapsuleCollisionBroadphaseSystemEditorTests
     {
-        private class FakeComponent : TestComponent, ICapsuleCollideWithCapsuleBroadphase
+        private class FakeComponent : TestComponent
         {
             public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
 
@@ -20,31 +21,39 @@ namespace andywiecko.PBD2D.Editor.Tests
                 Tree.Value.Construct(tmp.AsReadOnly());
             }
 
-            public override void Dispose()
-            {
-                Tree?.Dispose();
-            }
+            public override void Dispose() => Tree?.Dispose();
         }
 
-        private class FakeTuple : TestComponent, ICapsuleCapsuleCollisionBroadphaseTuple
+        private class FakeTuple : TestComponent, IBoundingVolumeTreesIntersectionTuple
         {
-            public (int, int)[] Result => PotentialCollisions.Value.ToArray().Select(i => ((int)i.Id1, (int)i.Id2)).ToArray();
+            public Ref<NativeBoundingVolumeTree<AABB>> Tree1 { get; private set; }
+            public Ref<NativeBoundingVolumeTree<AABB>> Tree2 { get; private set; }
+            public Ref<NativeList<int2>> Result { get; } = new NativeList<int2>(64, Allocator.Persistent);
 
-            public Ref<NativeList<IdPair<CollidableEdge>>> PotentialCollisions { get; } = new NativeList<IdPair<CollidableEdge>>(64, Allocator.Persistent);
-            public FakeComponent Component1 { get; } = new();
-            public FakeComponent Component2 { get; } = new();
-            ICapsuleCollideWithCapsuleBroadphase ICapsuleCapsuleCollisionBroadphaseTuple.Component1 => Component1;
-            ICapsuleCollideWithCapsuleBroadphase ICapsuleCapsuleCollisionBroadphaseTuple.Component2 => Component2;
+            public (int, int)[] GetResult() => Result.Value.ToArray().Select(i => (i.x, i.y)).ToArray();
+            public void ConstructTree1(AABB[] volumes)
+            {
+                Tree1 = new NativeBoundingVolumeTree<AABB>(volumes.Length, Allocator.Persistent);
+                using var tmp = new NativeArray<AABB>(volumes, Allocator.Persistent);
+                Tree1.Value.Construct(tmp.AsReadOnly());
+            }
+
+            public void ConstructTree2(AABB[] volumes)
+            {
+                Tree2 = new NativeBoundingVolumeTree<AABB>(volumes.Length, Allocator.Persistent);
+                using var tmp = new NativeArray<AABB>(volumes, Allocator.Persistent);
+                Tree2.Value.Construct(tmp.AsReadOnly());
+            }
 
             public override void Dispose()
             {
-                PotentialCollisions?.Dispose();
-                Component1?.Dispose();
-                Component2?.Dispose();
+                Result?.Dispose();
+                Tree1?.Dispose();
+                Tree2?.Dispose();
             }
         }
 
-        private CapsuleCapsuleCollisionBroadphaseSystem system;
+        private BoundingVolumeTreesIntersectionSystem system;
         private FakeTuple tuple;
 
         [SetUp]
@@ -52,7 +61,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             TestUtils.New(ref system);
             tuple = new();
-            system.World = new FakeWorld(tuple, tuple.Component1, tuple.Component2);
+            system.World = new FakeWorld(tuple);
         }
 
         [TearDown]
@@ -82,10 +91,10 @@ namespace andywiecko.PBD2D.Editor.Tests
         [Test, TestCaseSource(nameof(broadphaseResultTestData))]
         public (int, int)[] BroadphaseResultTest(AABB[] volumes1, AABB[] volumes2)
         {
-            tuple.Component1.ConstructTree(volumes1);
-            tuple.Component2.ConstructTree(volumes2);
+            tuple.ConstructTree1(volumes1);
+            tuple.ConstructTree2(volumes2);
             system.Run();
-            return tuple.Result;
+            return tuple.GetResult();
         }
     }
 }

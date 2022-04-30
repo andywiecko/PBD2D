@@ -13,6 +13,13 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
     }
 
+    public interface IBoundingVolumeTreesIntersectionTuple : IComponent
+    {
+        Ref<NativeBoundingVolumeTree<AABB>> Tree1 { get; }
+        Ref<NativeBoundingVolumeTree<AABB>> Tree2 { get; }
+        Ref<NativeList<int2>> Result { get; }
+    }
+
     #region Capsule-capsule collisions
     public interface ICapsuleCollideWithCapsuleBroadphase : IComponent
     {
@@ -32,13 +39,6 @@ namespace andywiecko.PBD2D.Core
     public interface ITriMeshCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule, ICapsuleCollideWithCapsuleBroadphase { }
     public interface IRodCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule { }
     public interface ITriMeshCapsulesCollideWithRodCapsules : ICapsuleCollideWithCapsule { }
-
-    public interface ICapsuleCapsuleCollisionBroadphaseTuple : IComponent
-    {
-        Ref<NativeList<IdPair<CollidableEdge>>> PotentialCollisions { get; }
-        ICapsuleCollideWithCapsuleBroadphase Component1 { get; }
-        ICapsuleCollideWithCapsuleBroadphase Component2 { get; }
-    }
 
     public interface ICapsuleCapsuleCollisionTuple : IComponent
     {

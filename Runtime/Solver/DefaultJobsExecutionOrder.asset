@@ -13,11 +13,6 @@ MonoBehaviour:
   m_Name: DefaultJobsExecutionOrder
   m_EditorClassIdentifier: 
   frameStart:
-  - tag: Capsule Capsule Collision Broadphase System
-    <Guid>k__BackingField: 7f4f329447aa8b741b3b8cdbc27e279e
-    script: {fileID: 11500000, guid: 7f4f329447aa8b741b3b8cdbc27e279e, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionBroadphaseSystem,
-      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - tag: Bounding Volume Tree Points System
     <Guid>k__BackingField: bcd551dc94f7eb04b9f65ebcd9f33df7
     script: {fileID: 11500000, guid: bcd551dc94f7eb04b9f65ebcd9f33df7, type: 3}
@@ -32,6 +27,11 @@ MonoBehaviour:
     <Guid>k__BackingField: d6127d639e88d0c40aea6c6afb089647
     script: {fileID: 11500000, guid: d6127d639e88d0c40aea6c6afb089647, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreeTrianglesSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - tag: Bounding Volume Trees Intersection System
+    <Guid>k__BackingField: 0b7e003b21377784fad35cb20454d986
+    script: {fileID: 11500000, guid: 0b7e003b21377784fad35cb20454d986, type: 3}
+    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreesIntersectionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   stepStart:
   - tag: Position Based Dynamics Step Start System
@@ -82,4 +82,12 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  undefinedTypes: []
+  undefinedTypes:
+  - tag: Point Tri Field Collision System
+    <Type>k__BackingField:
+      tag: Point Tri Field Collision System
+      <Guid>k__BackingField: 26302bb49924c4547aac45396fb3d34f
+      script: {fileID: 11500000, guid: 26302bb49924c4547aac45396fb3d34f, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Systems.PointTriFieldCollisionSystem,
+        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    <Step>k__BackingField: -1
