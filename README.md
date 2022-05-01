@@ -24,9 +24,9 @@ Unity Position Based Dynamics in two dimensions
     - [Ground](#ground)
   - [Architecture](#architecture)
   - [Roadmap](#roadmap)
-    - [v.0.1.0](#v010)
-    - [v.1.0.0](#v100)
-    - [v.2.0.0](#v200)
+    - [v0.1.0](#v010)
+    - [v1.0.0](#v100)
+    - [v2.0.0](#v200)
   - [Dependencies](#dependencies)
   - [Contributors](#contributors)
   - [Bibliography](#bibliography)
@@ -173,28 +173,36 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 ## Roadmap
 
-### v.0.1.0
+### v0.1.0
 
-- [ ] Reimport and refactor tri mesh structure.
-- [ ] Reimport and refactor rod structure.
-- [ ] Sample scenes uploaded to a separate repo+build online.
+- [X] ~~Reimport and refactor tri mesh structure.~~
+- [X] ~~Introduce list of constraints.~~
+- [X] ~~Unify Bvt Systems.~~
+- [X] ~~Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.~~
+- [ ] Add Cheap collisions edge-edge
 - [ ] Test for most of the systems.
+- [ ] Investigate performance with combined dependencies.
+- [ ] Add friction for trifield-trifield collisions
+- [ ] [!] **Restitution**
+- [ ] Sample scenes + build online.
 - [ ] Move math/collection related parts into custom packages.
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [X] Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.
-- [ ] Introduce list of constraints.
+- [ ] Static box?
+- [ ] Static circle?
 
-### v.1.0.0
+### v1.0.0
 
+- [ ] Reimport and refactor rod structure.
 - [ ] Refactor system class to not be derived from `MonoBehaviour`. 
+- [ ] Reimport and refactor position based fluid.
+- [ ] Fluid "fancy" shader.
+- [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
+
+### v2.0.0
+
 - [ ] Destructible bodies.
 - [ ] Continous collisions.
-- [ ] Fluid "fancy" shader.
-- [ ] Reimport and refactor position based fluid.
-
-### v.2.0.0
-
 - [ ] GPU fluids.
 - [ ] Sign distance field collisions.
 
