@@ -10,8 +10,9 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Bounding Volume Tree (Triangles)")]
-    public class TriMeshBoundingVolumeTreeTriangles : BaseComponent, IBoundingVolumeTreeComponent<Triangle>
+    public class TriMeshBoundingVolumeTreeTriangles : BaseComponent, IBoundingVolumeTreeComponent<Triangle>, IBoundsComponent
     {
+        public AABB Bounds { get; private set; }
         public float Margin { get; set; } = 0.2f;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, AABB>> Volumes { get; private set; }
@@ -24,6 +25,12 @@ namespace andywiecko.PBD2D.Components
         private Ref<NativeArray<Triangle>> triangles;
 
         private TriMesh triMesh;
+
+        public void UpdateBounds()
+        {
+            var tree = Tree.Value.AsReadOnly();
+            Bounds = tree.Volumes[tree.RootId.Value];
+        }
 
         private void Start()
         {
@@ -41,6 +48,8 @@ namespace andywiecko.PBD2D.Components
 
             volumes = Volumes.Value.GetInnerArray();
             triangles = Triangles.Value.GetInnerArray();
+
+            UpdateBounds();
         }
 
         [SerializeField, Range(0, 30)]

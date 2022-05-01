@@ -17,6 +17,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
+        public AABB Bounds => externalEdgeBVT.Bounds;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges triMeshExternalEdges;

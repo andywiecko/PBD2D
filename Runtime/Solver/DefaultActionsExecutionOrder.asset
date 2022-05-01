@@ -32,4 +32,13 @@ MonoBehaviour:
       assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
+  - tag: Update Bounds (Bounds System)
+    <Name>k__BackingField: UpdateBounds
+    <SerializedType>k__BackingField:
+      tag: Bounds System
+      <Guid>k__BackingField: 05a956019230a6f479500b7b576c54f3
+      script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
   undefinedMethods: []

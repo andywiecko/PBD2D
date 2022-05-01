@@ -33,10 +33,15 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies = default)
         {
-            foreach (var component in References)
+            //foreach (var component in References)
+            for (int i = 0; i < References.Count; i++)
             {
-                dependencies = new CommonJobs.ClearListJob<int2>(component.Result.Value).Schedule(dependencies);
-                dependencies = new GetTreesIntersectionJob(component).Schedule(dependencies);
+                var component = References[i];
+                if (component.Bounds1.Intersects(component.Bounds2))
+                {
+                    dependencies = new CommonJobs.ClearListJob<int2>(component.Result.Value).Schedule(dependencies);
+                    dependencies = new GetTreesIntersectionJob(component).Schedule(dependencies);
+                }
             }
 
             return dependencies;

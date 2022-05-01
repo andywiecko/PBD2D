@@ -18,6 +18,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => triMeshExternalEdges.ExternalEdges;
         public Ref<TriFieldLookup> TriFieldLookup => triFieldComponent.TriFieldLookup;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => treeComponent.Tree;
+        public AABB Bounds => treeComponent.Bounds;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges triMeshExternalEdges;

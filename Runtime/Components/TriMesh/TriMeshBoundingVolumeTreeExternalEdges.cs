@@ -11,9 +11,11 @@ namespace andywiecko.PBD2D.Components
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Bounding Volume Tree (External Edges)")]
-    public class TriMeshBoundingVolumeTreeExternalEdges : BaseComponent, IBoundingVolumeTreeComponent<ExternalEdge>
+    public class TriMeshBoundingVolumeTreeExternalEdges : BaseComponent, IBoundingVolumeTreeComponent<ExternalEdge>, IBoundsComponent
     {
-        public float Margin { get; set; } = 0.2f;
+        public AABB Bounds { get; private set; }
+        [field: SerializeField]
+        public float Margin { get; private set; } = 0.2f;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; private set; }
         public Ref<NativeIndexedArray<Id<ExternalEdge>, AABB>> AABBs { get; private set; }
@@ -26,6 +28,15 @@ namespace andywiecko.PBD2D.Components
 
         private TriMesh triMesh;
         private TriMeshExternalEdges externalEdges;
+
+        [SerializeField]
+        private bool drawBounds = false;
+
+        public void UpdateBounds()
+        {
+            var tree = Tree.Value.AsReadOnly();
+            Bounds = tree.Volumes[tree.RootId.Value];
+        }
 
         protected override void Awake()
         {
@@ -52,6 +63,8 @@ namespace andywiecko.PBD2D.Components
 
             volumes = AABBs.Value.GetInnerArray();
             objects = ExternalEdges.Value.GetInnerArray();
+
+            UpdateBounds();
         }
 
         [SerializeField, Range(0, 30)]
@@ -114,6 +127,12 @@ namespace andywiecko.PBD2D.Components
                 GizmosExtensions.DrawRectangle(min, max);
                 //var (position, radius) = tree.Volumes[el];
                 //Gizmos.DrawWireSphere(position.ToFloat3(), radius);
+            }
+
+            Gizmos.color = Color.magenta;
+            if (drawBounds)
+            {
+                GizmosExtensions.DrawRectangle(Bounds.Min, Bounds.Max);
             }
         }
     }

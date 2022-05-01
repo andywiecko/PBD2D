@@ -13,6 +13,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => treeComponent.Tree;
+        public AABB Bounds => treeComponent.Bounds;
 
         private TriMesh triMesh;
         private TriMeshBoundingVolumeTreePoints treeComponent;

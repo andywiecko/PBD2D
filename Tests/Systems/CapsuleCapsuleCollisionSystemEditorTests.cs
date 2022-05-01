@@ -11,6 +11,7 @@ namespace andywiecko.PBD2D.Editor.Tests
     {
         private class FakeComponent : TestComponent, ICapsuleCollideWithCapsule
         {
+            public AABB Bounds { get; }
             public float CollisionRadius { get; set; } = 1f;
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);

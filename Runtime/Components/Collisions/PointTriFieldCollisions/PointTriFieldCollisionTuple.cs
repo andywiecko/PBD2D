@@ -23,6 +23,10 @@ namespace andywiecko.PBD2D.Components
         Ref<NativeBoundingVolumeTree<AABB>> IBoundingVolumeTreesIntersectionTuple.Tree1 => Item1.Tree;
         Ref<NativeBoundingVolumeTree<AABB>> IBoundingVolumeTreesIntersectionTuple.Tree2 => Item2.Tree;
         Ref<NativeList<int2>> IBoundingVolumeTreesIntersectionTuple.Result => result;
+
+        public AABB Bounds1 => Item1.Bounds;
+        public AABB Bounds2 => Item2.Bounds;
+
         private Ref<NativeList<int2>> result;
 
         protected override void Initialize()

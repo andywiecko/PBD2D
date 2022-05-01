@@ -39,8 +39,10 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies)
         {
-            foreach (var component in References)
+            //foreach (var component in References)
+            for (int i = 0; i < References.Count; i++)
             {
+                var component = References[i];
                 dependencies = new UpdateAABBsJob(component).Schedule(dependencies);
                 dependencies = component.Tree.Value.UpdateLeavesVolumes(component.Volumes.Value.AsReadOnly(), dependencies);
             }

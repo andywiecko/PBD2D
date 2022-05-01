@@ -26,6 +26,8 @@ namespace andywiecko.PBD2D.Editor.Tests
 
         private class FakeTuple : TestComponent, IBoundingVolumeTreesIntersectionTuple
         {
+            public AABB Bounds1 { get; }
+            public AABB Bounds2 { get; }
             public Ref<NativeBoundingVolumeTree<AABB>> Tree1 { get; private set; }
             public Ref<NativeBoundingVolumeTree<AABB>> Tree2 { get; private set; }
             public Ref<NativeList<int2>> Result { get; } = new NativeList<int2>(64, Allocator.Persistent);

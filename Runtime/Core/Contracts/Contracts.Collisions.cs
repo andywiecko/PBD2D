@@ -4,9 +4,16 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
+    public interface IBoundsComponent : IComponent
+    {
+        AABB Bounds { get; }
+        void UpdateBounds();
+    }
+
     public interface IBoundingVolumeTreeComponent<T> : IComponent where T : struct, IConvertableToAABB
     {
         float Margin { get; }
+        AABB Bounds { get; }
         Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
         Ref<NativeArray<AABB>> Volumes { get; }
         Ref<NativeArray<T>> Objects { get; }
@@ -15,6 +22,8 @@ namespace andywiecko.PBD2D.Core
 
     public interface IBoundingVolumeTreesIntersectionTuple : IComponent
     {
+        AABB Bounds1 { get; }
+        AABB Bounds2 { get; }
         Ref<NativeBoundingVolumeTree<AABB>> Tree1 { get; }
         Ref<NativeBoundingVolumeTree<AABB>> Tree2 { get; }
         Ref<NativeList<int2>> Result { get; }
@@ -30,6 +39,7 @@ namespace andywiecko.PBD2D.Core
     {
         float Friction { get; }
         float CollisionRadius { get; }
+        AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
@@ -98,6 +108,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPointCollideWithTriField : IEntityComponent
     {
+        AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
     }
@@ -109,6 +120,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface ITriFieldCollideWithPoint : IEntityComponent
     {
+        AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
@@ -118,6 +130,8 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPointTriFieldCollisionTuple : IComponent
     {
+        AABB Bounds1 { get; }
+        AABB Bounds2 { get; }
         Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; }
         Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; }
         IPointCollideWithTriField PointsComponent { get; }

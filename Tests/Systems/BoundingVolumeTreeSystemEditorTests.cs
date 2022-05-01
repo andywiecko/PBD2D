@@ -18,7 +18,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         private class FakeComponent : TestComponent, IBoundingVolumeTreeComponent<FakeStruct>
         {
             private const int Count = 1;
-
+            public AABB Bounds { get; set; }
             public float Margin { get; set; } = 0;
             public Ref<NativeBoundingVolumeTree<AABB>> Tree { get; } = new NativeBoundingVolumeTree<AABB>(Count, Allocator.Persistent);
             public Ref<NativeArray<AABB>> Volumes { get; } = new NativeArray<AABB>(Count, Allocator.Persistent);
