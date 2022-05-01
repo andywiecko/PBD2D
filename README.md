@@ -179,32 +179,44 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [X] ~~Introduce list of constraints.~~
 - [X] ~~Unify Bvt Systems.~~
 - [X] ~~Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.~~
-- [ ] Add Cheap collisions edge-edge
-- [ ] Test for most of the systems.
-- [ ] Investigate performance with combined dependencies.
 - [ ] Add friction for trifield-trifield collisions
 - [ ] [!] **Restitution**
+- [ ] Add cheap collisions edge-edge
+- [ ] Refactor tuples constructor.
+- [ ] Move external edges to trimesh
+- [ ] Refactor TriMesh gizmos
+- [ ] Test for most of the systems.
+- [ ] Investigate performance with combined dependencies.
 - [ ] Sample scenes + build online.
+  - [ ] Washing machine scene (collisions)
+  - [ ] Constraint scene
+  - [ ] Friction scene
+  - [ ] Restitution scene 
 - [ ] Move math/collection related parts into custom packages.
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
 - [ ] Static box?
-- [ ] Static circle?
-
+- [ ] refactor triangulator editor, add support for raw data
+- [ ] Add preview gifs for fluids and rods.
+ 
 ### v1.0.0
 
+- [ ] Static circle, static capsule?
+- [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Reimport and refactor rod structure.
 - [ ] Refactor system class to not be derived from `MonoBehaviour`. 
 - [ ] Reimport and refactor position based fluid.
 - [ ] Fluid "fancy" shader.
 - [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
+- [ ] Destructible bodies.
 
 ### v2.0.0
 
-- [ ] Destructible bodies.
+- [ ] Position based rigid bodies
 - [ ] Continous collisions.
 - [ ] GPU fluids.
 - [ ] Sign distance field collisions.
+- [ ] Position based "smoke".
 
 ## Dependencies
 
