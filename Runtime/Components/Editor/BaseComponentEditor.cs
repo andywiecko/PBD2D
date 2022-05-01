@@ -19,6 +19,9 @@ namespace andywiecko.PBD2D.Components.Editor
         private PrefabStage prefabStage;
         private (bool isPrefabInstance, bool isPrefabAsset, bool isStage) targetStatus;
 
+        protected virtual VisualElement ElementBeforeComponentsList { get; }
+        protected virtual VisualElement ElementAfterComponentsList { get; }
+
         static BaseComponentEditor()
         {
             var types = TypeCache
@@ -63,7 +66,9 @@ namespace andywiecko.PBD2D.Components.Editor
             }
             else
             {
+                root.Add(ElementBeforeComponentsList);
                 root.Add(ComponentsList());
+                root.Add(ElementAfterComponentsList);
             }
 
             return root;
