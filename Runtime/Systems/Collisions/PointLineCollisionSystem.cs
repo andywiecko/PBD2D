@@ -50,8 +50,8 @@ namespace andywiecko.PBD2D.Systems
                 positions[pointId] += dP;
 
                 var (dx, _) = FrictionUtils.GetFrictionCorrections(
-                    pA: positions[pointId], qA: previousPositions[pointId], wA: 1, 
-                    pB: dl, qB: 0, wB: 0, 
+                    pA: positions[pointId], qA: previousPositions[pointId], wA: 1,
+                    pB: dl, qB: 0, wB: 0,
                     n, mu, fn: dP
                 );
                 positions[pointId] += dx;
@@ -65,9 +65,15 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies)
         {
-            foreach (var tuple in References)
+            for (int i = 0; i < References.Count; i++)
             {
-                dependencies = new PullPointsAboveSurfaceJob(tuple).Schedule(dependencies);
+                var component = References[i];
+                var bounds = component.PointComponent.Bounds;
+                var line = component.LineComponent.Line;
+                if (!bounds.IsAboveLine(line))
+                {
+                    dependencies = new PullPointsAboveSurfaceJob(component).Schedule(dependencies);
+                }
             }
 
             return dependencies;

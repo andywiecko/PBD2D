@@ -75,6 +75,7 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPointCollideWithPlane : IComponent
     {
+        AABB Bounds { get; }
         float CollisionRadius { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
