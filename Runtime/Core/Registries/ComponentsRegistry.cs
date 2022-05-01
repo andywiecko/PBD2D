@@ -26,7 +26,8 @@ namespace andywiecko.PBD2D.Core
             var list = new List<Type>();
             foreach (var @interface in type.GetInterfaces())
             {
-                if (typeof(IComponent).IsAssignableFrom(@interface))
+                if (typeof(IComponent).IsAssignableFrom(@interface) &&
+                    @interface.ContainsGenericParameters == false)
                 {
                     list.Add(@interface);
                     staticComponentInterfaces.Add(@interface);
