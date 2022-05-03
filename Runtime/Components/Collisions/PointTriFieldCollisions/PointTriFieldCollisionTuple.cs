@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Components
           ITriMeshPointsCollideWithTriMeshTriField, ITriMeshTriFieldCollideWithTriMeshPoints>,
           IPointTriFieldCollisionTuple, IBoundingVolumeTreesIntersectionTuple
     {
-        public PointTriFieldCollisionTuple(ITriMeshPointsCollideWithTriMeshTriField item1, ITriMeshTriFieldCollideWithTriMeshPoints item2, World world) : base(item1, item2, world)
+        public PointTriFieldCollisionTuple(ITriMeshPointsCollideWithTriMeshTriField item1, ITriMeshTriFieldCollideWithTriMeshPoints item2, ComponentsRegistry componentsRegistry) : base(item1, item2, componentsRegistry)
         {
         }
 

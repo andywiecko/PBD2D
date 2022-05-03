@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Components
         ITriMeshCapsulesCollideWithTriMeshCapsules, ITriMeshCapsulesCollideWithTriMeshCapsules>,
         ICapsuleCapsuleCollisionTuple, IBoundingVolumeTreesIntersectionTuple
     {
-        public TriMeshCapsulesTriMeshCapsulesCollisionTuple(ITriMeshCapsulesCollideWithTriMeshCapsules item1, ITriMeshCapsulesCollideWithTriMeshCapsules item2, World world) : base(item1, item2, world)
+        public TriMeshCapsulesTriMeshCapsulesCollisionTuple(ITriMeshCapsulesCollideWithTriMeshCapsules item1, ITriMeshCapsulesCollideWithTriMeshCapsules item2, ComponentsRegistry componentsRegistry) : base(item1, item2, componentsRegistry)
         {
 
         }

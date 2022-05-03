@@ -6,7 +6,7 @@ namespace andywiecko.PBD2D.Components
         ITriMeshPointsCollideWithGroundLine, IGroundLineCollideWithTriMeshPoints>,
         IPointLineCollisionTuple
     {
-        public TriMeshPointsGroundLineCollisionTuple(ITriMeshPointsCollideWithGroundLine item1, IGroundLineCollideWithTriMeshPoints item2, World world) : base(item1, item2, world)
+        public TriMeshPointsGroundLineCollisionTuple(ITriMeshPointsCollideWithGroundLine item1, IGroundLineCollideWithTriMeshPoints item2, ComponentsRegistry componentsRegistry) : base(item1, item2, componentsRegistry)
         {
         }
 
