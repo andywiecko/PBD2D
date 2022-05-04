@@ -40,8 +40,9 @@ namespace andywiecko.PBD2D.Components
                 throw new NullReferenceException();
             }
 
+            var rb = new RigidTransform(transform.rotation, transform.position);
             var transformedPositions = SerializedData.Positions
-                .Select(i => ((float3)transform.TransformPoint(i.x, i.y, 0)).xy)
+                .Select(i => math.transform(rb, math.float3(i.x, i.y, 0)).xy)//  (float3)transform.TransformPoint(i.x, i.y, 0)).xy)
                 .ToArray();
 
             var points = Enumerable.Range(0, SerializedData.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
@@ -90,7 +91,8 @@ namespace andywiecko.PBD2D.Components
             }
 
 
-            Gizmos.color = 0.7f * Color.blue + 0.3f * Color.green;
+            //Gizmos.color = 0.7f * Color.blue + 0.3f * Color.green;
+            Gizmos.color = 0.7f * Color.yellow + 0.3f * Color.green;
 
             if (!Application.isPlaying)
             {
@@ -110,21 +112,33 @@ namespace andywiecko.PBD2D.Components
                 var pB = Positions.Value[idB];
                 Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
             }
+
+            if (true)
+            {
+                Gizmos.color = Color.blue;
+                foreach (var p in Points.Value)
+                {
+                    var a = Positions.Value.At(p);
+                    var v = Velocities.Value.At(p);
+
+                    Gizmos.DrawRay(a.ToFloat3(), 0.001f * v.ToFloat3());
+                }
+            }
         }
 
         private void DrawPreview()
         {
-            float3 offset = transform.position;
+            var rb = new RigidTransform(transform.rotation, transform.position);
             foreach (var p in SerializedData.Positions)
             {
-                Gizmos.DrawSphere(offset + p.ToFloat3(), radius: 0.01f);
+                Gizmos.DrawSphere(math.transform(rb, p.ToFloat3()), radius: 0.01f);
             }
 
             foreach (var (idA, idB) in SerializedData.Edges.ToEdgesArray())
             {
-                var pA = offset + SerializedData.Positions[(int)idA].ToFloat3();
-                var pB = offset + SerializedData.Positions[(int)idB].ToFloat3();
-                Gizmos.DrawLine(pA, pB);
+                var pA = SerializedData.Positions[(int)idA].ToFloat3();
+                var pB = SerializedData.Positions[(int)idB].ToFloat3();
+                Gizmos.DrawLine(math.transform(rb, pA), math.transform(rb, pB));
             }
         }
     }

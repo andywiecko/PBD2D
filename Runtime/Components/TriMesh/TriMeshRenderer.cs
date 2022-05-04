@@ -24,7 +24,7 @@ namespace andywiecko.PBD2D.Components
 
         private void Start()
         {
-            RendererTransform.position = float3.zero;
+            RendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
             meshFilter = RendererTransform.GetComponent<MeshFilter>();
 
             DisposeOnDestroy(
