@@ -49,6 +49,7 @@ namespace andywiecko.PBD2D.Components.Editor
                 rendererTransform = new GameObject(name).transform;
                 rendererTransform.SetParent(Target.transform);
                 rendererTransform.localPosition = float3.zero;
+                rendererTransform.localScale = (float3)1;
             }
             return rendererTransform;
         }

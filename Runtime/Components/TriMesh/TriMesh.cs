@@ -40,10 +40,13 @@ namespace andywiecko.PBD2D.Components
                 throw new NullReferenceException();
             }
 
+            var s = transform.localScale;
             var rb = new RigidTransform(transform.rotation, transform.position);
             var transformedPositions = SerializedData.Positions
-                .Select(i => math.transform(rb, math.float3(i.x, i.y, 0)).xy)//  (float3)transform.TransformPoint(i.x, i.y, 0)).xy)
+                .Select(i => T(i.ToFloat3()).xy)//  (float3)transform.TransformPoint(i.x, i.y, 0)).xy)
                 .ToArray();
+
+            float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);
 
             var points = Enumerable.Range(0, SerializedData.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
             var allocator = Allocator.Persistent;
@@ -58,6 +61,9 @@ namespace andywiecko.PBD2D.Components
                 Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.Triangles.ToTrianglesArray(), allocator),
                 RestAreas2 = new NativeIndexedArray<Id<Triangle>, float>(SerializedData.RestAreas2, allocator)
             );
+
+            transform.SetPositionAndRotation(default, quaternion.identity);
+            transform.localScale = (float3)1;
         }
 
         private void OnValidate()
@@ -129,17 +135,20 @@ namespace andywiecko.PBD2D.Components
         private void DrawPreview()
         {
             var rb = new RigidTransform(transform.rotation, transform.position);
+            var s = transform.localScale.ToFloat4().xyz;
             foreach (var p in SerializedData.Positions)
             {
-                Gizmos.DrawSphere(math.transform(rb, p.ToFloat3()), radius: 0.01f);
+                Gizmos.DrawSphere(T(p.ToFloat3()), radius: 0.01f);
             }
 
             foreach (var (idA, idB) in SerializedData.Edges.ToEdgesArray())
             {
                 var pA = SerializedData.Positions[(int)idA].ToFloat3();
                 var pB = SerializedData.Positions[(int)idB].ToFloat3();
-                Gizmos.DrawLine(math.transform(rb, pA), math.transform(rb, pB));
+                Gizmos.DrawLine(T(pA), T(pB));
             }
+
+            float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);
         }
     }
 }
