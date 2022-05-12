@@ -108,11 +108,16 @@ namespace andywiecko.PBD2D.Components.Editor
         protected VisualElement CreateToggleButtonForType(Type type, string name)
         {
             var value = Target.GetComponent(type) != null;
-            var toggle = new Toggle(name)
+            var toggle = new Toggle(" " + name)
             {
                 value = value,
-                style = { unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Normal) }
+                style = {
+                    unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Normal),
+                    flexDirection = new StyleEnum<FlexDirection>(FlexDirection.RowReverse),
+                    alignSelf = new StyleEnum<Align>(Align.FlexStart)
+                }
             };
+
             toggle.RegisterValueChangedCallback((evt) =>
             {
                 switch (targetStatus)
@@ -136,9 +141,6 @@ namespace andywiecko.PBD2D.Components.Editor
                     default:
                         throw new NotImplementedException();
                 }
-
-
-
             });
             return toggle;
         }
