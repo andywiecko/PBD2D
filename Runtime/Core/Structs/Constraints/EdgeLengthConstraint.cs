@@ -9,6 +9,8 @@ namespace andywiecko.PBD2D.Core
         public readonly float RestLength { get; }
         private readonly int layout { get; }
 
+        public EdgeLengthConstraint(Edge e, float restLength) : this(e.IdA, e.IdB, restLength) { }
+
         public EdgeLengthConstraint(Id<Point> idA, Id<Point> idB, float restLength) =>
             (IdA, IdB, RestLength, layout) = (idA, idB, restLength, 0);
 

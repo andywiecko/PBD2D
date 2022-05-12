@@ -9,6 +9,8 @@ namespace andywiecko.PBD2D.Core
         public readonly Id<Point> IdC { get; }
         public readonly float RestArea2 { get; }
 
+        public TriangleAreaConstraint(Triangle t, float restArea2) : this(t.IdA, t.IdB, t.IdC, restArea2) { }
+
         public TriangleAreaConstraint(Id<Point> idA, Id<Point> idB, Id<Point> idC, float restArea2) =>
             (IdA, IdB, IdC, RestArea2) = (idA, idB, idC, restArea2);
 

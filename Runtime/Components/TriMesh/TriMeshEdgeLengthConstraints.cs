@@ -27,9 +27,11 @@ namespace andywiecko.PBD2D.Components
                 Constraints = new NativeList<EdgeLengthConstraint>(TriMesh.Edges.Value.Length, Allocator.Persistent)
             );
 
-            foreach (var (eId, (idA, idB)) in TriMesh.Edges.Value.IdsValues)
+            var positions = TriMesh.Positions.Value.AsReadOnly();
+            foreach (var e in TriMesh.Edges.Value.AsReadOnly())
             {
-                Constraints.Value.Add(new(idA, idB, TriMesh.RestLengths.Value[eId]));
+                var l = e.GetLength(positions);
+                Constraints.Value.Add(new(e, l));
             }
         }
     }

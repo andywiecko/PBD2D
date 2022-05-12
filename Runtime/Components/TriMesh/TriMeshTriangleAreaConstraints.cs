@@ -27,9 +27,11 @@ namespace andywiecko.PBD2D.Components
                 Constraints = new NativeList<TriangleAreaConstraint>(TriMesh.Triangles.Value.Length, Allocator.Persistent)
             );
 
-            foreach (var (tId, (idA, idB, idC)) in TriMesh.Triangles.Value.IdsValues)
+            var positions = TriMesh.Positions.Value.AsReadOnly();
+            foreach (var t in TriMesh.Triangles.Value.AsReadOnly())
             {
-                Constraints.Value.Add(new(idA, idB, idC, TriMesh.RestAreas2.Value[tId]));
+                var a2 = t.GetSignedArea2(positions);
+                Constraints.Value.Add(new(t, a2));
             }
         }
     }
