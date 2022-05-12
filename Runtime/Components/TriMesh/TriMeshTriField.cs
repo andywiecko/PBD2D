@@ -5,11 +5,6 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    public interface ITriField
-    {
-
-    }
-
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
     [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Tri Field")]
@@ -32,12 +27,10 @@ namespace andywiecko.PBD2D.Components
                 TriFieldLookup = new TriFieldLookup(trianglesCount: triMesh.Triangles.Value.Length, samples, Allocator.Persistent)
             );
 
-            var dependencies = TriFieldLookup.Value.Initialize(default);
-            TriFieldLookup.Value.GenerateMapping(
+            TriFieldLookup.Value.Initialize(
                 triMesh.Positions.Value.AsReadOnly(),
                 triMesh.Triangles.Value.AsReadOnly(),
-                externalEdges.ExternalEdges.Value.AsReadOnly(),
-                dependencies
+                externalEdges.ExternalEdges.Value.AsReadOnly()
             ).Complete();
         }
 
@@ -45,7 +38,7 @@ namespace andywiecko.PBD2D.Components
         {
             if (!Application.isPlaying) return;
 
-            var lookup = TriFieldLookup.Value.AsReadOnly();
+            var lookup = TriFieldLookup.Value;
             var positions = triMesh.Positions.Value.AsReadOnly();
             var external = externalEdges.ExternalEdges.Value.AsReadOnly();
 

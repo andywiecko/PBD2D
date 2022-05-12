@@ -41,5 +41,26 @@ namespace andywiecko.PBD2D.Core
             public ClearListJob(NativeList<T> list) => this.list = list;
             public void Execute() => list.Clear();
         }
+
+        [BurstCompile]
+        public struct SetNativeArrayValueJob<T> : IJob where T : unmanaged
+        {
+            private NativeArray<T> array;
+            private readonly T value;
+
+            public SetNativeArrayValueJob(NativeArray<T> array, T value)
+            {
+                this.array = array;
+                this.value = value;
+            }
+
+            public void Execute()
+            {
+                for(int i = 0; i < array.Length; i++)
+                {
+                    array[i] = value;
+                }
+            }
+        }
     }
 }
