@@ -83,7 +83,8 @@ namespace andywiecko.PBD2D.Core
             {
                 var (i, j) = MathUtils.ConvertFromTriMatId(index);
                 var p = math.clamp(math.float2(dx * i, dx * j), 0, 1);
-                barycoords[index] = MathUtils.Barycentric(a, b, c, p);
+                var bar = MathUtils.Barycentric(a, b, c, p);
+                barycoords[index] = math.clamp(bar, 0, 1);
             }
         }
 
