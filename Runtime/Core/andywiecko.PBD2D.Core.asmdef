@@ -4,6 +4,7 @@
     "references": [
         "andywiecko.BurstCollections",
         "andywiecko.BurstMathUtils",
+        "andywiecko.BurstTriangulator",
         "Unity.Burst",
         "Unity.Mathematics",
         "Unity.Jobs",
