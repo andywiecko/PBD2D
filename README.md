@@ -56,9 +56,9 @@ TODO: Add note about triangulation.
 System responsible for resolving edge length constraint, the most common constraint in PBD simulation.
 Constraint is defined in the following way
 
-![Figure](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2)=\|\vec&space;p_1-\vec&space;p_2\|-\ell)
+$$ C(p_1, p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
 
-where _l_ is rest length of the edge (_p₁, p₂_).
+where $\ell$ is rest length of the edge $(p_1, p_2)$.
 
 #### Triangle Area Constraint System
 
@@ -66,9 +66,9 @@ System responsible for resolving triangle area (signed) constraint.
 Constraint enforces that triangle area is conserved during the simulation.
 The constraint function is defined in the following way
 
-![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;C(p_1,p_2,p_3)=\vec&space;p_{12}\times&space;\vec&space;p_{13}-A)
+$$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
 
-where _pᵢⱼ_=_pⱼ_-_pᵢ_ and _A_ is 2 times rest area of the triangle (_p₁_,	_p₂_,	_p₃_).
+where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
 
 #### Shape Matching Constraint System
 
@@ -84,16 +84,16 @@ The method has many advantages:
 
 Shape matching problem can be formulated using the following function
 
-![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;f(\vec&space;p,\vec&space;q)=\sum_i&space;w_i\left(R\vec&space;q_i-\vec&space;p_i\right)^2)
+$$ f(\vec p, \vec q) = \sum_i w_i (R\vec q_i - \vec p_i)^2$$
 
-where weight _wᵢ_ corresponds to inverse mass,
-_qᵢ_ to the initial relative position with respect to the initial center of mass _t₀_,
-and _pᵢ_ to the current relative position with respect to the current center of mass _t_.
+where weight $w_i$ corresponds to inverse mass,
+$q_i$ to the initial relative position with respect to the initial center of mass $t_0$,
+and $p_i$ to the current relative position with respect to the current center of mass $t$.
 
-The goal is to find rotation _R_, and translation _t_ that minimizes the function _f(p,q)_.
-It can be shown analytically that such rotation _R_ can be found as a rotational part of the given matrix
+The goal is to find rotation $R$, and translation $t$ that minimizes the function $f(\vec p, \vec q)$.
+It can be shown analytically that such rotation $R$ can be found as a rotational part of the given matrix
 
-![Equation](https://latex.codecogs.com/png.image?\dpi{150}&space;\bg_white&space;A_{pq}=\sum_im_i\vec&space;p_i\vec&space;q_i^\mathsf{T})
+$$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
 
 System supports the linear deformation model (see [^2] for more details).
 
@@ -197,13 +197,14 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Move math/collection related parts into custom packages.
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [ ] Static box?
 - [ ] refactor triangulator editor, add support for raw data
 - [ ] Add preview gifs for fluids and rods.
 - [ ] Shuffle constraint on creation (more randomized behavior)
+- [ ] Refactor shape matching constraint
 
 ### v1.0.0
 
+- [ ] Static box?
 - [ ] Static circle, static capsule?
 - [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Reimport and refactor rod structure.
