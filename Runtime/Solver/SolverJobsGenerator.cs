@@ -12,32 +12,15 @@ namespace andywiecko.PBD2D.Solver
 
     public class SolverJobsGenerator : ISolverJobsGenerator
     {
+        private readonly SimulationConfiguration configuration;
         private readonly SystemsRegistry systemsRegistry;
         private readonly IReadOnlyDictionary<SimulationStep, List<Type>> jobsOrder;
 
         public SolverJobsGenerator(Solver solver, ISolverJobsExecutionOrder jobsExecutionOrder)
         {
+            configuration = solver.SimulationConfiguration;
             systemsRegistry = solver.World.SystemsRegistry;
             jobsOrder = jobsExecutionOrder.GetJobsOrder();
-        }
-
-        private class SetPhysicStateHelper
-        {
-            private readonly int stepId;
-            private readonly int substepId;
-
-            public SetPhysicStateHelper(int stepId, int substepId)
-            {
-                this.stepId = stepId;
-                this.substepId = substepId;
-            }
-
-            public JobHandle Schedule(JobHandle dependencies)
-            {
-                PhysicsState.StepId = stepId;
-                PhysicsState.SubStepId = substepId;
-                return dependencies;
-            }
         }
 
         public List<Func<JobHandle, JobHandle>> GenerateJobs()
@@ -45,19 +28,15 @@ namespace andywiecko.PBD2D.Solver
             var jobs = new List<Func<JobHandle, JobHandle>>();
 
             jobs.AddRange(GetJobsFor(SimulationStep.FrameStart));
-            for (int step = 0; step < PhysicsState.StepCount; step++)
+            for (int step = 0; step < configuration.StepsCount; step++)
             {
-                jobs.Add(new SetPhysicStateHelper(step, -1).Schedule);
                 jobs.AddRange(GetJobsFor(SimulationStep.StepStart));
-                for (int substep = 0; substep < PhysicsState.SubStepCount; substep++)
+                for (int substep = 0; substep < configuration.SubstepsCount; substep++)
                 {
-                    jobs.Add(new SetPhysicStateHelper(step, substep).Schedule);
                     jobs.AddRange(GetJobsFor(SimulationStep.SubStep));
                 }
-                jobs.Add(new SetPhysicStateHelper(step, -1).Schedule);
                 jobs.AddRange(GetJobsFor(SimulationStep.StepEnd));
             }
-            jobs.Add(new SetPhysicStateHelper(-1, -1).Schedule);
             jobs.AddRange(GetJobsFor(SimulationStep.FrameEnd));
 
             return jobs;
