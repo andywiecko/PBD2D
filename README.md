@@ -179,9 +179,10 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [X] ~~Introduce list of constraints.~~
 - [X] ~~Unify Bvt Systems.~~
 - [X] ~~Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.~~
-- [ ] [!] **Restitution**
+- [X] ~~**Restitution**~~
 - [X] ~~Support for rotation at transform~~
-- [ ] Add friction and restitution for trifield-trifield collisions
+- [ ] **Extended PBD** (without iterations)
+- [ ] Add friction  for trifield-trifield collisions
 - [ ] Cleanup steps and substep: replace with names: steps, iterations, introduce dt and h = dt / N, where N is number of steps.
 - [ ] Add cheap collisions edge-edge
 - [ ] Refactor tuples constructor.
@@ -213,7 +214,7 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Fluid "fancy" shader.
 - [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
 - [ ] Destructible bodies.
-- [ ] Extended PBD?
+- [ ] Extended PBD with lambda tracking (with iterations)
 
 ### v2.0.0
 
