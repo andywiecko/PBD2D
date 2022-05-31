@@ -18,14 +18,16 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
             [ReadOnly]
             private NativeArray<EdgeLengthConstraint> constraints;
-            private readonly float stiffness;
+            private readonly float k;
+            private readonly float a;
 
-            public ApplyEdgeConstraintJob(IEdgeLengthConstraints component)
+            public ApplyEdgeConstraintJob(IEdgeLengthConstraints component, float dt)
             {
                 predictedPositions = component.PredictedPositions;
                 massesInv = component.MassesInv.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
-                stiffness = component.Stiffness;
+                k = component.Stiffness;
+                a = component.Compliance / dt / dt;
             }
 
             public void Execute()
@@ -38,7 +40,7 @@ namespace andywiecko.PBD2D.Systems
 
             private void Execute(EdgeLengthConstraint c)
             {
-                var (idA, idB, restLength) = c;
+                var (idA, idB, l) = c;
 
                 var (wA, wB) = massesInv.At(c);
                 var wAB = wA + wB;
@@ -49,16 +51,19 @@ namespace andywiecko.PBD2D.Systems
 
                 var (pA, pB) = predictedPositions.At(c);
                 var pAB = pB - pA;
-                var length = math.length(pAB);
-                if (length < math.EPSILON)
+                var pABabs = math.length(pAB);
+
+                if (pABabs < math.EPSILON)
                 {
                     return;
                 }
 
-                var dP = stiffness * (1f / wAB) * (length - restLength) * pAB / length;
-
-                predictedPositions[idA] += wA * dP;
-                predictedPositions[idB] -= wB * dP;
+                var n = -pAB / pABabs;
+                var C = pABabs - l;
+                var lambda = -C / (wAB + a);
+                var dp = k * lambda * n;
+                predictedPositions[idA] += wA * dp;
+                predictedPositions[idB] -= wB * dp;
             }
         }
 
@@ -68,7 +73,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyEdgeConstraintJob(component).Schedule(dependencies);
+                    dependencies = new ApplyEdgeConstraintJob(component, World.Configuration.ReducedDeltaTime).Schedule(dependencies);
                 }
             }
 

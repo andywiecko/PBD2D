@@ -8,6 +8,7 @@ namespace andywiecko.PBD2D.Core
     public interface IEdgeLengthConstraints : IComponent
     {
         float Stiffness { get; }
+        float Compliance { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeList<EdgeLengthConstraint>> Constraints { get; }

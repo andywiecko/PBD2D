@@ -16,6 +16,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             private const int PointsCount = 5;
 
             public float Stiffness { get; set; } = 1;
+            public float Compliance { get; set; } = 0;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(PointsCount, DataAllocator);
             public Ref<NativeList<EdgeLengthConstraint>> Constraints { get; } = new NativeList<EdgeLengthConstraint>(64, DataAllocator);
@@ -159,6 +160,23 @@ namespace andywiecko.PBD2D.Editor.Tests
             var expectedPositions = defaultInitialPositions.ToArray();
             expectedPositions[1] = new(1.05f, 0);
             expectedPositions[2] = new(1.95f, 0);
+            Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
+        }
+
+        [Test]
+        public void ComplianceTest()
+        {
+            component
+                .DefaultConfiguration()
+                .SetPosition(1, new(1.1f, 0))
+                .SetPosition(2, new(1.9f, 0))
+            ;
+            component.Stiffness = 1;
+            component.Compliance = 0.01f;
+            system.Run();
+            var expectedPositions = defaultInitialPositions.ToArray();
+            expectedPositions[1] = new(1.099995f, 0);
+            expectedPositions[2] = new(1.900005f, 0);
             Assert.That(Positions, Is.EqualTo(expectedPositions).Using(Float2Comparer.Instance));
         }
     }
