@@ -17,7 +17,7 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly predictedPositions;
             private readonly float dt;
-            private readonly NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
 
             public MovePositionsAndUpdateVelocityJob(IPositionBasedDynamics component, float dt)
             {
@@ -44,7 +44,8 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new MovePositionsAndUpdateVelocityJob(component, dt: Configuration.DeltaTime).Schedule(component.Positions.Value.Length, 64, dependencies);
+                dependencies = new MovePositionsAndUpdateVelocityJob(component, dt: Configuration.ReducedDeltaTime)
+                    .Schedule(component.Positions.Value.Length, 64, dependencies);
             }
 
             return dependencies;

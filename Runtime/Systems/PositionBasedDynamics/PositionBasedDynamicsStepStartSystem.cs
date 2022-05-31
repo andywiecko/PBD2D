@@ -55,7 +55,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 var damping = component.Damping + GlobalDamping;
                 var externalForce = component.ExternalForce + GlobalExternalForce;
-                dependencies = new ApplyExternalForcesJob(component, damping, externalForce, dt: Configuration.DeltaTime).Schedule(component.Positions.Value.Length, innerloopBatchCount: 64, dependencies);
+                dependencies = new ApplyExternalForcesJob(component, damping, externalForce, dt: Configuration.ReducedDeltaTime).Schedule(component.Positions.Value.Length, innerloopBatchCount: 64, dependencies);
             }
 
             return dependencies;

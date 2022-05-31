@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace andywiecko.PBD2D.Systems
                 r = pointComponent.CollisionRadius;
                 (p, n) = lineComponent.Line;
                 dl = lineComponent.Displacement;
-                mu = pointComponent.Friction;
+                mu = tuple.Friction;
             }
 
             public void Execute(int index)

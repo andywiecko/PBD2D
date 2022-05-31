@@ -8,13 +8,11 @@ namespace andywiecko.PBD2D.Components
     [AddComponentMenu("PBD2D:Ground.Components/Collisions/Collide With TriMesh (Points)")]
     public class GroundLineCollideWithTriMeshPoints : BaseComponent, IGroundLineCollideWithTriMeshPoints
     {
-        public Line Line => new (ground.Surface.Point, ground.Surface.Normal);
+        public Line Line => new(ground.Surface.Point, ground.Surface.Normal);
         public float Friction => ground.PhysicalMaterial.Friction;
-
         public float2 Displacement => pos - prevPos;
 
         private Ground ground;
-
         private float2 pos;
         private float2 prevPos;
 

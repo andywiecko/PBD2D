@@ -66,7 +66,8 @@ namespace andywiecko.PBD2D.Editor.Tests
                 Configuration = {
                     DeltaTime = 1e-9f,
                     GlobalDamping = 0,
-                    GlobalExternalForce = 0
+                    GlobalExternalForce = 0,
+                    StepsCount = 1
                 }
             };
 

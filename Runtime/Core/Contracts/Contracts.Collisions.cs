@@ -69,11 +69,11 @@ namespace andywiecko.PBD2D.Core
     public interface IPointLineCollisionTuple : IComponent
     {
         public float Friction { get; }
-        IPointCollideWithPlane PointComponent { get; }
+        IPointCollideWithLine PointComponent { get; }
         ILineCollideWithPoint LineComponent { get; }
     }
 
-    public interface IPointCollideWithPlane : IComponent
+    public interface IPointCollideWithLine : IComponent
     {
         AABB Bounds { get; }
         float CollisionRadius { get; }
@@ -88,7 +88,7 @@ namespace andywiecko.PBD2D.Core
         float2 Displacement { get; }
     }
 
-    public interface ITriMeshPointsCollideWithGroundLine : IPointCollideWithPlane { }
+    public interface ITriMeshPointsCollideWithGroundLine : IPointCollideWithLine { }
     public interface IGroundLineCollideWithTriMeshPoints : ILineCollideWithPoint
     {
         float Friction { get; }
@@ -96,7 +96,7 @@ namespace andywiecko.PBD2D.Core
 
     public static class PointLineCollisionTupleExtensions
     {
-        public static void Deconstruct(this IPointLineCollisionTuple tuple, out IPointCollideWithPlane point, out ILineCollideWithPoint line)
+        public static void Deconstruct(this IPointLineCollisionTuple tuple, out IPointCollideWithLine point, out ILineCollideWithPoint line)
             => _ = (point = tuple.PointComponent, line = tuple.LineComponent);
     }
     #endregion

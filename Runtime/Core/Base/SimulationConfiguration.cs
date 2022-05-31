@@ -9,6 +9,7 @@ namespace andywiecko.PBD2D.Core
         int StepsCount { get; }
         int SubstepsCount { get; }
         float DeltaTime { get; }
+        float ReducedDeltaTime { get; }
         float2 GlobalExternalForce { get; }
         float GlobalDamping { get; }
     }
@@ -16,6 +17,11 @@ namespace andywiecko.PBD2D.Core
     [Serializable]
     public class SimulationConfiguration : ISimulationConfiguration
     {
+        /// <summary>
+        /// <see cref="DeltaTime"/> devided by <see cref="StepsCount"/>, commonly marked as <em>h</em> in the literature.
+        /// </summary>
+        public float ReducedDeltaTime => DeltaTime / StepsCount;
+
         [field: SerializeField, Tooltip("Number of steps in PBD simulation.")]
         public int StepsCount { get; set; } = 2;
 

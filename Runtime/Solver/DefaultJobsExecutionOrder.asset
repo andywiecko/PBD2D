@@ -96,11 +96,3 @@ MonoBehaviour:
       assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     <Step>k__BackingField: -1
-  - tag: Restitution Constraints System
-    <Type>k__BackingField:
-      tag: Restitution Constraints System
-      <Guid>k__BackingField: f9f824fdcfadd1a40864328f4e2da0f0
-      script: {fileID: 11500000, guid: f9f824fdcfadd1a40864328f4e2da0f0, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.RestitutionConstraintsSystem,
-        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    <Step>k__BackingField: -1
