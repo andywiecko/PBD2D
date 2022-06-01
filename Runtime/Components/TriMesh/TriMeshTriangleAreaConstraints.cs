@@ -14,6 +14,9 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;
         public Ref<NativeList<TriangleAreaConstraint>> Constraints { get; private set; }
 
+        [field: SerializeField, Min(0)]
+        public float Compliance { get; private set; } = 0;
+
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1f;
 

@@ -15,15 +15,17 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct ApplyAreaConstraintJob : IJob
         {
-            private readonly float stiffness;
+            private readonly float a;
+            private readonly float k;
             private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
             [ReadOnly]
             private NativeArray<TriangleAreaConstraint> constraints;
 
-            public ApplyAreaConstraintJob(ITriangleAreaConstraints component)
+            public ApplyAreaConstraintJob(ITriangleAreaConstraints component, float dt)
             {
-                stiffness = component.Stiffness;
+                a = component.Compliance / dt / dt;
+                k = component.Stiffness;
                 positions = component.PredictedPositions;
                 massesInv = component.MassesInv.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
@@ -47,12 +49,12 @@ namespace andywiecko.PBD2D.Systems
                 var pAC = pC - pA;
                 var pBC = pC - pB;
 
-                var lambda = wA * math.lengthsq(pBC) + wB * math.lengthsq(pAC) + wC * math.lengthsq(pAB);
+                var lambda = wA * math.lengthsq(pBC) + wB * math.lengthsq(pAC) + wC * math.lengthsq(pAB) + a;
                 if (lambda < math.EPSILON)
                 {
                     return;
                 }
-                lambda = stiffness / lambda;
+                lambda = k / lambda;
 
                 var A = MathUtils.Cross(pAB, pAC);
                 if (math.abs(A) < math.EPSILON)
@@ -73,7 +75,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyAreaConstraintJob(component).Schedule(dependencies);
+                    dependencies = new ApplyAreaConstraintJob(component, World.Configuration.ReducedDeltaTime).Schedule(dependencies);
                 }
             }
 
