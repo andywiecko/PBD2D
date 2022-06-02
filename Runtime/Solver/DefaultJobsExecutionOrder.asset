@@ -18,13 +18,12 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: 0b7e003b21377784fad35cb20454d986, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreesIntersectionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  stepStart:
+  substep:
   - tag: Position Based Dynamics Step Start System
     <Guid>k__BackingField: e09d1af8e500096498f1414949b909bc
     script: {fileID: 11500000, guid: e09d1af8e500096498f1414949b909bc, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepStartSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  subStep:
   - tag: Edge Length Constraints System
     <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
     script: {fileID: 11500000, guid: d2118c6b0d6718840bcfafa82c8b8cb3, type: 3}
@@ -60,7 +59,6 @@ MonoBehaviour:
     script: {fileID: 11500000, guid: 9524172c6d9c1bb449f00373f3c017ab, type: 3}
     assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  stepEnd:
   - tag: Position Based Dynamics Step End System
     <Guid>k__BackingField: 088831c1e88b859458a06401f038b333
     script: {fileID: 11500000, guid: 088831c1e88b859458a06401f038b333, type: 3}

@@ -7,7 +7,6 @@ namespace andywiecko.PBD2D.Core
     public interface ISimulationConfiguration
     {
         int StepsCount { get; }
-        int SubstepsCount { get; }
         float DeltaTime { get; }
         float ReducedDeltaTime { get; }
         float2 GlobalExternalForce { get; }
@@ -24,9 +23,6 @@ namespace andywiecko.PBD2D.Core
 
         [field: SerializeField, Tooltip("Number of steps in PBD simulation.")]
         public int StepsCount { get; set; } = 2;
-
-        [field: SerializeField, Tooltip("Number of substeps in PBD simulation.")]
-        public int SubstepsCount { get; set; } = 8;
 
         [field: SerializeField, Min(1e-15f), Tooltip("The smalest time step considered in the PBD simulation step.")]
         public float DeltaTime { get; set; } = 0.001f;

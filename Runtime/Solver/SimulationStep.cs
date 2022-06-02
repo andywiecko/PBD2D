@@ -4,9 +4,7 @@ namespace andywiecko.PBD2D.Solver
     {
         Undefined = -1,
         FrameStart,
-        StepStart,
-        SubStep,
-        StepEnd,
+        Substep,
         FrameEnd
     }
 }

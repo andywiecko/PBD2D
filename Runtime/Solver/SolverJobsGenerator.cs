@@ -30,12 +30,7 @@ namespace andywiecko.PBD2D.Solver
             jobs.AddRange(GetJobsFor(SimulationStep.FrameStart));
             for (int step = 0; step < configuration.StepsCount; step++)
             {
-                jobs.AddRange(GetJobsFor(SimulationStep.StepStart));
-                for (int substep = 0; substep < configuration.SubstepsCount; substep++)
-                {
-                    jobs.AddRange(GetJobsFor(SimulationStep.SubStep));
-                }
-                jobs.AddRange(GetJobsFor(SimulationStep.StepEnd));
+                jobs.AddRange(GetJobsFor(SimulationStep.Substep));
             }
             jobs.AddRange(GetJobsFor(SimulationStep.FrameEnd));
 

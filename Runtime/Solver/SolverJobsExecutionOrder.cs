@@ -114,7 +114,7 @@ namespace andywiecko.PBD2D.Solver
         }
 #endif
 
-        private List<Type> GetSerializedTypes() => new[] { frameStart, stepStart, subStep, stepEnd, frameEnd }
+        private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)
             .Select(i => i.Value)
             .ToList();
@@ -122,9 +122,7 @@ namespace andywiecko.PBD2D.Solver
         private List<SerializedType> GetListAtStep(SimulationStep step) => step switch
         {
             SimulationStep.FrameStart => frameStart,
-            SimulationStep.StepStart => stepStart,
-            SimulationStep.SubStep => subStep,
-            SimulationStep.StepEnd => stepEnd,
+            SimulationStep.Substep => substep,
             SimulationStep.FrameEnd => frameEnd,
             _ => default,
         };
@@ -137,16 +135,8 @@ namespace andywiecko.PBD2D.Solver
                     frameStart = list;
                     break;
 
-                case SimulationStep.StepStart:
-                    stepStart = list;
-                    break;
-
-                case SimulationStep.SubStep:
-                    subStep = list;
-                    break;
-
-                case SimulationStep.StepEnd:
-                    stepEnd = list;
+                case SimulationStep.Substep:
+                    substep = list;
                     break;
 
                 case SimulationStep.FrameEnd:
@@ -156,9 +146,7 @@ namespace andywiecko.PBD2D.Solver
         }
 
         [SerializeField] private List<SerializedType> frameStart = new();
-        [SerializeField] private List<SerializedType> stepStart = new();
-        [SerializeField] private List<SerializedType> subStep = new();
-        [SerializeField] private List<SerializedType> stepEnd = new();
+        [SerializeField] private List<SerializedType> substep = new();
         [SerializeField] private List<SerializedType> frameEnd = new();
 
         [Space(30)]
