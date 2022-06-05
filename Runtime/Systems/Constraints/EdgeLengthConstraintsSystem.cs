@@ -73,7 +73,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyEdgeConstraintJob(component, World.Configuration.ReducedDeltaTime).Schedule(dependencies);
+                    dependencies = new ApplyEdgeConstraintJob(component, Configuration.ReducedDeltaTime).Schedule(dependencies);
                 }
             }
 

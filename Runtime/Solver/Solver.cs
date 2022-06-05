@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Solver
 {
-    public class Solver : MonoBehaviour, ISimulationConfigurationProvider
+    public class Solver : MonoBehaviour
     {
         [field: SerializeField]
         public World World { get; private set; } = default;
@@ -16,9 +16,6 @@ namespace andywiecko.PBD2D.Solver
 
         [field: SerializeField]
         public SolverActionsExecutionOrder ActionsExecutionOrder { get; private set; } = default;
-
-        [field: SerializeField]
-        public SimulationConfiguration SimulationConfiguration { get; private set; } = new();
 
         public event Action OnScheduling;
         public event Action OnJobsComplete;
@@ -40,7 +37,6 @@ namespace andywiecko.PBD2D.Solver
             actionsGenerator = new SolverActionsGenerator(this, ActionsExecutionOrder);
 
             World.SystemsRegistry.OnRegistryChange += RegenerateSolverTasks;
-            World.Configuration = SimulationConfiguration;
         }
 
         public void Start()

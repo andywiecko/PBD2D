@@ -12,13 +12,13 @@ namespace andywiecko.PBD2D.Solver
 
     public class SolverJobsGenerator : ISolverJobsGenerator
     {
-        private readonly SimulationConfiguration configuration;
+        private readonly ConfigurationsRegistry configurationsRegistry;
         private readonly SystemsRegistry systemsRegistry;
         private readonly IReadOnlyDictionary<SimulationStep, List<Type>> jobsOrder;
 
         public SolverJobsGenerator(Solver solver, ISolverJobsExecutionOrder jobsExecutionOrder)
         {
-            configuration = solver.SimulationConfiguration;
+            configurationsRegistry = solver.World.ConfigurationsRegistry;
             systemsRegistry = solver.World.SystemsRegistry;
             jobsOrder = jobsExecutionOrder.GetJobsOrder();
         }
@@ -28,7 +28,7 @@ namespace andywiecko.PBD2D.Solver
             var jobs = new List<Func<JobHandle, JobHandle>>();
 
             jobs.AddRange(GetJobsFor(SimulationStep.FrameStart));
-            for (int step = 0; step < configuration.StepsCount; step++)
+            for (int step = 0; step < configurationsRegistry.Get<SimulationConfiguration>().StepsCount; step++)
             {
                 jobs.AddRange(GetJobsFor(SimulationStep.Substep));
             }

@@ -6,14 +6,14 @@ namespace andywiecko.PBD2D.Core
 {
     public interface IWorld
     {
-        SimulationConfiguration Configuration { get; }
+        ConfigurationsRegistry ConfigurationsRegistry { get; }
         ComponentsRegistry ComponentsRegistry { get; }
         SystemsRegistry SystemsRegistry { get; }
     }
 
     public class World : MonoBehaviour, IWorld
     {
-        public SimulationConfiguration Configuration { get; set; }
+        public ConfigurationsRegistry ConfigurationsRegistry { get; } = new();
         public ComponentsRegistry ComponentsRegistry { get; } = new();
         public SystemsRegistry SystemsRegistry { get; } = new();
     }

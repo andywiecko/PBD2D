@@ -7,7 +7,7 @@ namespace andywiecko.PBD2D.Core
         where TComponent : IComponent
     {
         public IWorld World { get; set; }
-        protected ISimulationConfiguration Configuration => World.Configuration;
+        protected SimulationConfiguration Configuration => World.ConfigurationsRegistry.Get<SimulationConfiguration>();
         protected IReadOnlyList<TComponent> References => World.ComponentsRegistry.GetComponents<TComponent>();
         public abstract JobHandle Schedule(JobHandle dependencies);
         public void Run() => Schedule(default).Complete();

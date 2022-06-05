@@ -1,25 +1,19 @@
-using System;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    public interface ISimulationConfiguration
+    public class SimulationConfiguration : MonoBehaviour, IConfiguration
     {
-        int StepsCount { get; }
-        float DeltaTime { get; }
-        float ReducedDeltaTime { get; }
-        float2 GlobalExternalForce { get; }
-        float GlobalDamping { get; }
-    }
+        [field: SerializeField]
+        public World World { get; private set; } = default;
 
-    [Serializable]
-    public class SimulationConfiguration : ISimulationConfiguration
-    {
         /// <summary>
         /// <see cref="DeltaTime"/> devided by <see cref="StepsCount"/>, commonly marked as <em>h</em> in the literature.
         /// </summary>
         public float ReducedDeltaTime => DeltaTime / StepsCount;
+
+        [field: Header("Config")]
 
         [field: SerializeField, Tooltip("Number of steps in PBD simulation.")]
         public int StepsCount { get; set; } = 2;
@@ -32,5 +26,10 @@ namespace andywiecko.PBD2D.Core
 
         [field: SerializeField, Min(0), Tooltip("Energy dissipation factor.")]
         public float GlobalDamping { get; set; } = 0;
+
+        private void Awake()
+        {
+            World.ConfigurationsRegistry.Set(this);
+        }
     }
 }

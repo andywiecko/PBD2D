@@ -75,7 +75,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 if (component.Stiffness != 0)
                 {
-                    dependencies = new ApplyAreaConstraintJob(component, World.Configuration.ReducedDeltaTime).Schedule(dependencies);
+                    dependencies = new ApplyAreaConstraintJob(component, Configuration.ReducedDeltaTime).Schedule(dependencies);
                 }
             }
 
