@@ -181,9 +181,10 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [X] ~~Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.~~
 - [X] ~~**Restitution**~~
 - [X] ~~Support for rotation at transform~~
-- [ ] **Extended PBD** (without iterations)
+- [X] ~~**Extended PBD** (without iterations)~~
+- [X] ~~Cleanup steps and substep: replace with names: steps, iterations, introduce dt and h = dt / N, where N is number of steps.~~
 - [ ] Add friction  for trifield-trifield collisions
-- [ ] Cleanup steps and substep: replace with names: steps, iterations, introduce dt and h = dt / N, where N is number of steps.
+- [ ] Self-collisions (field based)
 - [ ] Add cheap collisions edge-edge
 - [ ] Refactor tuples constructor.
 - [ ] Move external edges to trimesh
@@ -194,8 +195,8 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
   - [ ] Washing machine scene (collisions)
   - [ ] Constraint scene
   - [ ] Friction scene
-  - [ ] Restitution scene 
-- [ ] Move math/collection related parts into custom packages.
+  - [X] ~~Restitution scene~~ 
+- [ ] Move math/collection related parts into custom packages + extract additional assembly for common engine part (unrelated to pbd physics impl whatsoever)
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
 - [ ] refactor triangulator editor, add support for raw data
