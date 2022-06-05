@@ -61,8 +61,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         [SetUp]
         public void SetUp()
         {
-            TestUtils.New(ref system);
-            system.World = world = new();
+            system = new() { World = world = new() };
         }
 
         [TearDown]

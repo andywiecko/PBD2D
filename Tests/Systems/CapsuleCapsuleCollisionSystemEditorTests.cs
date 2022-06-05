@@ -70,11 +70,10 @@ namespace andywiecko.PBD2D.Editor.Tests
         [SetUp]
         public void SetUp()
         {
-            TestUtils.New(ref system);
             component1 = new();
             component2 = new();
             tuple = new() { Component1 = component1, Component2 = component2 };
-            system.World = new FakeWorld(component1, component2, tuple);
+            system = new() { World = new FakeWorld(component1, component2, tuple) };
         }
 
         [TearDown]

@@ -56,9 +56,6 @@ namespace andywiecko.PBD2D.Editor.Tests
         [SetUp]
         public void SetUp()
         {
-            TestUtils.New(ref startSystem);
-            TestUtils.New(ref endSystem);
-
             component = new();
 
             world = new FakeWorld(component)
@@ -71,8 +68,8 @@ namespace andywiecko.PBD2D.Editor.Tests
                 }
             };
 
-            startSystem.World = world;
-            endSystem.World = world;
+            startSystem = new() { World = world };
+            endSystem = new() { World = world };
         }
 
         [TearDown]

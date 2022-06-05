@@ -51,11 +51,10 @@ namespace andywiecko.PBD2D.Editor.Tests
         [SetUp]
         public void SetUp()
         {
-            TestUtils.New(ref system);
             point = new();
             line = new();
             tuple = new() { PointComponent = point, LineComponent = line };
-            system.World = new FakeWorld(point, line, tuple);
+            system = new() { World = new FakeWorld(point, line, tuple) };
         }
 
         [TearDown]
