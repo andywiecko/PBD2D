@@ -14,35 +14,36 @@ namespace andywiecko.PBD2D.Core
                 {
                     if (typeof(ISystem).IsAssignableFrom(type) && !type.IsAbstract)
                     {
-                        staticCachedSystems.Add(type, new List<ISystem>());
+                        staticCachedSystems.Add(type, default);
                     }
                 }
             }
         }
 
-        private static readonly Dictionary<Type, List<ISystem>> staticCachedSystems = new();
+        private static readonly Dictionary<Type, ISystem> staticCachedSystems = new();
 
         public event Action OnRegistryChange;
-        private readonly Dictionary<Type, List<ISystem>> systems;
+        private readonly Dictionary<Type, ISystem> systems;
 
         public SystemsRegistry()
         {
-            systems = staticCachedSystems.ToDictionary(i => i.Key, i => i.Value.ToList());
+            systems = staticCachedSystems.ToDictionary(i => i.Key, i => default(ISystem));
         }
 
-        public IReadOnlyList<ISystem> SystemsOf(Type type) => systems[type];
+        public ISystem SystemOf(Type type) => systems[type];
 
         public void Add<T>(T system) where T : ISystem
         {
             var type = system.GetType();
-            systems[type].Add(system);
+            //TODO Add warning if system is already present
+            systems[type] = system;
             OnRegistryChange?.Invoke();
         }
 
         public void Remove<T>(T system) where T : ISystem
         {
             var type = system.GetType();
-            systems[type].Remove(system);
+            systems[type] = default;
             OnRegistryChange?.Invoke();
         }
     }

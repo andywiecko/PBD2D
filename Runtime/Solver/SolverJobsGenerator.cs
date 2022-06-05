@@ -42,7 +42,8 @@ namespace andywiecko.PBD2D.Solver
             var jobs = new List<Func<JobHandle, JobHandle>>();
             foreach (var type in jobsOrder[step])
             {
-                foreach (var system in systemsRegistry.SystemsOf(type))
+                var system = systemsRegistry.SystemOf(type);
+                if (system != null)
                 {
                     jobs.Add(system.Schedule);
                 }

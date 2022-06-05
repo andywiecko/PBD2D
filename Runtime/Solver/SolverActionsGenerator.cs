@@ -1,4 +1,3 @@
-using andywiecko.PBD2D.Core;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -27,7 +26,8 @@ namespace andywiecko.PBD2D.Solver
 
             foreach (var (method, type) in actionsOrder[SolverAction.OnScheduling])
             {
-                foreach (var system in solver.World.SystemsRegistry.SystemsOf(type))
+                var system = solver.World.SystemsRegistry.SystemOf(type);
+                if (system != null)
                 {
                     solver.OnScheduling += () => method.Invoke(system, default);
                 }
@@ -35,7 +35,8 @@ namespace andywiecko.PBD2D.Solver
 
             foreach (var (method, type) in actionsOrder[SolverAction.OnJobsCompletion])
             {
-                foreach (var system in solver.World.SystemsRegistry.SystemsOf(type))
+                var system = solver.World.SystemsRegistry.SystemOf(type);
+                if (system != null)
                 {
                     solver.OnJobsComplete += () => method.Invoke(system, default);
                 }
