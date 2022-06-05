@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Position Based Dynamics/Step Start System")]
-    public class PositionBasedDynamicsStepStartSystem : BaseSystem<IPositionBasedDynamics>
+    public class PositionBasedDynamicsStepStartSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, SimulationConfiguration>
     {
         private float GlobalDamping => Configuration.GlobalDamping;
         private float2 GlobalExternalForce => Configuration.GlobalExternalForce;

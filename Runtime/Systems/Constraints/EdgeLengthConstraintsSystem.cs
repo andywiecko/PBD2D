@@ -9,7 +9,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Constraints/Edge Length Constraints System")]
-    public class EdgeLengthConstraintsSystem : BaseSystem<IEdgeLengthConstraints>
+    public class EdgeLengthConstraintsSystem : BaseSystemWithConfiguration<IEdgeLengthConstraints, SimulationConfiguration>
     {
         [BurstCompile]
         private struct ApplyEdgeConstraintJob : IJob
