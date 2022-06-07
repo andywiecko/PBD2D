@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
 using Unity.Jobs;

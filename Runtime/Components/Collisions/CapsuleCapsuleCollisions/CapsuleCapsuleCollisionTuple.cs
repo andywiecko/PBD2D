@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -59,6 +60,6 @@ namespace andywiecko.PBD2D.Components
         }
 #endif
 
-        protected override bool InstantiateWhen(ITriMeshCapsulesCollideWithTriMeshCapsules c1, ITriMeshCapsulesCollideWithTriMeshCapsules c2) => c1.Id < c2.Id;
+        protected override bool InstantiateWhen(ITriMeshCapsulesCollideWithTriMeshCapsules c1, ITriMeshCapsulesCollideWithTriMeshCapsules c2) => c1.ComponentId < c2.ComponentId;
     }
 }

@@ -8,7 +8,8 @@
         "Unity.Burst",
         "Unity.Jobs",
         "Unity.Collections",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "andywiecko.ECS"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

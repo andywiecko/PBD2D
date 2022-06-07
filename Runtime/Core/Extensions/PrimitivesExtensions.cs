@@ -3,7 +3,6 @@ using andywiecko.BurstMathUtils;
 using System;
 using System.Linq;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {

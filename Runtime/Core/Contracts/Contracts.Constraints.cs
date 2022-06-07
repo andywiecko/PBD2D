@@ -1,5 +1,6 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
+using andywiecko.ECS;
 using Unity.Collections;
 using Unity.Mathematics;
 

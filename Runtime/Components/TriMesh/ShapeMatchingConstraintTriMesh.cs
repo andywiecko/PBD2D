@@ -1,5 +1,6 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -54,7 +55,7 @@ namespace andywiecko.PBD2D.Components
 
         private void OnDrawGizmos()
         {
-            if(!Application.isPlaying)
+            if (!Application.isPlaying)
             {
                 return;
             }

@@ -1,4 +1,4 @@
-namespace andywiecko.PBD2D.Solver
+namespace andywiecko.PBD2D.Core
 {
     public enum SimulationStep
     {

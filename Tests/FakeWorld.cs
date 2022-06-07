@@ -1,6 +1,8 @@
-namespace andywiecko.PBD2D.Core
+using andywiecko.ECS;
+using andywiecko.PBD2D.Core;
+
+namespace andywiecko.PBD2D.Editor.Tests
 {
-    // Move this to test system assembly
     public class FakeWorld : IWorld
     {
         public SimulationConfiguration Configuration { get; set; }

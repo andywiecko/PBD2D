@@ -17,7 +17,7 @@ namespace andywiecko.PBD2D.Core
             public float Friction => 1;
             public float Restitution => 0.5f;
         }
-        
+
         public static readonly IPhysicalMaterial Default = new InternalDefault();
 
         [field: SerializeField, Min(0)]

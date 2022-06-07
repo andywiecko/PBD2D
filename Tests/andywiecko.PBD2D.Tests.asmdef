@@ -9,7 +9,8 @@
         "Unity.Mathematics",
         "Unity.Jobs",
         "Unity.Collections",
-        "Unity.Burst"
+        "Unity.Burst",
+        "andywiecko.ECS"
     ],
     "includePlatforms": [
         "Editor"

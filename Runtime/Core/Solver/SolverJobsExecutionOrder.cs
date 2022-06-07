@@ -1,17 +1,14 @@
-using andywiecko.PBD2D.Core;
-#if UNITY_EDITOR
-using andywiecko.PBD2D.Core.Editor;
-#endif
+using andywiecko.ECS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Unity.Jobs;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Solver
+namespace andywiecko.PBD2D.Core
 {
     [Serializable]
     public class SerializedType
@@ -70,50 +67,10 @@ namespace andywiecko.PBD2D.Solver
         public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
     }
 
-    public interface ISolverJobsExecutionOrder
-    {
-        public IReadOnlyDictionary<SimulationStep, List<Type>> GetJobsOrder();
-    }
-
     [CreateAssetMenu(fileName = "SolverSystemsExecutionOrder",
         menuName = "PBD2D/Solver/Solver Systems Execution Order")]
-    public class SolverJobsExecutionOrder : ScriptableObject, ISolverJobsExecutionOrder
+    public class SolverJobsExecutionOrder : SolverJobsOrder
     {
-        private static Type[] types;
-        private static readonly Dictionary<Type, string> typeToGuid = new();
-        private static readonly Dictionary<string, Type> guidToType = new();
-
-#if UNITY_EDITOR
-        [InitializeOnLoadMethod]
-        private static void Initialize()
-        {
-            types = TypeCache
-                .GetTypesDerivedFrom<ISystem>().ToArray()
-                .Where(s => !s.IsAbstract && s.GetCustomAttributes<FakeSystemAttribute>().Count() == 0)
-                .ToArray();
-
-            static void RegisterMapping(Type type, string guid)
-            {
-                typeToGuid.Add(type, guid);
-                guidToType.Add(guid, type);
-            }
-
-            foreach (var type in types)
-            {
-                var guid = AssetDatabaseUtils.TryGetTypeGUID(type);
-
-                if (guid is string)
-                {
-                    RegisterMapping(type, guid);
-                }
-                else
-                {
-                    throw new NotImplementedException("This Type-GUID case is not handled yet.");
-                }
-            }
-        }
-#endif
-
         private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)
             .Select(i => i.Value)
@@ -155,7 +112,7 @@ namespace andywiecko.PBD2D.Solver
 
         private readonly Dictionary<SimulationStep, List<Type>> jobsOrder = new();
 
-        public IReadOnlyDictionary<SimulationStep, List<Type>> GetJobsOrder()
+        public void RegenerateJobsOrder()
         {
             jobsOrder.Clear();
 
@@ -170,8 +127,6 @@ namespace andywiecko.PBD2D.Solver
                 }
                 jobsOrder.Add(s, types);
             }
-
-            return jobsOrder;
         }
 
         private void Awake() => ValidateTypes();
@@ -183,7 +138,7 @@ namespace andywiecko.PBD2D.Solver
             // HACK:
             //   For unknown reason static dicts don't survive when saving assest,
             //   but OnValidate is called during save.
-            if (guidToType.Count == 0)
+            if (ISystemUtils.GuidToType.Count == 0)
             {
                 return;
             }
@@ -201,15 +156,15 @@ namespace andywiecko.PBD2D.Solver
                     .Where(i => i.Value is not null)
                     .ToList();
 
-                list.RemoveAll(i => !guidToType.ContainsKey(i.Guid));
+                list.RemoveAll(i => !ISystemUtils.GuidToType.ContainsKey(i.Guid));
 
                 SetListAtStep(step, list);
             }
 
             undefinedTypes.Clear();
-            foreach (var t in types.Except(GetSerializedTypes()))
+            foreach (var t in ISystemUtils.Types.Except(GetSerializedTypes()))
             {
-                undefinedTypes.Add(new(t, typeToGuid[t]));
+                undefinedTypes.Add(new(t, ISystemUtils.TypeToGuid[t]));
             }
 
             foreach (var step in SystemExtensions.GetValues<SimulationStep>())
@@ -219,10 +174,39 @@ namespace andywiecko.PBD2D.Solver
                 {
                     foreach (var l in list)
                     {
-                        l.Validate(guidToType[l.Guid]);
+                        l.Validate(ISystemUtils.GuidToType[l.Guid]);
                     }
                 }
             }
+        }
+
+        public override List<Func<JobHandle, JobHandle>> GenerateJobs(World world)
+        {
+            var jobs = new List<Func<JobHandle, JobHandle>>();
+            RegenerateJobsOrder();
+
+            jobs.AddRange(GetJobsFor(SimulationStep.FrameStart, world));
+            for (int step = 0; step < world.ConfigurationsRegistry.Get<SimulationConfiguration>().StepsCount; step++)
+            {
+                jobs.AddRange(GetJobsFor(SimulationStep.Substep, world));
+            }
+            jobs.AddRange(GetJobsFor(SimulationStep.FrameEnd, world));
+
+            return jobs;
+        }
+
+        private List<Func<JobHandle, JobHandle>> GetJobsFor(SimulationStep step, World world)
+        {
+            var jobs = new List<Func<JobHandle, JobHandle>>();
+            foreach (var type in jobsOrder[step])
+            {
+                var system = world.SystemsRegistry.SystemOf(type);
+                if (system != null)
+                {
+                    jobs.Add(system.Schedule);
+                }
+            }
+            return jobs;
         }
     }
 }

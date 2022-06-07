@@ -1,3 +1,5 @@
+using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 
 namespace andywiecko.PBD2D.Components
@@ -13,5 +15,7 @@ namespace andywiecko.PBD2D.Components
         public float Friction => (Item1.Friction + Item2.Friction) / 2f;
         public IPointCollideWithLine PointComponent => Item1;
         public ILineCollideWithPoint LineComponent => Item2;
+
+        public Id<IComponent> Id => throw new System.NotImplementedException();
     }
 }
