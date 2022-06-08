@@ -186,7 +186,7 @@ namespace andywiecko.PBD2D.Core
             RegenerateJobsOrder();
 
             jobs.AddRange(GetJobsFor(SimulationStep.FrameStart, world));
-            for (int step = 0; step < world.ConfigurationsRegistry.Get<SimulationConfiguration>().StepsCount; step++)
+            for (int step = 0; step < world.ConfigurationsRegistry.Get<PBDConfiguration>().StepsCount; step++)
             {
                 jobs.AddRange(GetJobsFor(SimulationStep.Substep, world));
             }

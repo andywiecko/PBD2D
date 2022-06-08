@@ -5,8 +5,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 {
     public class FakeWorld : IWorld
     {
-        public SimulationConfiguration Configuration { get; set; }
-
+        public PBDConfiguration Configuration { get; } = new();
         public ComponentsRegistry ComponentsRegistry { get; } = new();
         public ConfigurationsRegistry ConfigurationsRegistry { get; } = new();
         public SystemsRegistry SystemsRegistry { get; } = new();
@@ -17,6 +16,8 @@ namespace andywiecko.PBD2D.Editor.Tests
             {
                 ComponentsRegistry.Add(c);
             }
+
+            ConfigurationsRegistry.Set(Configuration);
         }
     }
 }

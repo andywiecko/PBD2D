@@ -11,7 +11,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Systems
 {
     [AddComponentMenu("PBD2D:Systems/Constraints/Triangle Area Constraints System")]
-    public class TriangleAreaConstraintsSystem : BaseSystemWithConfiguration<ITriangleAreaConstraints, SimulationConfiguration>
+    public class TriangleAreaConstraintsSystem : BaseSystemWithConfiguration<ITriangleAreaConstraints, PBDConfiguration>
     {
         [BurstCompile]
         private struct ApplyAreaConstraintJob : IJob
