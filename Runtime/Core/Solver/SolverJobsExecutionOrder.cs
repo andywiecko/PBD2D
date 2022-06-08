@@ -200,8 +200,7 @@ namespace andywiecko.PBD2D.Core
             var jobs = new List<Func<JobHandle, JobHandle>>();
             foreach (var type in jobsOrder[step])
             {
-                var system = world.SystemsRegistry.SystemOf(type);
-                if (system != null)
+                if(world.SystemsRegistry.TryGetSystem(type, out var system))
                 {
                     jobs.Add(system.Schedule);
                 }
