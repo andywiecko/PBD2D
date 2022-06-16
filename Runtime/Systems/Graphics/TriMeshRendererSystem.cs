@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Graphics/TriMesh Renderer System")]
+    [AddComponentMenu("Graphics")]
     public class TriMeshRendererSystem : BaseSystem<ITriMeshRenderer>
     {
         [BurstCompile]

@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04e119b7a44b6384ea66a6bf04de193a, type: 3}
-  m_Name: DefaultActionsExecutionOrder
+  m_Name: DefaultSolverActionsOrder
   m_EditorClassIdentifier: 
+  <TargetAssemblies>k__BackingField:
+  - andywiecko.PBD2D.Systems
+  targetAssemblies:
+  - {fileID: 5897886265953266890, guid: a49c56f9dd8c5c140a2a6fcdcdbc1acc, type: 3}
   onScheduling: []
   onJobsCompletion:
   - tag: Redraw (Tri Mesh Renderer System)
@@ -19,26 +23,17 @@ MonoBehaviour:
     <SerializedType>k__BackingField:
       tag: Tri Mesh Renderer System
       <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
-      script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
   - tag: Mouse Interaction Update (Mouse Interaction System)
     <Name>k__BackingField: MouseInteractionUpdate
     <SerializedType>k__BackingField:
       tag: Mouse Interaction System
       <Guid>k__BackingField: 9a89fe673d7a53a438bda9e23d905790
-      script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
   - tag: Update Bounds (Bounds System)
     <Name>k__BackingField: UpdateBounds
     <SerializedType>k__BackingField:
       tag: Bounds System
       <Guid>k__BackingField: 05a956019230a6f479500b7b576c54f3
-      script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
   undefinedMethods: []

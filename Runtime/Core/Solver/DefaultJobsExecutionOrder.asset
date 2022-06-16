@@ -94,3 +94,11 @@ MonoBehaviour:
       assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     <Step>k__BackingField: -1
+  - tag: Fake System
+    <Type>k__BackingField:
+      tag: Fake System
+      <Guid>k__BackingField: 5146de86250c1de41b1402493e944046
+      script: {fileID: 11500000, guid: 5146de86250c1de41b1402493e944046, type: 3}
+      assemblyQualifiedName: andywiecko.PBD2D.Editor.Tests.BoundingVolumeTreeSystemEditorTests+FakeSystem,
+        andywiecko.PBD2D.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    <Step>k__BackingField: -1

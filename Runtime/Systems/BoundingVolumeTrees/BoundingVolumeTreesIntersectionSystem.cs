@@ -5,11 +5,10 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Collisions/Bounding Volume Trees Intersection System")]
+    [Category("Collisions")]
     public class BoundingVolumeTreesIntersectionSystem : BaseSystem<IBoundingVolumeTreesIntersectionTuple>
     {
         [BurstCompile]

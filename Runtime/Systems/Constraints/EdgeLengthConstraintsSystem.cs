@@ -5,11 +5,10 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Constraints/Edge Length Constraints System")]
+    [Category("Constraints")]
     public class EdgeLengthConstraintsSystem : BaseSystemWithConfiguration<IEdgeLengthConstraints, PBDConfiguration>
     {
         [BurstCompile]

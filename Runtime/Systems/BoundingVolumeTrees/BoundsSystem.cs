@@ -4,6 +4,7 @@ using Unity.Jobs;
 
 namespace andywiecko.PBD2D.Systems
 {
+    [Category("TODO")]
     public class BoundsSystem : BaseSystem<IBoundsComponent>
     {
         // TODO: introduce ActionSystem without schedule

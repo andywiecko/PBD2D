@@ -6,11 +6,10 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Constraints/Shape Matching Constraint System")]
+    [Category("Constraints")]
     public class ShapeMatchingConstraintSystem : BaseSystem<IShapeMatchingConstraint>
     {
         [BurstCompile]

@@ -1,4 +1,5 @@
 using andywiecko.ECS;
+using andywiecko.ECS.Editor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -200,7 +201,7 @@ namespace andywiecko.PBD2D.Core
             var jobs = new List<Func<JobHandle, JobHandle>>();
             foreach (var type in jobsOrder[step])
             {
-                if(world.SystemsRegistry.TryGetSystem(type, out var system))
+                if (world.SystemsRegistry.TryGetSystem(type, out var system))
                 {
                     jobs.Add(system.Schedule);
                 }

@@ -4,11 +4,10 @@ using andywiecko.PBD2D.Core;
 using Unity.Burst;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Position Based Dynamics/Step Start System")]
+    [Category("Position Based Dynamics")]
     public class PositionBasedDynamicsStepStartSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, PBDConfiguration>
     {
         private float GlobalDamping => Configuration.GlobalDamping;

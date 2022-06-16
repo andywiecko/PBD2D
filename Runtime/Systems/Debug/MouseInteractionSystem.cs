@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("PBD2D:Systems/Debug/Mouse Interaction System")]
+    [Category("Debug")]
     public class MouseInteractionSystem : BaseSystem<IMouseInteractionComponent>
     {
         private bool grabBody = false;
