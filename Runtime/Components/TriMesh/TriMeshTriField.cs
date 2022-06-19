@@ -8,7 +8,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Tri Field")]
+    [Category(PBDCategory.ExtendedData)]
     public class TriMeshTriField : BaseComponent
     {
         public Ref<TriFieldLookup> TriFieldLookup { get; private set; }

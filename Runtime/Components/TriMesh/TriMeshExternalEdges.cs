@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/External Edges")]
+    [Category(PBDCategory.ExtendedData)]
     public class TriMeshExternalEdges : BaseComponent
     {
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; private set; }

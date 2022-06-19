@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Constraints/Edge Length Constraints")]
+    [Category(PBDCategory.Constraints)]
     public class TriMeshEdgeLengthConstraints : BaseComponent, IEdgeLengthConstraints
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => TriMesh.PredictedPositions;

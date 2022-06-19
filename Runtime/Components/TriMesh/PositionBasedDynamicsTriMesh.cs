@@ -7,7 +7,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Constraints/Position Based Dynamics")]
+    [Category(PBDCategory.PBD)]
     public class PositionBasedDynamicsTriMesh : BaseComponent, IPositionBasedDynamics
     {
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;

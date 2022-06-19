@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System.Linq;
 using Unity.Collections;
@@ -8,7 +9,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Bounding Volume Tree (External Edges)")]
+    [Category(PBDCategory.ExtendedData)]
     public class TriMeshBoundingVolumeTreeExternalEdges : TriMeshBoundingVolumeTree<ExternalEdge>
     {
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => externalEdges.ExternalEdges;

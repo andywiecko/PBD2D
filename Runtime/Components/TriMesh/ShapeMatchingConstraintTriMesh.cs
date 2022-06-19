@@ -9,7 +9,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Constraints/Shape Matching Constraint")]
+    [Category(PBDCategory.Constraints)]
     public class ShapeMatchingConstraintTriMesh : BaseComponent, IShapeMatchingConstraint
     {
         [field: SerializeField, Range(0, 1)]

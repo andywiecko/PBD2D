@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Graphics/TriMesh Renderer")]
+    [Category(PBDCategory.Graphics)]
     public class TriMeshRenderer : BaseComponent, ITriMeshRenderer
     {
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }

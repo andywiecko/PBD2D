@@ -8,7 +8,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshBoundingVolumeTreePoints))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Collisions/Collide With Ground (Points)")]
+    [Category(PBDCategory.Collisions)]
     public class TriMeshPointsCollideWithGroundLine : BaseComponent, ITriMeshPointsCollideWithGroundLine
     {
         public AABB Bounds => treeComponent.Bounds;

@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System.Linq;
 using Unity.Collections;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Extended Data/Bounding Volume Tree (Points)")]
+    [Category(PBDCategory.ExtendedData)]
     public class TriMeshBoundingVolumeTreePoints : TriMeshBoundingVolumeTree<Point>
     {
         public Ref<NativeArray<Point>> Points => triMesh.Points;

@@ -8,7 +8,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshBoundingVolumeTreePoints))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Collisions/Collide With TriMesh (Points with TriField)")]
+    [Category(PBDCategory.Collisions)]
     public class TriMeshPointsCollideWithTriMeshTriField : BaseComponent, ITriMeshPointsCollideWithTriMeshTriField
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;

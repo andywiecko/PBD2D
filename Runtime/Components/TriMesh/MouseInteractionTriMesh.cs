@@ -8,7 +8,7 @@ using UnityEngine;
 namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
-    [AddComponentMenu("PBD2D:TriMesh.Components/Debug/Mouse Interaction")]
+    [Category(PBDCategory.Debug)]
     public class MouseInteractionTriMesh : BaseComponent, IMouseInteractionComponent
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
