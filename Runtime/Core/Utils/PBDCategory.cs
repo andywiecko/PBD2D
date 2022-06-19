@@ -1,4 +1,4 @@
-namespace andywiecko.PBD2D.Systems
+namespace andywiecko.PBD2D.Core
 {
     public static class PBDCategory
     {
