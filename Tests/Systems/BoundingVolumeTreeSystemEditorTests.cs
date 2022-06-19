@@ -37,7 +37,6 @@ namespace andywiecko.PBD2D.Editor.Tests
             }
         }
 
-        [FakeSystem]
         private class FakeSystem : BoundingVolumeTreeSystem<FakeStruct> { }
 
         private FakeComponent component;

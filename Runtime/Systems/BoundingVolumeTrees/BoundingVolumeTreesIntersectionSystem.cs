@@ -8,7 +8,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Collisions")]
+    [Category(PBDCategory.Collisions)]
     public class BoundingVolumeTreesIntersectionSystem : BaseSystem<IBoundingVolumeTreesIntersectionTuple>
     {
         [BurstCompile]

@@ -9,13 +9,14 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Debug")]
+    [Category(PBDCategory.Debug)]
     public class MouseInteractionSystem : BaseSystem<IMouseInteractionComponent>
     {
         private bool grabBody = false;
         private bool releaseBody = false;
         private float2 mousePosition;
 
+        // TODO: this is no longer working since removing MonoBehaviour dependency for systems!
         private void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;

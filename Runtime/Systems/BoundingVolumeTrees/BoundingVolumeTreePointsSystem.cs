@@ -3,6 +3,6 @@ using andywiecko.PBD2D.Core;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Extended Data")]
+    [Category(PBDCategory.ExtendedData)]
     public class BoundingVolumeTreePointsSystem : BoundingVolumeTreeSystem<Point> { }
 }

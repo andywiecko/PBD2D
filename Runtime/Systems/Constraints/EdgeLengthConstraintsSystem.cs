@@ -8,7 +8,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Constraints")]
+    [Category(PBDCategory.Constraints)]
     public class EdgeLengthConstraintsSystem : BaseSystemWithConfiguration<IEdgeLengthConstraints, PBDConfiguration>
     {
         [BurstCompile]

@@ -5,11 +5,10 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [AddComponentMenu("Graphics")]
+    [Category(PBDCategory.Graphics)]
     public class TriMeshRendererSystem : BaseSystem<ITriMeshRenderer>
     {
         [BurstCompile]

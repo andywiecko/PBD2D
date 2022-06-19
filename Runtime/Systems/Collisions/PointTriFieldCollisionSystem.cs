@@ -9,7 +9,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Collisions")]
+    [Category(PBDCategory.Collisions)]
     public class PointTriFieldCollisionSystem : BaseSystem<IPointTriFieldCollisionTuple>
     {
         [BurstCompile]

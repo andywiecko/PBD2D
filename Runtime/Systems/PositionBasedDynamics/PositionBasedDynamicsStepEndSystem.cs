@@ -7,7 +7,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Position Based Dynamics")]
+    [Category(PBDCategory.PBD)]
     public class PositionBasedDynamicsStepEndSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, PBDConfiguration>
     {
         [BurstCompile]

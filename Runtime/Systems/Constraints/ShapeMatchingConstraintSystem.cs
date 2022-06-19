@@ -9,7 +9,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
-    [Category("Constraints")]
+    [Category(PBDCategory.Constraints)]
     public class ShapeMatchingConstraintSystem : BaseSystem<IShapeMatchingConstraint>
     {
         [BurstCompile]
