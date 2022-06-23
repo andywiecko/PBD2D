@@ -117,7 +117,7 @@ namespace andywiecko.PBD2D.Core
         {
             jobsOrder.Clear();
 
-            foreach (var s in SystemExtensions.GetValues<SimulationStep>())
+            foreach (var s in ECS.SystemExtensions.GetValues<SimulationStep>())
             {
                 var list = GetListAtStep(s);
                 if (list is null) continue;
@@ -139,7 +139,7 @@ namespace andywiecko.PBD2D.Core
             // HACK:
             //   For unknown reason static dicts don't survive when saving assest,
             //   but OnValidate is called during save.
-            if (ISystemUtils.GuidToType.Count == 0)
+            if (TypeCacheUtils.Systems.GuidToType.Count == 0)
             {
                 return;
             }
@@ -150,32 +150,32 @@ namespace andywiecko.PBD2D.Core
                 GetListAtStep(u.Step).Add(u.Type);
             }
 
-            foreach (var step in SystemExtensions.GetValues<SimulationStep>().Except(new[] { SimulationStep.Undefined }))
+            foreach (var step in ECS.SystemExtensions.GetValues<SimulationStep>().Except(new[] { SimulationStep.Undefined }))
             {
                 var list = GetListAtStep(step)
                     .DistinctBy(i => i.Guid)
                     .Where(i => i.Value is not null)
                     .ToList();
 
-                list.RemoveAll(i => !ISystemUtils.GuidToType.ContainsKey(i.Guid));
+                list.RemoveAll(i => !TypeCacheUtils.Systems.GuidToType.ContainsKey(i.Guid));
 
                 SetListAtStep(step, list);
             }
 
             undefinedTypes.Clear();
-            foreach (var t in ISystemUtils.Types.Except(GetSerializedTypes()))
+            foreach (var t in TypeCacheUtils.Systems.Types.Except(GetSerializedTypes()))
             {
-                undefinedTypes.Add(new(t, ISystemUtils.TypeToGuid[t]));
+                undefinedTypes.Add(new(t, TypeCacheUtils.Systems.TypeToGuid[t]));
             }
 
-            foreach (var step in SystemExtensions.GetValues<SimulationStep>())
+            foreach (var step in ECS.SystemExtensions.GetValues<SimulationStep>())
             {
                 var list = GetListAtStep(step);
                 if (list is not null)
                 {
                     foreach (var l in list)
                     {
-                        l.Validate(ISystemUtils.GuidToType[l.Guid]);
+                        l.Validate(TypeCacheUtils.Systems.GuidToType[l.Guid]);
                     }
                 }
             }
