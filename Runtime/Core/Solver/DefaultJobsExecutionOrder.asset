@@ -7,11 +7,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff7cfd002b57be42b2fb365812a1161, type: 3}
   m_Name: DefaultJobsExecutionOrder
   m_EditorClassIdentifier: 
+  <TargetAssemblies>k__BackingField:
+  - andywiecko.PBD2D.Systems
+  targetAssemblies:
+  - {fileID: 5897886265953266890, guid: a49c56f9dd8c5c140a2a6fcdcdbc1acc, type: 3}
   frameStart:
   - tag: Bounding Volume Trees Intersection System
     <Guid>k__BackingField: 0b7e003b21377784fad35cb20454d986
@@ -93,12 +97,4 @@ MonoBehaviour:
       script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
       assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    <Step>k__BackingField: -1
-  - tag: Fake System
-    <Type>k__BackingField:
-      tag: Fake System
-      <Guid>k__BackingField: 5146de86250c1de41b1402493e944046
-      script: {fileID: 11500000, guid: 5146de86250c1de41b1402493e944046, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Editor.Tests.BoundingVolumeTreeSystemEditorTests+FakeSystem,
-        andywiecko.PBD2D.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     <Step>k__BackingField: -1

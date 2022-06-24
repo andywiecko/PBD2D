@@ -1,8 +1,10 @@
 using andywiecko.ECS;
 using andywiecko.ECS.Editor;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.Jobs;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -103,6 +105,15 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
+        [field: SerializeField, HideInInspector]
+        public string[] TargetAssemblies { get; private set; } = { };
+
+#if UNITY_EDITOR
+        [SerializeField]
+        private UnityEditorInternal.AssemblyDefinitionAsset[] targetAssemblies = { };
+#endif
+
+        [Space(50)]
         [SerializeField] private List<SerializedType> frameStart = new();
         [SerializeField] private List<SerializedType> substep = new();
         [SerializeField] private List<SerializedType> frameEnd = new();
@@ -132,7 +143,14 @@ namespace andywiecko.PBD2D.Core
 
         private void Awake() => ValidateTypes();
 
-        private void OnValidate() => ValidateTypes();
+        private void OnValidate()
+        {
+            TargetAssemblies = targetAssemblies?
+                .Where(i => i != null)
+                .Select(i => JObject.Parse(i.text)["name"].ToString()).ToArray();
+
+            ValidateTypes();
+        }
 
         private void ValidateTypes()
         {
@@ -143,6 +161,11 @@ namespace andywiecko.PBD2D.Core
             {
                 return;
             }
+
+            var targetTypes = TargetAssemblies
+                .Select(i => Assembly.Load(i))
+                .SelectMany(i => TypeCacheUtils.Systems.AssemblyToTypes[i]);
+            var targetGuids = targetTypes.Select(i => TypeCacheUtils.Systems.TypeToGuid[i]);
 
             var typesToAssign = undefinedTypes.Where(t => t.Step != SimulationStep.Undefined);
             foreach (var u in typesToAssign)
@@ -157,13 +180,13 @@ namespace andywiecko.PBD2D.Core
                     .Where(i => i.Value is not null)
                     .ToList();
 
-                list.RemoveAll(i => !TypeCacheUtils.Systems.GuidToType.ContainsKey(i.Guid));
+                list.RemoveAll(i => !targetGuids.Contains(i.Guid));
 
                 SetListAtStep(step, list);
             }
 
             undefinedTypes.Clear();
-            foreach (var t in TypeCacheUtils.Systems.Types.Except(GetSerializedTypes()))
+            foreach (var t in targetTypes.Except(GetSerializedTypes()))
             {
                 undefinedTypes.Add(new(t, TypeCacheUtils.Systems.TypeToGuid[t]));
             }
