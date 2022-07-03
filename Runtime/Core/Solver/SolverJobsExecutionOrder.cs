@@ -204,22 +204,20 @@ namespace andywiecko.PBD2D.Core
             }
         }
 
-        public override List<Func<JobHandle, JobHandle>> GenerateJobs(World world)
+        public override void GenerateJobs(ISolver solver, IWorld world)
         {
-            var jobs = new List<Func<JobHandle, JobHandle>>();
             RegenerateJobsOrder();
 
+            var jobs = solver.Jobs;
             jobs.AddRange(GetJobsFor(SimulationStep.FrameStart, world));
             for (int step = 0; step < world.ConfigurationsRegistry.Get<PBDConfiguration>().StepsCount; step++)
             {
                 jobs.AddRange(GetJobsFor(SimulationStep.Substep, world));
             }
             jobs.AddRange(GetJobsFor(SimulationStep.FrameEnd, world));
-
-            return jobs;
         }
 
-        private List<Func<JobHandle, JobHandle>> GetJobsFor(SimulationStep step, World world)
+        private List<Func<JobHandle, JobHandle>> GetJobsFor(SimulationStep step, IWorld world)
         {
             var jobs = new List<Func<JobHandle, JobHandle>>();
             foreach (var type in jobsOrder[step])
