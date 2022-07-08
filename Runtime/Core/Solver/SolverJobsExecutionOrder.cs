@@ -72,7 +72,7 @@ namespace andywiecko.PBD2D.Core
 
     [CreateAssetMenu(fileName = "SolverSystemsExecutionOrder",
         menuName = "PBD2D/Solver/Solver Systems Execution Order")]
-    public class SolverJobsExecutionOrder : SolverJobsOrder
+    public class SolverJobsExecutionOrder : JobsOrder
     {
         private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)

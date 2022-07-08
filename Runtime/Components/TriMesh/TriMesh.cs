@@ -32,8 +32,10 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             if (!IsValid)
             {
                 throw new NullReferenceException();
