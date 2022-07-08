@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components.Editor
 {
-    public class EntitiesEditor : MonoBehaviour
+    public static class EntitiesEditor
     {
         // TODO: add source generator for these
 
