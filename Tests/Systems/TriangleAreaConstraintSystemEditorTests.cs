@@ -1,6 +1,5 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
-using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using andywiecko.PBD2D.Systems;
 using NUnit.Framework;
