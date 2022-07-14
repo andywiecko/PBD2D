@@ -5,8 +5,8 @@ namespace andywiecko.PBD2D.Systems
     public static class FrictionUtils
     {
         public static (float2 dpA, float2 dpB) GetFrictionCorrections(
-            float2 pA, float2 qA, float wA, 
-            float2 pB, float2 qB, float wB, float2 n, 
+            float2 pA, float2 qA, float wA,
+            float2 pB, float2 qB, float wB, float2 n,
             float mu, float2 fn)
         {
             var wAB = wA + wB;

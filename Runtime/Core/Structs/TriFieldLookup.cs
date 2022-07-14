@@ -1,7 +1,7 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
-using System.Diagnostics;
 using System;
+using System.Diagnostics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;

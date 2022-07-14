@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Core
             1 => aabb.Max,
             2 => new(aabb.Min.x, aabb.Max.y),
             3 => new(aabb.Max.x, aabb.Min.y),
-            _ => throw new System.ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         public static bool IsAboveLine(this AABB aabb, Line line)

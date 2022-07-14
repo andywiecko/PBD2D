@@ -128,7 +128,7 @@ namespace andywiecko.PBD2D.Core
         {
             jobsOrder.Clear();
 
-            foreach (var s in ECS.SystemExtensions.GetValues<SimulationStep>())
+            foreach (var s in SystemExtensions.GetValues<SimulationStep>())
             {
                 var list = GetListAtStep(s);
                 if (list is null) continue;
@@ -173,7 +173,7 @@ namespace andywiecko.PBD2D.Core
                 GetListAtStep(u.Step).Add(u.Type);
             }
 
-            foreach (var step in ECS.SystemExtensions.GetValues<SimulationStep>().Except(new[] { SimulationStep.Undefined }))
+            foreach (var step in SystemExtensions.GetValues<SimulationStep>().Except(new[] { SimulationStep.Undefined }))
             {
                 var list = GetListAtStep(step)
                     .DistinctBy(i => i.Guid)
@@ -191,7 +191,7 @@ namespace andywiecko.PBD2D.Core
                 undefinedTypes.Add(new(t, TypeCacheUtils.Systems.TypeToGuid[t]));
             }
 
-            foreach (var step in ECS.SystemExtensions.GetValues<SimulationStep>())
+            foreach (var step in SystemExtensions.GetValues<SimulationStep>())
             {
                 var list = GetListAtStep(step);
                 if (list is not null)

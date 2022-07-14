@@ -5,7 +5,7 @@ using Unity.Jobs;
 
 namespace andywiecko.PBD2D.Core
 {
-    public static class CommonJobs 
+    public static class CommonJobs
     {
         [BurstCompile]
         public struct SetNativeReferenceValueJob<T> : IJob
@@ -56,7 +56,7 @@ namespace andywiecko.PBD2D.Core
 
             public void Execute()
             {
-                for(int i = 0; i < array.Length; i++)
+                for (int i = 0; i < array.Length; i++)
                 {
                     array[i] = value;
                 }
