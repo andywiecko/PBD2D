@@ -17,6 +17,7 @@ namespace andywiecko.PBD2D.Core
             public RangeEnumerator GetEnumerator() => this;
         }
 
+        public static T[] GetValues<T>() where T : Enum => (T[])Enum.GetValues(typeof(T));
         public static RangeEnumerator GetEnumerator(this Range range) => new(range);
     }
 }
