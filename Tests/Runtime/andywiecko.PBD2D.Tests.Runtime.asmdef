@@ -4,16 +4,17 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-		"andywiecko.PBD2D.Systems",
+        "andywiecko.ECS",
+        "andywiecko.PBD2D.Components",
+        "andywiecko.PBD2D.Systems",
         "andywiecko.PBD2D.Core",
         "andywiecko.BurstMathUtils",
         "andywiecko.BurstCollections",
         "Unity.Mathematics",
         "Unity.Jobs",
         "Unity.Collections",
-        "Unity.Burst",
-        "andywiecko.ECS"
-	],
+        "Unity.Burst"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
