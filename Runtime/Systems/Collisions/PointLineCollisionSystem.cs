@@ -26,8 +26,8 @@ namespace andywiecko.PBD2D.Systems
             {
                 var (pointComponent, lineComponent) = tuple;
 
-                positions = pointComponent.PredictedPositions;
-                previousPositions = pointComponent.Positions.Value.AsReadOnly();
+                positions = pointComponent.Positions;
+                previousPositions = pointComponent.PreviousPositions.Value.AsReadOnly();
                 r = pointComponent.CollisionRadius;
                 (p, n) = lineComponent.Line;
                 dl = lineComponent.Displacement;

@@ -22,13 +22,13 @@ namespace andywiecko.PBD2D.Tests
 
             static void SquashTriMesh(TriMesh triMesh)
             {
-                var points = triMesh.PredictedPositions.Value;
+                var points = triMesh.Positions.Value;
                 for (int i = 0; i < points.Length; i++)
                 {
                     var x = points[(Id<Point>)i];
                     x.y = 2f;
                     triMesh.Positions.Value[(Id<Point>)i] = x;
-                    triMesh.PredictedPositions.Value[(Id<Point>)i] = x;
+                    triMesh.PreviousPositions.Value[(Id<Point>)i] = x;
                 }
             }
 

@@ -8,8 +8,8 @@ namespace andywiecko.PBD2D.Core
     public interface IPositionBasedDynamics : IComponent
     {
         Ref<NativeList<Point>> Points { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; }
         float2 ExternalAcceleration { get; }
         float Damping { get; }
@@ -17,8 +17,8 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPositionBasedFluid : IComponent
     {
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; }
         Ref<NativeIndexedArray<Id<Point>, int2>> PointsGridCell { get; }
         Ref<NativeIndexedArray<Id<Point>, FixedList128Bytes<int2>>> PointsNeighborCells { get; }
@@ -35,5 +35,4 @@ namespace andywiecko.PBD2D.Core
         float InteractionRadius { get; }
         float RestDensity { get; }
     }
-
 }

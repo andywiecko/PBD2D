@@ -12,10 +12,10 @@ namespace andywiecko.PBD2D.Components
     public abstract class TriMeshCapsulesCollideWith : BaseComponent, ICapsuleCollideWithCapsule
     {
         public float CollisionRadius => triMeshCollider.CollisionRadius;
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions => triMesh.PreviousPositions;
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
         public Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; private set; }
-        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;
         public AABB Bounds => externalEdgeBVT.Bounds;

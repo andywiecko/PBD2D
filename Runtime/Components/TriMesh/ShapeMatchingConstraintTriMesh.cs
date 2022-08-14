@@ -18,7 +18,7 @@ namespace andywiecko.PBD2D.Components
         public float TotalMass { get; private set; }
 
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
         public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; private set; }

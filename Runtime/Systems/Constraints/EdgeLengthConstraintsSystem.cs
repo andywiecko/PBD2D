@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct ApplyEdgeConstraintJob : IJob
         {
-            private NativeIndexedArray<Id<Point>, float2> predictedPositions;
+            private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
             [ReadOnly]
             private NativeArray<EdgeLengthConstraint> constraints;
@@ -23,7 +23,7 @@ namespace andywiecko.PBD2D.Systems
 
             public ApplyEdgeConstraintJob(IEdgeLengthConstraints component, float dt)
             {
-                predictedPositions = component.PredictedPositions;
+                positions = component.Positions;
                 massesInv = component.MassesInv.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
                 k = component.Stiffness;
@@ -43,27 +43,27 @@ namespace andywiecko.PBD2D.Systems
                 var (idA, idB, l) = c;
 
                 var (wA, wB) = massesInv.At(c);
-                var wAB = wA + wB;
+                var wAB = wA + wB + a;
                 if (wAB <= math.EPSILON)
                 {
                     return;
                 }
 
-                var (pA, pB) = predictedPositions.At(c);
+                var (pA, pB) = positions.At(c);
                 var pAB = pB - pA;
                 var pABabs = math.length(pAB);
 
-                if (pABabs < math.EPSILON)
+                if (pABabs <= math.EPSILON)
                 {
                     return;
                 }
 
                 var n = -pAB / pABabs;
                 var C = pABabs - l;
-                var lambda = -C / (wAB + a);
+                var lambda = -C / wAB;
                 var dp = k * lambda * n;
-                predictedPositions[idA] += wA * dp;
-                predictedPositions[idB] -= wB * dp;
+                positions[idA] += wA * dp;
+                positions[idB] -= wB * dp;
             }
         }
 

@@ -20,8 +20,8 @@ namespace andywiecko.PBD2D.Systems
             [ReadOnly]
             private NativeArray<Point> points;
             private NativeIndexedArray<Id<Point>, float2> velocities;
-            private NativeIndexedArray<Id<Point>, float2> predictedPositions;
-            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
+            private NativeIndexedArray<Id<Point>, float2> positions;
+            private NativeIndexedArray<Id<Point>, float2> previousPositions;
             private readonly float dt;
             private readonly float gamma;
             private readonly float2 a;
@@ -30,8 +30,8 @@ namespace andywiecko.PBD2D.Systems
             {
                 points = component.Points.Value.AsDeferredJobArray();
                 velocities = component.Velocities;
-                predictedPositions = component.PredictedPositions;
-                positions = component.Positions.Value.AsReadOnly();
+                positions = component.Positions;
+                previousPositions = component.PreviousPositions;
                 dt = deltaTime;
                 gamma = damping;
                 a = acceleration;
@@ -41,9 +41,10 @@ namespace andywiecko.PBD2D.Systems
             {
                 var pointId = points[index].Id;
                 var v = velocities[pointId];
+                var p = positions[pointId];
                 v += (a - gamma * v) * dt;
-
-                predictedPositions[pointId] = positions[pointId] + v * dt;
+                previousPositions[pointId] = p;
+                positions[pointId] += v * dt;
                 velocities[pointId] = v;
             }
         }

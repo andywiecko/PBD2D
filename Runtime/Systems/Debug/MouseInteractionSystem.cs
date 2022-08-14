@@ -65,7 +65,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 interactingPointId = component.InteractingPointId;
                 offset = component.Offset;
-                positions = component.PredictedPositions;
+                positions = component.Positions;
                 this.mousePosition = mousePosition;
                 this.minimalDistanceSq = minimalDistance * minimalDistance;
             }
@@ -107,7 +107,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 interactingPointId = component.InteractingPointId;
                 offset = component.Offset;
-                positions = component.PredictedPositions;
+                positions = component.Positions;
                 this.mousePosition = mousePosition;
             }
 

@@ -29,8 +29,8 @@ namespace andywiecko.PBD2D.Systems
                 potentialCollisions = tuple.PotentialCollisions.Value.AsDeferredJobArray();
                 collisions = tuple.Collisions.Value.AsParallelWriter();
                 triangles = tuple.TriFieldComponent.Triangles.Value.AsReadOnly();
-                pointsPositions = tuple.PointsComponent.PredictedPositions.Value.AsReadOnly();
-                triFieldPositions = tuple.TriFieldComponent.PredictedPositions.Value.AsReadOnly();
+                pointsPositions = tuple.PointsComponent.Positions.Value.AsReadOnly();
+                triFieldPositions = tuple.TriFieldComponent.Positions.Value.AsReadOnly();
                 lookup = tuple.TriFieldComponent.TriFieldLookup.Value.AsReadOnly();
             }
 
@@ -61,9 +61,9 @@ namespace andywiecko.PBD2D.Systems
             public ResolveCollisionsJob(IPointTriFieldCollisionTuple tuple)
             {
                 collisions = tuple.Collisions.Value.AsDeferredJobArray();
-                pointPositions = tuple.PointsComponent.PredictedPositions;
+                pointPositions = tuple.PointsComponent.Positions;
                 pointMassesInv = tuple.PointsComponent.MassesInv.Value.AsReadOnly();
-                triFieldPositions = tuple.TriFieldComponent.PredictedPositions;
+                triFieldPositions = tuple.TriFieldComponent.Positions;
                 triFieldMassesInv = tuple.TriFieldComponent.MassesInv.Value.AsReadOnly();
                 externalEdges = tuple.TriFieldComponent.ExternalEdges.Value.AsReadOnly();
             }

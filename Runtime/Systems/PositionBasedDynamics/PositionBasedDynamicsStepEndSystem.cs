@@ -17,25 +17,26 @@ namespace andywiecko.PBD2D.Systems
             [ReadOnly]
             private NativeArray<Point> points;
             private NativeIndexedArray<Id<Point>, float2> velocities;
-            private NativeIndexedArray<Id<Point>, float2> positions;
-            private NativeIndexedArray<Id<Point>, float2>.ReadOnly predictedPositions;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private readonly float dtInv;
 
             public SolveStepEndJob(IPositionBasedDynamics component, float dt)
             {
                 points = component.Points.Value.AsDeferredJobArray();
                 velocities = component.Velocities;
-                positions = component.Positions;
-                predictedPositions = component.PredictedPositions.Value.AsReadOnly();
+                previousPositions = component.PreviousPositions.Value.AsReadOnly();
+                positions = component.Positions.Value.AsReadOnly();
                 dtInv = 1f / dt;
             }
 
             public void Execute(int index)
             {
                 var pointId = points[index].Id;
-                var predictedPosition = predictedPositions[pointId];
-                velocities[pointId] = (predictedPosition - positions[pointId]) * dtInv;
-                positions[pointId] = predictedPosition;
+                var p = positions[pointId];
+                var q = previousPositions[pointId];
+                var v = (p - q) * dtInv;
+                velocities[pointId] = v;
             }
         }
 

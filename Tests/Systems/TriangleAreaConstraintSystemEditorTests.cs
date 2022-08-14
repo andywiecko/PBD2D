@@ -17,14 +17,14 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float Compliance { get; set; } = 0;
             public float Stiffness { get; set; } = 1;
-            public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
             public Ref<NativeList<TriangleAreaConstraint>> Constraints { get; } = new NativeList<TriangleAreaConstraint>(64, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
-                PredictedPositions?.Dispose();
+                Positions?.Dispose();
                 MassesInv?.Dispose();
                 Constraints?.Dispose();
             }
@@ -37,7 +37,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public void SetPositions(float2[] positions)
             {
-                PredictedPositions.Value.GetInnerArray().CopyFrom(positions);
+                Positions.Value.GetInnerArray().CopyFrom(positions);
             }
 
             public void SetRestArea2(float area2)
@@ -47,12 +47,12 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float GetArea2()
             {
-                var p = PredictedPositions.Value.AsReadOnly();
+                var p = Positions.Value.AsReadOnly();
                 return MathUtils.TriangleSignedArea2(p[(Id<Point>)0], p[(Id<Point>)1], p[(Id<Point>)2]);
             }
         }
 
-        private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
+        private float2[] Positions => component.Positions.Value.GetInnerArray().ToArray();
 
         private FakeWorld world;
         private FakeComponent component;

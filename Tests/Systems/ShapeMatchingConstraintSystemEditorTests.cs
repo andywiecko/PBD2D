@@ -20,7 +20,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public float Beta { get; set; } = 0;
             public float TotalMass { get; }
             public float2x2 AqqMatrix { get; }
-            public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeReference<float2>> CenterOfMass { get; } = new NativeReference<float2>(DataAllocator);
             public Ref<NativeReference<float2x2>> ApqMatrix { get; } = new NativeReference<float2x2>(DataAllocator);
@@ -42,7 +42,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public override void Dispose()
             {
                 base.Dispose();
-                PredictedPositions?.Dispose();
+                Positions?.Dispose();
                 RelativePositions?.Dispose();
                 CenterOfMass?.Dispose();
                 ApqMatrix?.Dispose();
@@ -52,10 +52,10 @@ namespace andywiecko.PBD2D.Editor.Tests
                 InitialRelativePositions?.Dispose();
             }
 
-            public void SetPositions(float2[] positions) => PredictedPositions.Value.GetInnerArray().CopyFrom(positions);
+            public void SetPositions(float2[] positions) => Positions.Value.GetInnerArray().CopyFrom(positions);
         }
 
-        private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
+        private float2[] Positions => component.Positions.Value.GetInnerArray().ToArray();
 
         private FakeWorld world;
         private ShapeMatchingConstraintSystem system;

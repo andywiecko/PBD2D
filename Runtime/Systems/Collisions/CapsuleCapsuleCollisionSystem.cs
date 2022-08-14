@@ -29,8 +29,8 @@ namespace andywiecko.PBD2D.Systems
                 var (triMesh1, triMesh2) = tuple;
                 collidableEdges1 = triMesh1.CollidableEdges.Value.AsReadOnly();
                 collidableEdges2 = triMesh2.CollidableEdges.Value.AsReadOnly();
-                positions1 = triMesh1.PredictedPositions.Value.AsReadOnly();
-                positions2 = triMesh2.PredictedPositions.Value.AsReadOnly();
+                positions1 = triMesh1.Positions.Value.AsReadOnly();
+                positions2 = triMesh2.Positions.Value.AsReadOnly();
                 var radius1 = triMesh1.CollisionRadius;
                 var radius2 = triMesh2.CollisionRadius;
                 contactRadiusSq = (radius1 + radius2) * (radius1 + radius2);
@@ -79,12 +79,12 @@ namespace andywiecko.PBD2D.Systems
                 var (triMesh1, triMesh2) = tuple;
                 collidableEdges1 = triMesh1.CollidableEdges.Value.AsReadOnly();
                 collidableEdges2 = triMesh2.CollidableEdges.Value.AsReadOnly();
-                positions1 = triMesh1.PredictedPositions;
-                positions2 = triMesh2.PredictedPositions;
+                positions1 = triMesh1.Positions;
+                positions2 = triMesh2.Positions;
                 massesInv1 = triMesh1.MassesInv.Value.AsReadOnly();
                 massesInv2 = triMesh2.MassesInv.Value.AsReadOnly();
-                previousPositions1 = triMesh1.Positions.Value.AsReadOnly();
-                previousPositions2 = triMesh2.Positions.Value.AsReadOnly();
+                previousPositions1 = triMesh1.PreviousPositions.Value.AsReadOnly();
+                previousPositions2 = triMesh2.PreviousPositions.Value.AsReadOnly();
                 mu = tuple.Friction;
                 contactRadius = triMesh1.CollisionRadius + triMesh2.CollisionRadius;
                 collisions = tuple.Collisions.Value.AsDeferredJobArray();

@@ -14,18 +14,18 @@ namespace andywiecko.PBD2D.Editor.Tests
         {
             public AABB Bounds { get; set; }
             public float CollisionRadius { get; set; } = 0;
-            public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(1, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(1, Allocator.Persistent);
+            public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(1, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; } = new NativeIndexedArray<Id<Point>, float2>(1, Allocator.Persistent);
             public float Friction => throw new System.NotImplementedException();
-            public ref float2 PredictedPosition => ref PredictedPositions.Value.ElementAt(default);
-            public ref float2 Position => ref Positions.Value.ElementAt(default);
+            public ref float2 PredictedPosition => ref Positions.Value.ElementAt(default);
+            public ref float2 Position => ref PreviousPositions.Value.ElementAt(default);
             public ref float2 Velocity => ref Velocities.Value.ElementAt(default);
 
             public override void Dispose()
             {
-                PredictedPositions?.Dispose();
                 Positions?.Dispose();
+                PreviousPositions?.Dispose();
                 Velocities?.Dispose();
             }
         }

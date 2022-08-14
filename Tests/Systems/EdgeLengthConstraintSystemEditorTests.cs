@@ -17,14 +17,14 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float Stiffness { get; set; } = 1;
             public float Compliance { get; set; } = 0;
-            public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(PointsCount, DataAllocator);
             public Ref<NativeList<EdgeLengthConstraint>> Constraints { get; } = new NativeList<EdgeLengthConstraint>(64, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
-                PredictedPositions?.Dispose();
+                Positions?.Dispose();
                 MassesInv?.Dispose();
                 Constraints?.Dispose();
             }
@@ -37,7 +37,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public FakeEdgeLengthConstraint SetPosition(int i, float2 pi)
             {
-                PredictedPositions.Value[(Id<Point>)i] = pi;
+                Positions.Value[(Id<Point>)i] = pi;
                 return this;
             }
 
@@ -76,7 +76,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             new(4, 0)
         };
 
-        private float2[] Positions => component.PredictedPositions.Value.GetInnerArray().ToArray();
+        private float2[] Positions => component.Positions.Value.GetInnerArray().ToArray();
 
         private EdgeLengthConstraintsSystem system;
         private FakeEdgeLengthConstraint component;

@@ -27,7 +27,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeArray<Point>> Points { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; private set; }
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; private set; }
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; private set; }
         public Ref<NativeIndexedArray<Id<Edge>, Edge>> Edges { get; private set; }
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; private set; }
@@ -55,7 +55,7 @@ namespace andywiecko.PBD2D.Components
                 Points = new NativeArray<Point>(points, allocator),
                 MassesInv = new NativeIndexedArray<Id<Point>, float>(SerializedData.MassesInv, allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
-                PredictedPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
+                PreviousPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 Velocities = new NativeIndexedArray<Id<Point>, float2>(SerializedData.Positions.Length, allocator),
                 Edges = new NativeIndexedArray<Id<Edge>, Edge>(SerializedData.Edges.ToEdgesArray(), allocator),
                 Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.Triangles.ToTrianglesArray(), allocator)

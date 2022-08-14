@@ -69,7 +69,7 @@ namespace andywiecko.PBD2D.Components
             }
 
             Gizmos.color = Color.red;
-            var positions = triMesh.PredictedPositions.Value.AsReadOnly();
+            var positions = triMesh.Positions.Value.AsReadOnly();
             var edges = triMesh.Edges.Value.AsReadOnly();
             foreach (var edge in ExternalEdges.Value.AsReadOnly())
             {

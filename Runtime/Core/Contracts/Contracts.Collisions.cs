@@ -41,8 +41,8 @@ namespace andywiecko.PBD2D.Core
         float Friction { get; }
         float CollisionRadius { get; }
         AABB Bounds { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; }
     }
@@ -78,8 +78,8 @@ namespace andywiecko.PBD2D.Core
     {
         AABB Bounds { get; }
         float CollisionRadius { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         float Friction { get; }
     }
 
@@ -111,7 +111,7 @@ namespace andywiecko.PBD2D.Core
     public interface IPointCollideWithTriField : IEntityComponent
     {
         AABB Bounds { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
     }
 
@@ -123,7 +123,7 @@ namespace andywiecko.PBD2D.Core
     public interface ITriFieldCollideWithPoint : IEntityComponent
     {
         AABB Bounds { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }

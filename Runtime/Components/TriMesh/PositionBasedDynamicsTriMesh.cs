@@ -12,8 +12,8 @@ namespace andywiecko.PBD2D.Components
     public class PositionBasedDynamicsTriMesh : BaseComponent, IPositionBasedDynamics
     {
         public Ref<NativeList<Point>> Points { get; private set; }
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions => TriMesh.PreviousPositions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => TriMesh.PredictedPositions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities => TriMesh.Velocities;
 
         [field: SerializeField]

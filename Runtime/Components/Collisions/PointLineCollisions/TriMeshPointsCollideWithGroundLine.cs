@@ -13,7 +13,7 @@ namespace andywiecko.PBD2D.Components
     {
         public AABB Bounds => treeComponent.Bounds;
         public float CollisionRadius => 0;
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions => triMesh.PreviousPositions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public float Friction => triMesh.PhysicalMaterial.Friction;
 

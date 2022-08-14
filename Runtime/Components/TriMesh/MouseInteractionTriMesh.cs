@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Debug)]
     public class MouseInteractionTriMesh : BaseComponent, IMouseInteractionComponent
     {
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeReference<Id<Point>>> InteractingPointId { get; private set; }
         public Ref<NativeReference<float2>> Offset { get; private set; }
 

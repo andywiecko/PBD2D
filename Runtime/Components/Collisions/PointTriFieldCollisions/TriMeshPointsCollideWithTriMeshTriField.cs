@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Collisions)]
     public class TriMeshPointsCollideWithTriMeshTriField : BaseComponent, ITriMeshPointsCollideWithTriMeshTriField
     {
-        public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions => triMesh.PredictedPositions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => treeComponent.Tree;
         public AABB Bounds => treeComponent.Bounds;

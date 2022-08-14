@@ -26,7 +26,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 a = component.Compliance / dt / dt;
                 k = component.Stiffness;
-                positions = component.PredictedPositions;
+                positions = component.Positions;
                 massesInv = component.MassesInv.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
             }
