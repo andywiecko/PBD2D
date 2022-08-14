@@ -22,7 +22,7 @@ namespace andywiecko.PBD2D.Core
         [field: SerializeField, Min(0), Tooltip("Energy dissipation factor.")]
         public float GlobalDamping { get; set; } = 0;
 
-        [field: SerializeField, Tooltip("External force applied to all PBD simulated bodies.")]
-        public float2 GlobalExternalForce { get; set; } = new(0, -10);
+        [field: SerializeField, Tooltip("External acceleration applied to all PBD simulated bodies.")]
+        public float2 GlobalExternalAcceleration { get; set; } = new(0, -10);
     }
 }

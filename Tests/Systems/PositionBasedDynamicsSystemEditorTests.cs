@@ -14,21 +14,20 @@ namespace andywiecko.PBD2D.Editor.Tests
             private const int PointsCount = 1;
             private const Allocator DataAllocator = Allocator.Persistent;
 
-            public float2 ExternalForce { get; set; } = 0;
+            public float2 ExternalAcceleration { get; set; } = 0;
             public float Damping { get; set; } = 0;
+            public Ref<NativeList<Point>> Points { get; } = new NativeList<Point>(PointsCount, DataAllocator) { Length = 1, [default] = new(default) };
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f }, Allocator.Persistent);
 
             public override void Dispose()
             {
                 base.Dispose();
-
+                Points?.Dispose();
                 Positions?.Dispose();
                 PredictedPositions?.Dispose();
                 Velocities?.Dispose();
-                MassesInv?.Dispose();
             }
         }
 
@@ -63,7 +62,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 Configuration = {
                     DeltaTime = 1e-9f,
                     GlobalDamping = 0,
-                    GlobalExternalForce = 0,
+                    GlobalExternalAcceleration = 0,
                     StepsCount = 1
                 }
             };
@@ -81,7 +80,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         [Test]
         public void StepStartTest()
         {
-            component.ExternalForce = new(0, -10);
+            component.ExternalAcceleration = new(0, -10);
             world.Configuration.DeltaTime = 1;
             Position = new(0, 10);
 
@@ -94,7 +93,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         [Test]
         public void StepEndTest()
         {
-            component.ExternalForce = new(0, -10);
+            component.ExternalAcceleration = new(0, -10);
             world.Configuration.DeltaTime = 1;
             Position = new(0, 10);
             PredictedPosition = new(0, 8);
@@ -112,7 +111,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             float2 v0 = new(1, 0);
             float2 a = new(0, -1);
             var t = 15f;
-            component.ExternalForce = a;
+            component.ExternalAcceleration = a;
             world.Configuration.DeltaTime = 1e-2f;
             Position = x0;
             PredictedPosition = x0;

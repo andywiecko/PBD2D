@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
@@ -11,32 +12,30 @@ namespace andywiecko.PBD2D.Systems
     public class PositionBasedDynamicsStepEndSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, PBDConfiguration>
     {
         [BurstCompile]
-        private struct MovePositionsAndUpdateVelocityJob : IJobParallelFor
+        private struct SolveStepEndJob : IJobParallelForDefer
         {
+            [ReadOnly]
+            private NativeArray<Point> points;
             private NativeIndexedArray<Id<Point>, float2> velocities;
             private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly predictedPositions;
-            private readonly float dt;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private readonly float dtInv;
 
-            public MovePositionsAndUpdateVelocityJob(IPositionBasedDynamics component, float dt)
+            public SolveStepEndJob(IPositionBasedDynamics component, float dt)
             {
+                points = component.Points.Value.AsDeferredJobArray();
                 velocities = component.Velocities;
                 positions = component.Positions;
                 predictedPositions = component.PredictedPositions.Value.AsReadOnly();
-                this.dt = dt;
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                dtInv = 1f / dt;
             }
 
             public void Execute(int index)
             {
-                var pointId = (Id<Point>)index;
-                if (massesInv[pointId] != 0)
-                {
-                    var predictedPosition = predictedPositions[pointId];
-                    velocities[pointId] = (predictedPosition - positions[pointId]) / dt;
-                    positions[pointId] = predictedPosition;
-                }
+                var pointId = points[index].Id;
+                var predictedPosition = predictedPositions[pointId];
+                velocities[pointId] = (predictedPosition - positions[pointId]) * dtInv;
+                positions[pointId] = predictedPosition;
             }
         }
 
@@ -44,8 +43,8 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new MovePositionsAndUpdateVelocityJob(component, dt: Configuration.ReducedDeltaTime)
-                    .Schedule(component.Positions.Value.Length, 64, dependencies);
+                dependencies = new SolveStepEndJob(component, dt: Configuration.ReducedDeltaTime)
+                    .Schedule(component.Points.Value, 64, dependencies);
             }
 
             return dependencies;

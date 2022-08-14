@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
@@ -11,41 +12,39 @@ namespace andywiecko.PBD2D.Systems
     public class PositionBasedDynamicsStepStartSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, PBDConfiguration>
     {
         private float GlobalDamping => Configuration.GlobalDamping;
-        private float2 GlobalExternalForce => Configuration.GlobalExternalForce;
+        private float2 GlobalExternalAcceleration => Configuration.GlobalExternalAcceleration;
 
         [BurstCompile]
-        private struct ApplyExternalForcesJob : IJobParallelFor
+        private struct SolveStepStartJob : IJobParallelForDefer
         {
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            [ReadOnly]
+            private NativeArray<Point> points;
             private NativeIndexedArray<Id<Point>, float2> velocities;
             private NativeIndexedArray<Id<Point>, float2> predictedPositions;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private readonly float dt;
-            private readonly float damping;
-            private readonly float2 externalForce;
+            private readonly float gamma;
+            private readonly float2 a;
 
-            public ApplyExternalForcesJob(IPositionBasedDynamics component, float damping, float2 externalForce, float dt)
+            public SolveStepStartJob(IPositionBasedDynamics component, float damping, float2 acceleration, float deltaTime)
             {
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                points = component.Points.Value.AsDeferredJobArray();
                 velocities = component.Velocities;
                 predictedPositions = component.PredictedPositions;
                 positions = component.Positions.Value.AsReadOnly();
-                this.dt = dt;
-                this.damping = damping;
-                this.externalForce = externalForce;
+                dt = deltaTime;
+                gamma = damping;
+                a = acceleration;
             }
 
             public void Execute(int index)
             {
-                var pointId = (Id<Point>)index;
-                var massInv = massesInv[pointId];
-                if (massInv == 0f)
-                {
-                    return;
-                }
+                var pointId = points[index].Id;
+                var v = velocities[pointId];
+                v += (a - gamma * v) * dt;
 
-                velocities[pointId] += dt * massInv * (externalForce - damping * velocities[pointId]);
-                predictedPositions[pointId] = positions[pointId] + dt * velocities[pointId];
+                predictedPositions[pointId] = positions[pointId] + v * dt;
+                velocities[pointId] = v;
             }
         }
 
@@ -53,9 +52,10 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
+                var acceleration = component.ExternalAcceleration + GlobalExternalAcceleration;
                 var damping = component.Damping + GlobalDamping;
-                var externalForce = component.ExternalForce + GlobalExternalForce;
-                dependencies = new ApplyExternalForcesJob(component, damping, externalForce, dt: Configuration.ReducedDeltaTime).Schedule(component.Positions.Value.Length, innerloopBatchCount: 64, dependencies);
+                dependencies = new SolveStepStartJob(component, damping, acceleration, Configuration.ReducedDeltaTime)
+                    .Schedule(component.Points.Value, innerloopBatchCount: 64, dependencies);
             }
 
             return dependencies;

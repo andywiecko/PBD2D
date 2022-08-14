@@ -7,11 +7,11 @@ namespace andywiecko.PBD2D.Core
 {
     public interface IPositionBasedDynamics : IComponent
     {
+        Ref<NativeList<Point>> Points { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> PredictedPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; }
-        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
-        float2 ExternalForce { get; }
+        float2 ExternalAcceleration { get; }
         float Damping { get; }
     }
 
