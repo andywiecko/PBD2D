@@ -9,7 +9,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [Category(PBDCategory.Debug)]
-    public class MouseInteractionTriMesh : BaseComponent, IMouseInteractionComponent
+    public class TriMeshMouseInteraction : BaseComponent, IMouseInteractionComponent
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeReference<Id<Point>>> InteractingPointId { get; private set; }

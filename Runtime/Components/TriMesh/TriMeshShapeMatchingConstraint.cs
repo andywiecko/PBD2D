@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [Category(PBDCategory.Constraints)]
-    public class ShapeMatchingConstraintTriMesh : BaseComponent, IShapeMatchingConstraint
+    public class TriMeshShapeMatchingConstraint : BaseComponent, IShapeMatchingConstraint
     {
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1;
@@ -19,7 +19,6 @@ namespace andywiecko.PBD2D.Components
 
         public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
-
         public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; private set; }
         public Ref<NativeReference<float2>> CenterOfMass { get; private set; }
