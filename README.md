@@ -175,18 +175,7 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 ### v0.1.0
 
-- [X] ~~Reimport and refactor tri mesh structure.~~
-- [X] ~~Introduce list of constraints.~~
-- [X] ~~Unify Bvt Systems.~~
-- [X] ~~Remove static from `ComponentsSystemsRegistry`, by introducing the `World` class.~~
-- [X] ~~**Restitution**~~
-- [X] ~~Support for rotation at transform~~
-- [X] ~~**Extended PBD** (without iterations)~~
-- [X] ~~Cleanup steps and substep: replace with names: steps, iterations, introduce dt and h = dt / N, where N is number of steps.~~
 - [ ] Add friction  for trifield-trifield collisions
-- [ ] Self-collisions (field based)
-- [ ] Add cheap collisions edge-edge
-- [ ] Refactor tuples constructor.
 - [ ] Move external edges to trimesh
 - [ ] Refactor TriMesh gizmos
 - [ ] Test for most of the systems.
@@ -195,19 +184,18 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
   - [ ] Washing machine scene (collisions)
   - [ ] Constraint scene
   - [ ] Friction scene
-  - [X] ~~Restitution scene~~ 
-- [ ] Move math/collection related parts into custom packages + extract additional assembly for common engine part (unrelated to pbd physics impl whatsoever)
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
 - [ ] refactor triangulator editor, add support for raw data
 - [ ] Add preview gifs for fluids and rods.
-- [ ] Shuffle constraint on creation (more randomized behavior)
+- [ ] Shuffle/sort constraint on creation (more randomized behavior)
 - [ ] Refactor shape matching constraint
 
 ### v1.0.0
 
-- [ ] Static box?
-- [ ] Static circle, static capsule?
+- [ ] Add cheap collisions edge-edge
+- [ ] Static/dynamic box
+- [ ] Static/dynamic circle, static capsule
 - [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Reimport and refactor rod structure.
 - [ ] Refactor system class to not be derived from `MonoBehaviour`. 
@@ -215,7 +203,7 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Fluid "fancy" shader.
 - [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
 - [ ] Destructible bodies.
-- [ ] Extended PBD with lambda tracking (with iterations)
+- [ ] Connectors and lockers.
 
 ### v2.0.0
 
