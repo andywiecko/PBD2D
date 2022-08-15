@@ -1,3 +1,4 @@
+using andywiecko.BurstMathUtils;
 using andywiecko.BurstTriangulator;
 using andywiecko.PBD2D.Core;
 using System;
@@ -39,9 +40,6 @@ namespace andywiecko.PBD2D.Components
         public Triangulator.TriangulationSettings Settings { get; private set; } = new();
 
         public ManagedInputData InputData = new();
-
-        [field: SerializeField, Min(1e-9f)]
-        public float TotalMass { get; private set; } = 1;
 
         [SerializeField]
         protected Path[] paths = { };
@@ -126,8 +124,17 @@ namespace andywiecko.PBD2D.Components
 
             Edges = edgeIds.ToArray();
 
-            var localMassInv = pointsCount / TotalMass;
-            Weights = Enumerable.Repeat(localMassInv, pointsCount).ToArray();
+            Weights = Enumerable.Repeat(0f, pointsCount).ToArray();
+            for (int i = 0; i < trianglesCount; i++)
+            {
+                var (a, b, c) = (Triangles[3 * i], Triangles[3 * i + 1], Triangles[3 * i + 2]);
+                var (pA, pB, pC) = (Positions[a], Positions[b], Positions[c]);
+                var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
+                var w0 = 6f / math.abs(area); // 3 (points) * 2 (doubled area)
+                Weights[a] += w0;
+                Weights[b] += w0;
+                Weights[c] += w0;
+            }
 
             UpdateUVs();
         }

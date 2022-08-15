@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ba90593a11184e41b8ae3908115323d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Compliance>k__BackingField: 0.001
+  <Compliance>k__BackingField: 1
   <Stiffness>k__BackingField: 1
 --- !u!114 &104616963
 MonoBehaviour:
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ebc514e36fb5499a38bc9d6c2712d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ExternalForce>k__BackingField:
+  <ExternalAcceleration>k__BackingField:
     x: 0
     y: 0
   <Damping>k__BackingField: 0
@@ -1384,7 +1384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ba90593a11184e41b8ae3908115323d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Compliance>k__BackingField: 0.1
+  <Compliance>k__BackingField: 5
   <Stiffness>k__BackingField: 1
 --- !u!114 &1269937047
 MonoBehaviour:
@@ -1398,7 +1398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ebc514e36fb5499a38bc9d6c2712d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ExternalForce>k__BackingField:
+  <ExternalAcceleration>k__BackingField:
     x: 0
     y: 0
   <Damping>k__BackingField: 0
@@ -1572,9 +1572,9 @@ MonoBehaviour:
     <StepsCount>k__BackingField: 10
     <DeltaTime>k__BackingField: 0.01666667
     <GlobalDamping>k__BackingField: 0
-    <GlobalExternalForce>k__BackingField:
+    <GlobalExternalAcceleration>k__BackingField:
       x: 0
-      y: -0.1
+      y: -10
 --- !u!1 &1598496444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1691,7 +1691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ebc514e36fb5499a38bc9d6c2712d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ExternalForce>k__BackingField:
+  <ExternalAcceleration>k__BackingField:
     x: 0
     y: 0
   <Damping>k__BackingField: 0
