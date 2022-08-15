@@ -17,7 +17,7 @@ namespace andywiecko.PBD2D.Components
 
         public float TotalMass { get; private set; }
 
-        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
         public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; private set; }
@@ -47,10 +47,10 @@ namespace andywiecko.PBD2D.Components
                 Rotation = new NativeReference<Complex>(Complex.Identity, Allocator.Persistent)
             );
 
-            TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv.Value);
-            CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, MassesInv.Value, TotalMass);
+            TotalMass = ShapeMatchingUtils.CalculateTotalMass(Weights.Value);
+            CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(triMesh.Positions.Value, Weights.Value, TotalMass);
             ShapeMatchingUtils.CalculateRelativePositions(InitialRelativePositions.Value, triMesh.Positions.Value, CenterOfMass.Value.Value);
-            AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, MassesInv.Value);
+            AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, Weights.Value);
         }
 
         private void OnDrawGizmos()

@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Components
         public float CollisionRadius => triMeshCollider.CollisionRadius;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
         public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions => triMesh.PreviousPositions;
-        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => triMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; private set; }
         public float Friction => triMesh.PhysicalMaterial.Friction;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => externalEdgeBVT.Tree;

@@ -63,8 +63,8 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>.ReadOnly collidableEdges2;
             private NativeIndexedArray<Id<Point>, float2> positions1;
             private NativeIndexedArray<Id<Point>, float2> positions2;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv1;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv2;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights1;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights2;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions1;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly previousPositions2;
             private readonly float mu;
@@ -81,8 +81,8 @@ namespace andywiecko.PBD2D.Systems
                 collidableEdges2 = triMesh2.CollidableEdges.Value.AsReadOnly();
                 positions1 = triMesh1.Positions;
                 positions2 = triMesh2.Positions;
-                massesInv1 = triMesh1.MassesInv.Value.AsReadOnly();
-                massesInv2 = triMesh2.MassesInv.Value.AsReadOnly();
+                weights1 = triMesh1.Weights.Value.AsReadOnly();
+                weights2 = triMesh2.Weights.Value.AsReadOnly();
                 previousPositions1 = triMesh1.PreviousPositions.Value.AsReadOnly();
                 previousPositions2 = triMesh2.PreviousPositions.Value.AsReadOnly();
                 mu = tuple.Friction;
@@ -122,7 +122,7 @@ namespace andywiecko.PBD2D.Systems
 
                 var n = math.normalize(pA - pB);
 
-                var (wa0, wa1, wb0, wb1) = (massesInv1[a0Id], massesInv1[a1Id], massesInv2[b0Id], massesInv2[b1Id]);
+                var (wa0, wa1, wb0, wb1) = (weights1[a0Id], weights1[a1Id], weights2[b0Id], weights2[b1Id]);
                 var barASq = barA * barA;
                 var barBSq = barB * barB;
                 var lambda = wa0 * barASq.x + wa1 * barASq.y + wb0 * barBSq.x + wb1 * barBSq.y;

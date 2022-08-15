@@ -9,40 +9,40 @@ namespace andywiecko.PBD2D.Core
     [BurstCompatible]
     public static class ShapeMatchingUtils
     {
-        public static float2 CalculateCenterOfMass(ReadOnlySpan<float2> positions, ReadOnlySpan<float> massesInv, float totalMass)
+        public static float2 CalculateCenterOfMass(ReadOnlySpan<float2> positions, ReadOnlySpan<float> weights, float totalMass)
         {
-            AssertBufferLengths(positions, massesInv);
+            AssertBufferLengths(positions, weights);
 
             var com = (float2)0;
             foreach (var i in 0..positions.Length)
             {
                 var p = positions[i];
-                var m = 1 / massesInv[i];
+                var m = 1 / weights[i];
                 com += m * p;
             }
             com /= totalMass;
             return com;
         }
 
-        public static float CalculateTotalMass(ReadOnlySpan<float> massesInv)
+        public static float CalculateTotalMass(ReadOnlySpan<float> weights)
         {
             var M = 0f;
-            foreach (var mInv in massesInv)
+            foreach (var mInv in weights)
             {
                 M += 1 / mInv;
             }
             return M;
         }
 
-        public static float2x2 CalculateAqqMatrix(ReadOnlySpan<float2> relativePositions, ReadOnlySpan<float> massesInv)
+        public static float2x2 CalculateAqqMatrix(ReadOnlySpan<float2> relativePositions, ReadOnlySpan<float> weights)
         {
-            AssertBufferLengths(relativePositions, massesInv);
+            AssertBufferLengths(relativePositions, weights);
 
             var Aqq = float2x2.zero;
             foreach (var i in 0..relativePositions.Length)
             {
                 var q = relativePositions[i];
-                var m = 1 / massesInv[i];
+                var m = 1 / weights[i];
                 Aqq += m * MathUtils.OuterProduct(q, q);
             }
             return math.inverse(Aqq);

@@ -18,7 +18,7 @@ namespace andywiecko.PBD2D.Systems
             private readonly float a;
             private readonly float k;
             private NativeIndexedArray<Id<Point>, float2> positions;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
             [ReadOnly]
             private NativeArray<TriangleAreaConstraint> constraints;
 
@@ -27,7 +27,7 @@ namespace andywiecko.PBD2D.Systems
                 a = component.Compliance / dt / dt;
                 k = component.Stiffness;
                 positions = component.Positions;
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                weights = component.Weights.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
             }
 
@@ -43,7 +43,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 var (idA, idB, idC, restArea2) = c;
                 var (pA, pB, pC) = positions.At(c);
-                var (wA, wB, wC) = massesInv.At(c);
+                var (wA, wB, wC) = weights.At(c);
 
                 var pAB = pB - pA;
                 var pAC = pC - pA;

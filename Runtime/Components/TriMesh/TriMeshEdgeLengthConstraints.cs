@@ -12,7 +12,7 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshEdgeLengthConstraints : BaseComponent, IEdgeLengthConstraints
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
-        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv => TriMesh.MassesInv;
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => TriMesh.Weights;
         public Ref<NativeList<EdgeLengthConstraint>> Constraints { get; private set; }
 
         [field: SerializeField, Min(0)]

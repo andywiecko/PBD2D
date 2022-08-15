@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Core
         float Stiffness { get; }
         float Compliance { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
         Ref<NativeList<EdgeLengthConstraint>> Constraints { get; }
     }
 
@@ -20,7 +20,7 @@ namespace andywiecko.PBD2D.Core
         float Stiffness { get; }
         float Compliance { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
         Ref<NativeList<TriangleAreaConstraint>> Constraints { get; }
     }
 
@@ -29,7 +29,7 @@ namespace andywiecko.PBD2D.Core
         float Stiffness { get; }
         float Beta { get; }
         float TotalMass { get; }
-        Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; }

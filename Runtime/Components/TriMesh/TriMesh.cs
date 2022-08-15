@@ -25,7 +25,7 @@ namespace andywiecko.PBD2D.Components
         private bool IsValid => SerializedData;
 
         public Ref<NativeArray<Point>> Points { get; private set; }
-        public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; private set; }
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; private set; }
@@ -53,7 +53,7 @@ namespace andywiecko.PBD2D.Components
             var allocator = Allocator.Persistent;
             DisposeOnDestroy(
                 Points = new NativeArray<Point>(points, allocator),
-                MassesInv = new NativeIndexedArray<Id<Point>, float>(SerializedData.MassesInv, allocator),
+                Weights = new NativeIndexedArray<Id<Point>, float>(SerializedData.Weights, allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 PreviousPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 Velocities = new NativeIndexedArray<Id<Point>, float2>(SerializedData.Positions.Length, allocator),

@@ -15,7 +15,7 @@ namespace andywiecko.PBD2D.Systems
         private struct ApplyEdgeConstraintJob : IJob
         {
             private NativeIndexedArray<Id<Point>, float2> positions;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
             [ReadOnly]
             private NativeArray<EdgeLengthConstraint> constraints;
             private readonly float k;
@@ -24,7 +24,7 @@ namespace andywiecko.PBD2D.Systems
             public ApplyEdgeConstraintJob(IEdgeLengthConstraints component, float dt)
             {
                 positions = component.Positions;
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                weights = component.Weights.Value.AsReadOnly();
                 constraints = component.Constraints.Value.AsDeferredJobArray();
                 k = component.Stiffness;
                 a = component.Compliance / dt / dt;
@@ -42,7 +42,7 @@ namespace andywiecko.PBD2D.Systems
             {
                 var (idA, idB, l) = c;
 
-                var (wA, wB) = massesInv.At(c);
+                var (wA, wB) = weights.At(c);
                 var wAB = wA + wB + a;
                 if (wAB <= math.EPSILON)
                 {

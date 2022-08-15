@@ -29,7 +29,7 @@ namespace andywiecko.PBD2D.Components
         }
 
         [field: SerializeField, HideInInspector] public Mesh Mesh { get; protected set; } = default;
-        [field: SerializeField, HideInInspector] public float[] MassesInv { get; protected set; } = { };
+        [field: SerializeField, HideInInspector] public float[] Weights { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public float2[] Positions { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public int[] Edges { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public int[] Triangles { get; protected set; } = { };
@@ -127,7 +127,7 @@ namespace andywiecko.PBD2D.Components
             Edges = edgeIds.ToArray();
 
             var localMassInv = pointsCount / TotalMass;
-            MassesInv = Enumerable.Repeat(localMassInv, pointsCount).ToArray();
+            Weights = Enumerable.Repeat(localMassInv, pointsCount).ToArray();
 
             UpdateUVs();
         }

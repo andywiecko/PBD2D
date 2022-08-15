@@ -16,21 +16,21 @@ namespace andywiecko.PBD2D.Systems
         private struct CalculateCenterOfMassJob : IJob
         {
             private NativeReference<float2> com;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
             private readonly float M;
 
             public CalculateCenterOfMassJob(IShapeMatchingConstraint component)
             {
                 com = component.CenterOfMass;
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                weights = component.Weights.Value.AsReadOnly();
                 positions = component.Positions.Value.AsReadOnly();
                 M = component.TotalMass;
             }
 
             public void Execute()
             {
-                com.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, massesInv, totalMass: M);
+                com.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, weights, totalMass: M);
             }
         }
 
@@ -66,14 +66,14 @@ namespace andywiecko.PBD2D.Systems
             private NativeReference<float2x2> Apq;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly relativePositions;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly initialRelativePositions;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly massesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
 
             public CalculateApqMatrixJob(IShapeMatchingConstraint component)
             {
                 Apq = component.ApqMatrix;
                 relativePositions = component.RelativePositions.Value.AsReadOnly();
                 initialRelativePositions = component.InitialRelativePositions.Value.AsReadOnly();
-                massesInv = component.MassesInv.Value.AsReadOnly();
+                weights = component.Weights.Value.AsReadOnly();
             }
 
             public void Execute()
@@ -81,7 +81,7 @@ namespace andywiecko.PBD2D.Systems
                 var apq = float2x2.zero;
                 foreach (var (pId, p) in relativePositions.IdsValues)
                 {
-                    var m = 1 / massesInv[pId];
+                    var m = 1 / weights[pId];
                     var q = initialRelativePositions[pId];
                     apq += m * MathUtils.OuterProduct(p, q);
                 }

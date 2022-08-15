@@ -26,15 +26,15 @@ namespace andywiecko.PBD2D.Editor.Tests
             public Ref<NativeReference<float2x2>> ApqMatrix { get; } = new NativeReference<float2x2>(DataAllocator);
             public Ref<NativeReference<float2x2>> AMatrix { get; } = new NativeReference<float2x2>(float2x2.identity, DataAllocator);
             public Ref<NativeReference<Complex>> Rotation { get; } = new NativeReference<Complex>(Complex.Identity, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
 
             public FakeShapeMatchingConstraint(float2[] positions)
             {
-                TotalMass = ShapeMatchingUtils.CalculateTotalMass(MassesInv.Value);
-                CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, MassesInv.Value, TotalMass);
+                TotalMass = ShapeMatchingUtils.CalculateTotalMass(Weights.Value);
+                CenterOfMass.Value.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, Weights.Value, TotalMass);
                 ShapeMatchingUtils.CalculateRelativePositions(InitialRelativePositions.Value, positions, CenterOfMass.Value.Value);
-                AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, MassesInv.Value);
+                AqqMatrix = ShapeMatchingUtils.CalculateAqqMatrix(InitialRelativePositions.Value, Weights.Value);
 
                 SetPositions(positions);
             }
@@ -48,7 +48,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 ApqMatrix?.Dispose();
                 AMatrix?.Dispose();
                 Rotation?.Dispose();
-                MassesInv?.Dispose();
+                Weights?.Dispose();
                 InitialRelativePositions?.Dispose();
             }
 

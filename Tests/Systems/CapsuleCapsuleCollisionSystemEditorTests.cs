@@ -15,7 +15,7 @@ namespace andywiecko.PBD2D.Editor.Tests
             public float CollisionRadius { get; set; } = 1f;
             public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(2, Allocator.Persistent);
-            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f }, Allocator.Persistent);
+            public Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f }, Allocator.Persistent);
             public Ref<NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>> CollidableEdges { get; } = new NativeIndexedArray<Id<CollidableEdge>, CollidableEdge>(new CollidableEdge[] { (0, 1) }, Allocator.Persistent);
             public float Friction => throw new System.NotImplementedException(); // Used friction from tuple explicitly
 
@@ -24,7 +24,7 @@ namespace andywiecko.PBD2D.Editor.Tests
                 base.Dispose();
                 PreviousPositions?.Dispose();
                 Positions?.Dispose();
-                MassesInv?.Dispose();
+                Weights?.Dispose();
                 CollidableEdges?.Dispose();
             }
 

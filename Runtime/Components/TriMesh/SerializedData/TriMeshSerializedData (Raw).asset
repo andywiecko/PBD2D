@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TriMeshSerializedData (Raw)
   m_EditorClassIdentifier: 
   <Mesh>k__BackingField: {fileID: 264432685300193483}
-  <MassesInv>k__BackingField:
+  <Weights>k__BackingField:
   - 4
   - 4
   - 4

@@ -18,14 +18,14 @@ namespace andywiecko.PBD2D.Editor.Tests
             public float Compliance { get; set; } = 0;
             public float Stiffness { get; set; } = 1;
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
-            public Ref<NativeIndexedArray<Id<Point>, float>> MassesInv { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
+            public Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; } = new NativeIndexedArray<Id<Point>, float>(new[] { 1f, 1f, 1f }, DataAllocator);
             public Ref<NativeList<TriangleAreaConstraint>> Constraints { get; } = new NativeList<TriangleAreaConstraint>(64, DataAllocator);
 
             public override void Dispose()
             {
                 base.Dispose();
                 Positions?.Dispose();
-                MassesInv?.Dispose();
+                Weights?.Dispose();
                 Constraints?.Dispose();
             }
 

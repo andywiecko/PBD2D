@@ -53,18 +53,18 @@ namespace andywiecko.PBD2D.Systems
             [ReadOnly]
             private NativeArray<IdPair<Point, ExternalEdge>> collisions;
             private NativeIndexedArray<Id<Point>, float2> pointPositions;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly pointMassesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly pointWeights;
             private NativeIndexedArray<Id<Point>, float2> triFieldPositions;
-            private NativeIndexedArray<Id<Point>, float>.ReadOnly triFieldMassesInv;
+            private NativeIndexedArray<Id<Point>, float>.ReadOnly triFieldWeights;
             private NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges;
 
             public ResolveCollisionsJob(IPointTriFieldCollisionTuple tuple)
             {
                 collisions = tuple.Collisions.Value.AsDeferredJobArray();
                 pointPositions = tuple.PointsComponent.Positions;
-                pointMassesInv = tuple.PointsComponent.MassesInv.Value.AsReadOnly();
+                pointWeights = tuple.PointsComponent.Weights.Value.AsReadOnly();
                 triFieldPositions = tuple.TriFieldComponent.Positions;
-                triFieldMassesInv = tuple.TriFieldComponent.MassesInv.Value.AsReadOnly();
+                triFieldWeights = tuple.TriFieldComponent.Weights.Value.AsReadOnly();
                 externalEdges = tuple.TriFieldComponent.ExternalEdges.Value.AsReadOnly();
             }
 
@@ -80,10 +80,10 @@ namespace andywiecko.PBD2D.Systems
             {
                 var (pId, eId) = c;
                 var p = pointPositions[pId];
-                var wp = pointMassesInv[pId];
+                var wp = pointWeights[pId];
                 var e = externalEdges[eId];
                 var (e1, e2) = triFieldPositions.At(e);
-                var (we1, we2) = triFieldMassesInv.At(e);
+                var (we1, we2) = triFieldWeights.At(e);
 
                 MathUtils.PointClosestPointOnLineSegment(p, e1, e2, out var q);
                 var bar = MathUtils.BarycentricSafe(q, e1, e2, 0.5f);
