@@ -58,6 +58,5 @@ namespace andywiecko.PBD2D.Components
 #endif
 
         protected override bool InstantiateWhen(ITriMeshPointsCollideWithTriMeshTriField c1, ITriMeshTriFieldCollideWithTriMeshPoints c2) => c1.EntityId != c2.EntityId;
-
     }
 }
