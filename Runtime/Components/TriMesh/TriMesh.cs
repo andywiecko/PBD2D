@@ -1,7 +1,9 @@
 using andywiecko.BurstCollections;
+using andywiecko.BurstMathUtils;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using Unity.Collections.NotBurstCompatible;
@@ -50,14 +52,37 @@ namespace andywiecko.PBD2D.Components
             float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);
 
             var points = Enumerable.Range(0, SerializedData.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
+
+            var weights = Enumerable.Repeat(0f, points.Length).ToArray();
+            var triangles = SerializedData.Triangles;
+            for (int i = 0; i < triangles.Length / 3; i++)
+            {
+                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
+                var (pA, pB, pC) = (transformedPositions[a], transformedPositions[b], transformedPositions[c]);
+                var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
+                var w0 = 6f / math.abs(area); // 3 (points) * 2 (doubled area)
+                weights[a] += w0;
+                weights[b] += w0;
+                weights[c] += w0;
+            }
+
+            var edges = new HashSet<Edge>();
+            for (int i = 0; i < triangles.Length / 3; i++)
+            {
+                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
+                edges.Add((a, b));
+                edges.Add((a, c));
+                edges.Add((b, c));
+            }
+
             var allocator = Allocator.Persistent;
             DisposeOnDestroy(
                 Points = new NativeArray<Point>(points, allocator),
-                Weights = new NativeIndexedArray<Id<Point>, float>(SerializedData.Weights, allocator),
+                Weights = new NativeIndexedArray<Id<Point>, float>(weights, allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 PreviousPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 Velocities = new NativeIndexedArray<Id<Point>, float2>(SerializedData.Positions.Length, allocator),
-                Edges = new NativeIndexedArray<Id<Edge>, Edge>(SerializedData.Edges.ToEdgesArray(), allocator),
+                Edges = new NativeIndexedArray<Id<Edge>, Edge>(edges.ToArray(), allocator),
                 Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.Triangles.ToTrianglesArray(), allocator)
             );
 
@@ -139,11 +164,15 @@ namespace andywiecko.PBD2D.Components
                 Gizmos.DrawSphere(T(p.ToFloat3()), radius: 0.01f);
             }
 
-            foreach (var (idA, idB) in SerializedData.Edges.ToEdgesArray())
+            var triangles = SerializedData.Triangles;
+            var positions = SerializedData.Positions;
+            for (int i = 0; i < triangles.Length / 3; i++)
             {
-                var pA = SerializedData.Positions[(int)idA].ToFloat3();
-                var pB = SerializedData.Positions[(int)idB].ToFloat3();
+                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
+                var (pA, pB, pC) = (positions[a].ToFloat3(), positions[b].ToFloat3(), positions[c].ToFloat3());
                 Gizmos.DrawLine(T(pA), T(pB));
+                Gizmos.DrawLine(T(pB), T(pC));
+                Gizmos.DrawLine(T(pC), T(pA));
             }
 
             float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);

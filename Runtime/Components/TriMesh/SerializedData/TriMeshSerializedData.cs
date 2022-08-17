@@ -1,4 +1,3 @@
-using andywiecko.BurstMathUtils;
 using andywiecko.BurstTriangulator;
 using andywiecko.PBD2D.Core;
 using System;
@@ -30,9 +29,7 @@ namespace andywiecko.PBD2D.Components
         }
 
         [field: SerializeField, HideInInspector] public Mesh Mesh { get; protected set; } = default;
-        [field: SerializeField, HideInInspector] public float[] Weights { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public float2[] Positions { get; protected set; } = { };
-        [field: SerializeField, HideInInspector] public int[] Edges { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public int[] Triangles { get; protected set; } = { };
         [field: SerializeField, HideInInspector] public Vector2[] UVs { get; protected set; } = { };
 
@@ -102,39 +99,6 @@ namespace andywiecko.PBD2D.Components
         {
             Triangles = triangulator.Output.Triangles.ToArray();
             Positions = triangulator.Output.Positions.ToArray();
-
-            var pointsCount = Positions.Length;
-            var trianglesCount = Triangles.Length / 3;
-
-            var edges = new HashSet<Edge>();
-            for (int i = 0; i < trianglesCount; i++)
-            {
-                var (a, b, c) = (Triangles[3 * i], Triangles[3 * i + 1], Triangles[3 * i + 2]);
-                edges.Add((a, b));
-                edges.Add((a, c));
-                edges.Add((b, c));
-            }
-
-            var edgeIds = new List<int>();
-            foreach (var (a, b) in edges)
-            {
-                edgeIds.Add((int)a);
-                edgeIds.Add((int)b);
-            }
-
-            Edges = edgeIds.ToArray();
-
-            Weights = Enumerable.Repeat(0f, pointsCount).ToArray();
-            for (int i = 0; i < trianglesCount; i++)
-            {
-                var (a, b, c) = (Triangles[3 * i], Triangles[3 * i + 1], Triangles[3 * i + 2]);
-                var (pA, pB, pC) = (Positions[a], Positions[b], Positions[c]);
-                var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
-                var w0 = 6f / math.abs(area); // 3 (points) * 2 (doubled area)
-                Weights[a] += w0;
-                Weights[b] += w0;
-                Weights[c] += w0;
-            }
 
             UpdateUVs();
         }

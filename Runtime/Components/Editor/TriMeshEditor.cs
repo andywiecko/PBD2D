@@ -32,10 +32,9 @@ namespace andywiecko.PBD2D.Components.Editor
 
             var data = (target as TriMesh).SerializedData;
             var points = data == null ? "???" : data.Positions.Length.ToString();
-            var edges = data == null ? "???" : (data.Edges.Length / 2).ToString();
             var triangles = data == null ? "???" : (data.Triangles.Length / 3).ToString();
 
-            label.text = $" Data:  ● Points: {points}    ▬ Edges: {edges}    ▲ Triangles: {triangles}  "; ;
+            label.text = $" Data:  ● Points: {points}  ▲ Triangles: {triangles}  "; ;
 
             return label;
         }

@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
@@ -21,8 +22,15 @@ namespace andywiecko.PBD2D.Components
             base.Awake();
             triMesh = GetComponent<TriMesh>();
 
-            var edges = triMesh.SerializedData.Edges.ToEdgesArray();
             var triangles = triMesh.SerializedData.Triangles.ToTrianglesArray();
+            var edgesSet = new HashSet<Edge>();
+            foreach (var (a, b, c) in triangles)
+            {
+                edgesSet.Add((a, b));
+                edgesSet.Add((b, c));
+                edgesSet.Add((c, a));
+            }
+            var edges = edgesSet.ToArray();
 
             // TODO: cache this inside editor to draw it during editor?
             var externalEdges = new List<ExternalEdge>();

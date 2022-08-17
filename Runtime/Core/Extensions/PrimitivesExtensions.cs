@@ -56,10 +56,5 @@ namespace andywiecko.PBD2D.Core
             .Range(0, tris.Length / 3)
             .Select(i => (Triangle)(tris[3 * i], tris[3 * i + 1], tris[3 * i + 2]))
             .ToArray();
-
-        public static Edge[] ToEdgesArray(this int[] edges) => Enumerable
-            .Range(0, edges.Length / 2)
-            .Select(i => (Edge)(edges[2 * i], edges[2 * i + 1]))
-            .ToArray();
     }
 }
