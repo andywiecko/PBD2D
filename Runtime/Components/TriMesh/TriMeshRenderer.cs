@@ -1,6 +1,7 @@
 using andywiecko.BurstCollections;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
+using System;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,29 +13,70 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshRenderer : BaseComponent, ITriMeshRenderer
     {
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }
-        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
-        private TriMesh TriMesh => triMesh == null ? triMesh = GetComponent<TriMesh>() : triMesh;
-        private TriMesh triMesh;
-
-        [field: SerializeField, /*HideInInspector*/]
+        [field: SerializeField, HideInInspector]
         public Transform RendererTransform { get; set; } = default;
 
-        private Mesh Mesh { get => meshFilter.mesh; set => meshFilter.mesh = value; }
-        private MeshFilter meshFilter;
+        private TriMesh triMesh;
+        private Mesh mesh;
+
+        private void TryCreateRenderer()
+        {
+            if (RendererTransform != null)
+            {
+                return;
+            }
+
+            triMesh = GetComponent<TriMesh>();
+            var name = "RendererTransform";
+            var rendererTransform = transform.Find(name);
+            if (rendererTransform == null)
+            {
+                rendererTransform = new GameObject(name).transform;
+                rendererTransform.SetParent(transform);
+                rendererTransform.localPosition = float3.zero;
+                rendererTransform.localScale = (float3)1;
+            }
+
+            rendererTransform.TryAddComponent<MeshRenderer>();
+            var filter = rendererTransform.TryAddComponent<MeshFilter>();
+            filter.sharedMesh = triMesh.SerializedData.Mesh;
+            RendererTransform = rendererTransform;
+        }
+
+        private void OnValidate()
+        {
+
+            EditorDelayed(TryCreateRenderer);
+        }
+
+        private void EditorDelayed(Action a)
+        {
+            UnityEditor.EditorApplication.delayCall += b;
+            void b()
+            {
+                a();
+                UnityEditor.EditorApplication.delayCall -= b;
+            };
+        }
 
         private void Start()
         {
+            TryCreateRenderer();
+
+            triMesh = GetComponent<TriMesh>();
             RendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
-            meshFilter = RendererTransform.GetComponent<MeshFilter>();
+            var meshFilter = RendererTransform.GetComponent<MeshFilter>();
+            mesh = meshFilter.mesh;
 
             DisposeOnDestroy(
-                MeshVertices = new NativeArray<float3>(TriMesh.Positions.Value.Length, Allocator.Persistent)
+                MeshVertices = new NativeArray<float3>(triMesh.Positions.Value.Length, Allocator.Persistent)
             );
 
             Redraw();
         }
 
-        public void Redraw() { Mesh.SetVertices(MeshVertices.Value); Mesh.RecalculateBounds(); }
+        public void Redraw() { mesh.SetVertices(MeshVertices.Value); mesh.RecalculateBounds(); }
     }
 }
