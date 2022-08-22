@@ -16,7 +16,7 @@ namespace andywiecko.PBD2D.Components
     {
         public event Action OnSerializedDataChange;
 
-        [field: SerializeField]
+        [field: SerializeField, HideInInspector]
         public TriMeshSerializedData SerializedData { get; private set; } = default;
         private TriMeshSerializedData serializedData;
 
