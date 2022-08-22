@@ -84,7 +84,7 @@ namespace andywiecko.PBD2D.Components
         {
             Positions = GeneratePositions();
             Triangles = GenerateTriangles();
-            UVs = Positions.Select(i => (Vector2)math.clamp(i / radius + radius, 0, 1)).ToArray();
+            UVs = Positions.Select(i => (Vector2)math.clamp(0.5f * (i / radius + 1), 0, 1)).ToArray();
             RecalculateMesh();
         }
 
