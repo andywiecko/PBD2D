@@ -15,7 +15,13 @@ namespace andywiecko.PBD2D.Components
 
         private void Awake()
         {
-            Positions = new float2[4];
+            Positions = new[]
+            {
+                math.float2(0, 0),
+                math.float2(size.x, 0),
+                math.float2(size.x, size.y),
+                math.float2(0, size.y)
+            };
 
             Triangles = new[]
             {

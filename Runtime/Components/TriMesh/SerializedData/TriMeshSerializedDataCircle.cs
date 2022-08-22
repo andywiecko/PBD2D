@@ -19,6 +19,7 @@ namespace andywiecko.PBD2D.Components
 
         private void Awake()
         {
+            GenerateData();
             SubscribeDelayedCreateMesh();
         }
 
@@ -50,11 +51,15 @@ namespace andywiecko.PBD2D.Components
 
         private void OnValidate()
         {
+            GenerateData();
+            RecalculateMesh();
+        }
+
+        private void GenerateData()
+        {
             Positions = GeneratePositions();
             Triangles = GenerateTriangles();
             UVs = Positions.Select(i => (Vector2)math.clamp(0.5f * (i / radius + 1), 0, 1)).ToArray();
-
-            RecalculateMesh();
         }
     }
 }

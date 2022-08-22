@@ -44,7 +44,8 @@ namespace andywiecko.PBD2D.Components
 
         private void CreateMesh()
         {
-            Mesh = new() { name = "Generated Mesh" };
+            Mesh = new() { name = $"Generated Mesh ({GetType().Name})" };
+            RecalculateMesh();
             UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssetIfDirty(this);

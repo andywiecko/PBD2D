@@ -54,6 +54,18 @@ namespace andywiecko.PBD2D.Components
 
         public void Triangulate()
         {
+            if (texture == null)
+            {
+                Debug.LogWarning($"[{this}]: Missing {nameof(texture)}!", this);
+                return;
+            }
+
+            if (path.Data is { Length: < 3 })
+            {
+                Debug.LogWarning($"[{this}]: Path should contains at least 3 points!", this);
+                return;
+            }
+
             var pointCount = path.Data.Length;
             using var positions = new NativeArray<float2>(path.Data, Allocator.Persistent);
             static IEnumerable<int> Constraints(int i, int L)
