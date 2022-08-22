@@ -95,6 +95,7 @@ namespace andywiecko.PBD2D.Components
             Triangles = GenerateTriangles();
             UVs = Positions.Select(i => (Vector2)math.clamp(i / radius + radius, 0, 1)).ToArray();
 
+            Mesh.Clear();
             Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
             Mesh.SetTriangles(Triangles, submesh: 0);
             Mesh.SetUVs(0, UVs);
