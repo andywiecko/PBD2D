@@ -1,4 +1,3 @@
-using andywiecko.PBD2D.Core;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -20,38 +19,7 @@ namespace andywiecko.PBD2D.Components
 
         private void Awake()
         {
-            Positions = GeneratePositions();
-            Triangles = GenerateTriangles();
-            UVs = Positions.Select(i => (Vector2)math.clamp(i / radius + radius, 0, 1)).ToArray();
-
-            UnityEditor.EditorApplication.update += DelayedCreateMesh;
-        }
-
-        private void DelayedCreateMesh()
-        {
-            if (UnityEditor.EditorUtility.IsPersistent(this))
-            {
-                CreateMesh();
-                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
-                return;
-            }
-
-            if (UnityEditor.Selection.activeObject != this)
-            {
-                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
-                return;
-            }
-        }
-
-        private void CreateMesh()
-        {
-            Mesh = new();
-            Mesh.name = "Generated Mesh";
-            RecalculateMesh();
-
-            UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
-            UnityEditor.EditorUtility.SetDirty(this);
-            UnityEditor.AssetDatabase.SaveAssetIfDirty(this);
+            SubscribeDelayedCreateMesh();
         }
 
         private float2[] GeneratePositions()
@@ -85,16 +53,8 @@ namespace andywiecko.PBD2D.Components
             Positions = GeneratePositions();
             Triangles = GenerateTriangles();
             UVs = Positions.Select(i => (Vector2)math.clamp(0.5f * (i / radius + 1), 0, 1)).ToArray();
-            RecalculateMesh();
-        }
 
-        private void RecalculateMesh()
-        {
-            Mesh.Clear();
-            Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
-            Mesh.SetTriangles(Triangles, submesh: 0);
-            Mesh.SetUVs(0, UVs);
-            Mesh.RecalculateBounds();
+            RecalculateMesh();
         }
     }
 }

@@ -88,17 +88,6 @@ namespace andywiecko.PBD2D.Components
             RecalculateMesh();
         }
 
-        private void RecalculateMesh()
-        {
-#if UNITY_EDITOR
-            Mesh.Clear();
-            Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
-            Mesh.SetTriangles(Triangles, submesh: 0);
-            Mesh.SetUVs(0, UVs);
-            Mesh.RecalculateBounds();
-#endif
-        }
-
         protected virtual void OnValidate()
         {
 #if UNITY_EDITOR
@@ -128,35 +117,7 @@ namespace andywiecko.PBD2D.Components
 
         private void Awake()
         {
-            UnityEditor.EditorApplication.update += DelayedCreateMesh;
-        }
-
-
-        private void DelayedCreateMesh()
-        {
-            if (UnityEditor.EditorUtility.IsPersistent(this))
-            {
-                CreateMesh();
-                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
-                return;
-            }
-
-            if (UnityEditor.Selection.activeObject != this)
-            {
-                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
-                return;
-            }
-        }
-
-        private void CreateMesh()
-        {
-            Mesh = new();
-            Mesh.name = "Generated Mesh";
-            RecalculateMesh();
-
-            UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
-            UnityEditor.EditorUtility.SetDirty(this);
-            UnityEditor.AssetDatabase.SaveAssetIfDirty(this);
+            SubscribeDelayedCreateMesh();
         }
     }
 }
