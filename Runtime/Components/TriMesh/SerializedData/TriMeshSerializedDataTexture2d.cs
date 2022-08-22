@@ -84,28 +84,18 @@ namespace andywiecko.PBD2D.Components
             UVs = Positions
                 .Select(i => (Vector2)(i / math.float2(texture.width / 100f, texture.height / 100f)))
                 .ToArray();
-            RegenerateMesh();
+
+            RecalculateMesh();
         }
 
-        private void RegenerateMesh()
+        private void RecalculateMesh()
         {
 #if UNITY_EDITOR
-            if (Mesh != null)
-            {
-                UnityEditor.AssetDatabase.RemoveObjectFromAsset(Mesh);
-            }
-            Mesh = CreateMesh();
-            Mesh.name = "Generated Mesh";
-            UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
-
-            Mesh CreateMesh()
-            {
-                var mesh = new Mesh();
-                mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
-                mesh.SetTriangles(Triangles, submesh: 0);
-                mesh.SetUVs(0, UVs);
-                return mesh;
-            }
+            Mesh.Clear();
+            Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
+            Mesh.SetTriangles(Triangles, submesh: 0);
+            Mesh.SetUVs(0, UVs);
+            Mesh.RecalculateBounds();
 #endif
         }
 
@@ -134,6 +124,39 @@ namespace andywiecko.PBD2D.Components
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.delayCall -= GetPointsFromCollider;
 #endif 
+        }
+
+        private void Awake()
+        {
+            UnityEditor.EditorApplication.update += DelayedCreateMesh;
+        }
+
+
+        private void DelayedCreateMesh()
+        {
+            if (UnityEditor.EditorUtility.IsPersistent(this))
+            {
+                CreateMesh();
+                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
+                return;
+            }
+
+            if (UnityEditor.Selection.activeObject != this)
+            {
+                UnityEditor.EditorApplication.update -= DelayedCreateMesh;
+                return;
+            }
+        }
+
+        private void CreateMesh()
+        {
+            Mesh = new();
+            Mesh.name = "Generated Mesh";
+            RecalculateMesh();
+
+            UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssetIfDirty(this);
         }
     }
 }

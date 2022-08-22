@@ -1,6 +1,4 @@
 using andywiecko.PBD2D.Core;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -47,16 +45,9 @@ namespace andywiecko.PBD2D.Components
 
         private void CreateMesh()
         {
-            if (Mesh != null)
-            {
-                UnityEditor.AssetDatabase.RemoveObjectFromAsset(Mesh);
-            }
-
             Mesh = new();
             Mesh.name = "Generated Mesh";
-            Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
-            Mesh.SetTriangles(Triangles, submesh: 0);
-            Mesh.SetUVs(0, UVs);
+            RecalculateMesh();
 
             UnityEditor.AssetDatabase.AddObjectToAsset(Mesh, this);
             UnityEditor.EditorUtility.SetDirty(this);
@@ -94,12 +85,15 @@ namespace andywiecko.PBD2D.Components
             Positions = GeneratePositions();
             Triangles = GenerateTriangles();
             UVs = Positions.Select(i => (Vector2)math.clamp(i / radius + radius, 0, 1)).ToArray();
+            RecalculateMesh();
+        }
 
+        private void RecalculateMesh()
+        {
             Mesh.Clear();
             Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
             Mesh.SetTriangles(Triangles, submesh: 0);
             Mesh.SetUVs(0, UVs);
-
             Mesh.RecalculateBounds();
         }
     }

@@ -55,11 +55,6 @@ namespace andywiecko.PBD2D.Components
 
         private void CreateMesh()
         {
-            if (Mesh != null)
-            {
-                UnityEditor.AssetDatabase.RemoveObjectFromAsset(Mesh);
-            }
-
             Mesh = new();
             Mesh.name = "Generated Mesh";
             Mesh.SetVertices(Positions.Select(i => (Vector3)i.ToFloat3()).ToList());
