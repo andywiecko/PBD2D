@@ -47,8 +47,15 @@ namespace andywiecko.PBD2D.Components
 
         private void OnValidate()
         {
-
             EditorDelayed(TryCreateRenderer);
+        }
+
+        public void UpdateMeshReference()
+        {
+            TryCreateRenderer();
+            var meshFilter = RendererTransform.GetComponent<MeshFilter>();
+            var triMesh = GetComponent<TriMesh>();
+            meshFilter.mesh = triMesh.SerializedData?.Mesh;
         }
 
         private void EditorDelayed(Action a)

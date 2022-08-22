@@ -17,14 +17,12 @@ namespace andywiecko.PBD2D.Components
         public event Action OnSerializedDataChange;
 
         [field: SerializeField]
-        public TriMeshSerializedData SerializedData = default;
+        public TriMeshSerializedData SerializedData { get; private set; } = default;
         private TriMeshSerializedData serializedData;
 
         public IPhysicalMaterial PhysicalMaterial => physicalMaterial ? physicalMaterial : Core.PhysicalMaterial.Default;
         [SerializeField]
         private PhysicalMaterial physicalMaterial = default;
-
-        private bool IsValid => SerializedData;
 
         public Ref<NativeArray<Point>> Points { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; private set; }
@@ -38,7 +36,7 @@ namespace andywiecko.PBD2D.Components
         {
             base.Awake();
 
-            if (!IsValid)
+            if (!SerializedData)
             {
                 throw new NullReferenceException();
             }
@@ -92,10 +90,6 @@ namespace andywiecko.PBD2D.Components
 
         private void OnValidate()
         {
-            if (!IsValid)
-            {
-                return;
-            }
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.delayCall += DelayedOnValidate;
 #endif
@@ -115,7 +109,7 @@ namespace andywiecko.PBD2D.Components
 
         private void OnDrawGizmos()
         {
-            if (!IsValid)
+            if (!SerializedData)
             {
                 return;
             }
