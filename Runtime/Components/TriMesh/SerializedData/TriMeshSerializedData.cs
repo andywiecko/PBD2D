@@ -30,7 +30,10 @@ namespace andywiecko.PBD2D.Components
         {
             if (UnityEditor.EditorUtility.IsPersistent(this))
             {
-                CreateMesh();
+                if (Mesh == null)
+                {
+                    CreateMesh();
+                }
                 UnityEditor.EditorApplication.update -= DelayedCreateMesh;
                 return;
             }
