@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,21 +11,23 @@ namespace andywiecko.PBD2D.Components.Editor
 
         private void OnEnable()
         {
-            triMesh = Target.GetComponent<TriMesh>();
-            triMesh.OnSerializedDataChange += Target.UpdateMeshReference;
-        }
-
-        private void OnDestroy()
-        {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }
 
-            if (Target == null && Target.RendererTransform != null)
+            triMesh = Target.GetComponent<TriMesh>();
+            triMesh.OnSerializedDataChange += Target.UpdateMeshReference;
+        }
+
+        private void OnDisable()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || Target == null)
             {
-                triMesh.OnSerializedDataChange -= Target.UpdateMeshReference;
+                return;
             }
+
+            triMesh.OnSerializedDataChange -= Target.UpdateMeshReference;
         }
     }
 }
