@@ -49,31 +49,39 @@ namespace andywiecko.PBD2D.Core
         }
     }
 
-    [Serializable]
-    public class UnconfiguredType
-    {
-        [HideInInspector, SerializeField]
-        private string tag = "";
-
-        [field: HideInInspector, SerializeField]
-        public SerializedType Type { get; private set; }
-
-        [field: SerializeField]
-        public SimulationStep Step { get; private set; } = SimulationStep.Undefined;
-
-        public UnconfiguredType(SerializedType type)
-        {
-            tag = type.Value.Name.ToNonPascal();
-            Type = type;
-        }
-
-        public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
-    }
-
     [CreateAssetMenu(fileName = "PBD2D Jobs Order",
         menuName = "PBD2D/Solver/PBD2D Jobs Order")]
     public class PBD2DJobsOrder : JobsOrder
     {
+        private enum SimulationStep
+        {
+            Undefined = -1,
+            FrameStart,
+            Substep,
+            FrameEnd
+        }
+
+        [Serializable]
+        private class UnconfiguredType
+        {
+            [HideInInspector, SerializeField]
+            private string tag = "";
+
+            [field: HideInInspector, SerializeField]
+            public SerializedType Type { get; private set; }
+
+            [field: SerializeField]
+            public SimulationStep Step { get; private set; } = SimulationStep.Undefined;
+
+            public UnconfiguredType(SerializedType type)
+            {
+                tag = type.Value.Name.ToNonPascal();
+                Type = type;
+            }
+
+            public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
+        }
+
         private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)
             .Select(i => i.Value)
