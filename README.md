@@ -175,35 +175,33 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 ### v0.1.0
 
-- [ ] Add friction  for trifield-trifield collisions
+- [ ] Add friction for trifield-trifield collisions
 - [ ] Move external edges to trimesh
 - [ ] Refactor TriMesh gizmos
 - [ ] Test for most of the systems.
-- [ ] Investigate performance with combined dependencies.
 - [ ] Sample scenes + build online.
   - [ ] Washing machine scene (collisions)
   - [ ] Constraint scene
   - [ ] Friction scene
+  - [ ] Shape matching scene
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [ ] refactor triangulator editor, add support for raw data
+- [X] ~~refactor triangulator editor, add support for raw data~~.
 - [ ] Add preview gifs for fluids and rods.
-- [ ] Shuffle/sort constraint on creation (more randomized behavior)
 - [ ] Refactor shape matching constraint
 
 ### v1.0.0
 
 - [ ] Add cheap collisions edge-edge
-- [ ] Static/dynamic box
-- [ ] Static/dynamic circle, static capsule
 - [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Reimport and refactor rod structure.
-- [ ] Refactor system class to not be derived from `MonoBehaviour`. 
 - [ ] Reimport and refactor position based fluid.
 - [ ] Fluid "fancy" shader.
 - [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
 - [ ] Destructible bodies.
 - [ ] Connectors and lockers.
+- [ ] Shape matching clusters.
+- [ ] Investigate performance with combined dependencies.
 
 ### v2.0.0
 
