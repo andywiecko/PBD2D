@@ -64,15 +64,15 @@ namespace andywiecko.PBD2D.Components
 
         private void DrawRotation()
         {
-            var com = CenterOfMass.Value.Value.ToFloat3();
+            var com = CenterOfMass.Value.Value;
             var R = Rotation.Value.Value;
-            var right = R.Value.ToFloat3();
-            var up = MathUtils.Rotate90CCW(R.Value).ToFloat3();
+            var right = R.Value;
+            var up = MathUtils.Rotate90CCW(R.Value);
 
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(com, right);
+            GizmosUtils.DrawRay(com, right);
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(com, up);
+            GizmosUtils.DrawRay(com, up);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace andywiecko.PBD2D.Components
                 foreach (var b in lookup.Barycoords)
                 {
                     var p = pA * b.x + pB * b.y + pC * b.z;
-                    Gizmos.DrawSphere(p.ToFloat3(), 0.03f);
+                    GizmosUtils.DrawCircle(p, 0.03f);
                 }
             }
 
@@ -67,7 +67,7 @@ namespace andywiecko.PBD2D.Components
                     var p = pA * b.x + pB * b.y + pC * b.z;
                     // TODO: this should be cached, it can be valuable!
                     MathUtils.PointClosestPointOnLineSegment(p, e0, e1, out var q);
-                    Gizmos.DrawLine(p.ToFloat3(), q.ToFloat3());
+                    GizmosUtils.DrawLine(p, q);
                 }
             }
         }

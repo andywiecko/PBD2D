@@ -19,16 +19,16 @@ namespace andywiecko.PBD2D.Components
 
         private void OnDrawGizmos()
         {
-            var (point, normal) = Surface;
-            var tangent = normal.Rotate90CW();
-            var length = 100;
+            var (p, n) = Surface;
+            var t = n.Rotate90CW();
+            var l = 100;
+
             Gizmos.color = Color.black;
-            var p = point.ToFloat3();
-            var n = normal.ToFloat3();
-            Gizmos.DrawRay(p, +(length * tangent).ToFloat3());
-            Gizmos.DrawRay(p, -(length * tangent).ToFloat3());
+            GizmosUtils.DrawRay(p, +l * t);
+            GizmosUtils.DrawRay(p, -l * t);
+
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(p, 0.5f * n);
+            GizmosUtils.DrawRay(p, 0.5f * n);
         }
     }
 }

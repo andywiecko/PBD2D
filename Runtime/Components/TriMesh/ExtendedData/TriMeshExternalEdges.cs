@@ -76,13 +76,12 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            Gizmos.color = Color.red;
             var positions = triMesh.Positions.Value.AsReadOnly();
-            var edges = triMesh.Edges.Value.AsReadOnly();
+            Gizmos.color = Color.red;
             foreach (var edge in ExternalEdges.Value.AsReadOnly())
             {
                 var (pA, pB) = positions.At(edge);
-                Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
+                GizmosUtils.DrawLine(pA, pB);
 
                 var p = edge.GetCenter(positions);
                 var n = edge.GetNormal(positions);

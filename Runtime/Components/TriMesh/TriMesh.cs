@@ -114,7 +114,6 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            //Gizmos.color = 0.7f * Color.blue + 0.3f * Color.green;
             Gizmos.color = 0.7f * Color.yellow + 0.3f * Color.green;
 
             if (!Application.isPlaying)
@@ -123,9 +122,9 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            foreach (var position in Positions.Value)
+            foreach (var p in Positions.Value)
             {
-                Gizmos.DrawSphere(position.ToFloat3(), radius: 0.01f);
+                GizmosUtils.DrawCircle(p, 0.01f);
             }
 
             foreach (var edge in Edges.Value)
@@ -133,7 +132,7 @@ namespace andywiecko.PBD2D.Components
                 var (idA, idB) = edge;
                 var pA = Positions.Value[idA];
                 var pB = Positions.Value[idB];
-                Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
+                GizmosUtils.DrawLine(pA, pB);
             }
 
             if (true)
@@ -144,7 +143,7 @@ namespace andywiecko.PBD2D.Components
                     var a = Positions.Value.At(p);
                     var v = Velocities.Value.At(p);
 
-                    Gizmos.DrawRay(a.ToFloat3(), 0.001f * v.ToFloat3());
+                    GizmosUtils.DrawRay(a, 0.001f * v);
                 }
             }
         }
@@ -155,7 +154,7 @@ namespace andywiecko.PBD2D.Components
             var s = transform.localScale.ToFloat4().xyz;
             foreach (var p in SerializedData.Positions)
             {
-                Gizmos.DrawSphere(T(p.ToFloat3()), radius: 0.01f);
+                GizmosUtils.DrawCircle(T(p.ToFloat3()), 0.01f);
             }
 
             var triangles = SerializedData.Triangles;
@@ -164,12 +163,12 @@ namespace andywiecko.PBD2D.Components
             {
                 var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
                 var (pA, pB, pC) = (positions[a].ToFloat3(), positions[b].ToFloat3(), positions[c].ToFloat3());
-                Gizmos.DrawLine(T(pA), T(pB));
-                Gizmos.DrawLine(T(pB), T(pC));
-                Gizmos.DrawLine(T(pC), T(pA));
+                GizmosUtils.DrawLine(T(pA), T(pB));
+                GizmosUtils.DrawLine(T(pB), T(pC));
+                GizmosUtils.DrawLine(T(pC), T(pA));
             }
 
-            float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);
+            float2 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos).xy;
         }
     }
 }
