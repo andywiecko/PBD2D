@@ -70,9 +70,9 @@ namespace andywiecko.PBD2D.Core
         public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
     }
 
-    [CreateAssetMenu(fileName = "SolverSystemsExecutionOrder",
-        menuName = "PBD2D/Solver/Solver Systems Execution Order")]
-    public class SolverJobsExecutionOrder : JobsOrder
+    [CreateAssetMenu(fileName = "PBD2D Jobs Order",
+        menuName = "PBD2D/Solver/PBD2D Jobs Order")]
+    public class PBD2DJobsOrder : JobsOrder
     {
         private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)

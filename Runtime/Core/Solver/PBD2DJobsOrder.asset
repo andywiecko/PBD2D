@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff7cfd002b57be42b2fb365812a1161, type: 3}
-  m_Name: DefaultJobsExecutionOrder
+  m_Name: PBD2DJobsOrder
   m_EditorClassIdentifier: 
   <TargetAssemblies>k__BackingField:
   - andywiecko.PBD2D.Systems
