@@ -86,7 +86,7 @@ namespace andywiecko.PBD2D.Components
 
                 var p = edge.GetCenter(positions);
                 var n = edge.GetNormal(positions);
-                GizmosExtensions.DrawArrow(p, p + 0.33f * n);
+                GizmosUtils.DrawArrow(p, p + 0.33f * n);
             }
         }
     }

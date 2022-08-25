@@ -33,7 +33,7 @@ namespace andywiecko.PBD2D.Components
             foreach (var edge in externalEdges)
             {
                 var (pA, pB) = triMesh.Positions.Value.At(edge);
-                GizmosExtensions.DrawCapsule(pA, pB, CollisionRadius);
+                GizmosUtils.DrawCapsule(pA, pB, CollisionRadius);
             }
         }
     }

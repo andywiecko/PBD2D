@@ -46,7 +46,7 @@ namespace andywiecko.PBD2D.Components
             }
 
             Gizmos.color = 0.3f * Color.red + 0.7f * Color.yellow;
-            GizmosExtensions.DrawRectangle(Bounds.Min, Bounds.Max);
+            GizmosUtils.DrawRectangle(Bounds.Min, Bounds.Max);
 
             Gizmos.color = color;
 
@@ -81,7 +81,7 @@ namespace andywiecko.PBD2D.Components
             foreach (var el in set)
             {
                 var (min, max) = tree.Volumes[el];
-                GizmosExtensions.DrawRectangle(min, max);
+                GizmosUtils.DrawRectangle(min, max);
             }
         }
     }

@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    public static class GizmosExtensions
+    public static class GizmosUtils
     {
+        public static void DrawLine(float2 a, float2 b, float z = 0)
+        {
+
+        }
+
         public static void DrawRectangle(float2 min, float2 max)
         {
             var (minx, miny) = min;
