@@ -13,44 +13,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
-    [Serializable]
-    public class SerializedType
-    {
-        [HideInInspector, SerializeField]
-        private string tag = "";
-
-        [field: SerializeField, HideInInspector]
-        public string Guid { get; private set; } = default;
-
-#if UNITY_EDITOR
-        [SerializeField]
-        private MonoScript script = default;
-#endif
-
-        [HideInInspector, SerializeField]
-        private string assemblyQualifiedName = "";
-
-        public Type Value => Type.GetType(assemblyQualifiedName);
-
-        public SerializedType(Type type, string guid)
-        {
-            Guid = guid;
-            Validate(type);
-        }
-
-        public void Validate(Type type)
-        {
-            tag = type.Name.ToNonPascal();
-            assemblyQualifiedName = type.AssemblyQualifiedName;
-#if UNITY_EDITOR
-            var path = AssetDatabase.GUIDToAssetPath(Guid);
-            script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-#endif
-        }
-    }
-
-    [CreateAssetMenu(fileName = "PBD2D Jobs Order",
-        menuName = "PBD2D/Solver/PBD2D Jobs Order")]
+    [CreateAssetMenu(fileName = "PBD2D Jobs Order", menuName = "PBD2D/Solver/PBD2D Jobs Order")]
     public class PBD2DJobsOrder : JobsOrder
     {
         private enum SimulationStep
@@ -67,24 +30,22 @@ namespace andywiecko.PBD2D.Core
             [HideInInspector, SerializeField]
             private string tag = "";
 
-            [field: HideInInspector, SerializeField]
+            [field: SerializeField]
             public SerializedType Type { get; private set; }
 
             [field: SerializeField]
             public SimulationStep Step { get; private set; } = SimulationStep.Undefined;
 
-            public UnconfiguredType(SerializedType type)
+            public UnconfiguredType(Type type, string guid)
             {
-                tag = type.Value.Name.ToNonPascal();
-                Type = type;
+                Type = new(type, guid);
+                tag = type.Name.ToNonPascal();
             }
-
-            public UnconfiguredType(Type type, string guid) : this(new(type, guid)) { }
         }
 
         private List<Type> GetSerializedTypes() => new[] { frameStart, substep, frameEnd }
             .SelectMany(i => i)
-            .Select(i => i.Value)
+            .Select(i => i.Type)
             .ToList();
 
         private List<SerializedType> GetListAtStep(SimulationStep step) => step switch
@@ -143,7 +104,7 @@ namespace andywiecko.PBD2D.Core
                 var types = new List<Type>(capacity: list.Count);
                 foreach (var st in list)
                 {
-                    types.Add(st.Value);
+                    types.Add(st.Type);
                 }
                 jobsOrder.Add(s, types);
             }
@@ -185,7 +146,7 @@ namespace andywiecko.PBD2D.Core
             {
                 var list = GetListAtStep(step)
                     .DistinctBy(i => i.Guid)
-                    .Where(i => i.Value is not null)
+                    .Where(i => i.Type is not null)
                     .ToList();
 
                 list.RemoveAll(i => !targetGuids.Contains(i.Guid));

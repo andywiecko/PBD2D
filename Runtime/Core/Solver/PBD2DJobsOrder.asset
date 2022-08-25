@@ -17,84 +17,54 @@ MonoBehaviour:
   targetAssemblies:
   - {fileID: 5897886265953266890, guid: a49c56f9dd8c5c140a2a6fcdcdbc1acc, type: 3}
   frameStart:
-  - tag: Bounding Volume Trees Intersection System
-    <Guid>k__BackingField: 0b7e003b21377784fad35cb20454d986
-    script: {fileID: 11500000, guid: 0b7e003b21377784fad35cb20454d986, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreesIntersectionSystem,
+  - <Guid>k__BackingField: 0b7e003b21377784fad35cb20454d986
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreesIntersectionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   substep:
-  - tag: Position Based Dynamics Step Start System
-    <Guid>k__BackingField: e09d1af8e500096498f1414949b909bc
-    script: {fileID: 11500000, guid: e09d1af8e500096498f1414949b909bc, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepStartSystem,
+  - <Guid>k__BackingField: e09d1af8e500096498f1414949b909bc
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepStartSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Edge Length Constraints System
-    <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
-    script: {fileID: 11500000, guid: d2118c6b0d6718840bcfafa82c8b8cb3, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.EdgeLengthConstraintsSystem,
+  - <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.EdgeLengthConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Triangle Area Constraints System
-    <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
-    script: {fileID: 11500000, guid: 73cc6ccdd8744f841947e4cf8086776d, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriangleAreaConstraintsSystem,
+  - <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.TriangleAreaConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Shape Matching Constraint System
-    <Guid>k__BackingField: 538b76c4234524e4b8b9b7faa5d6e9aa
-    script: {fileID: 11500000, guid: 538b76c4234524e4b8b9b7faa5d6e9aa, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.ShapeMatchingConstraintSystem,
+  - <Guid>k__BackingField: 538b76c4234524e4b8b9b7faa5d6e9aa
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.ShapeMatchingConstraintSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Mouse Interaction System
-    <Guid>k__BackingField: 9a89fe673d7a53a438bda9e23d905790
-    script: {fileID: 11500000, guid: 9a89fe673d7a53a438bda9e23d905790, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.MouseInteractionSystem, andywiecko.PBD2D.Systems,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Point Line Collision System
-    <Guid>k__BackingField: 2ed1a7a66d14f2d42a1643f489f93c4e
-    script: {fileID: 11500000, guid: 2ed1a7a66d14f2d42a1643f489f93c4e, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.PointLineCollisionSystem, andywiecko.PBD2D.Systems,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Point Tri Field Collision System
-    <Guid>k__BackingField: 26302bb49924c4547aac45396fb3d34f
-    script: {fileID: 11500000, guid: 26302bb49924c4547aac45396fb3d34f, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.PointTriFieldCollisionSystem,
+  - <Guid>k__BackingField: 9a89fe673d7a53a438bda9e23d905790
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.MouseInteractionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Capsule Capsule Collision System
-    <Guid>k__BackingField: 9524172c6d9c1bb449f00373f3c017ab
-    script: {fileID: 11500000, guid: 9524172c6d9c1bb449f00373f3c017ab, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionSystem,
+  - <Guid>k__BackingField: 2ed1a7a66d14f2d42a1643f489f93c4e
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PointLineCollisionSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Position Based Dynamics Step End System
-    <Guid>k__BackingField: 088831c1e88b859458a06401f038b333
-    script: {fileID: 11500000, guid: 088831c1e88b859458a06401f038b333, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepEndSystem,
+  - <Guid>k__BackingField: 26302bb49924c4547aac45396fb3d34f
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PointTriFieldCollisionSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: 9524172c6d9c1bb449f00373f3c017ab
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.CapsuleCapsuleCollisionSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: 088831c1e88b859458a06401f038b333
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PositionBasedDynamicsStepEndSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   frameEnd:
-  - tag: Tri Mesh Renderer System
-    <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
-    script: {fileID: 11500000, guid: d153ff9d65a593f48b913a6c8edb8582, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.TriMeshRendererSystem, andywiecko.PBD2D.Systems,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Bounding Volume Tree External Edges System
-    <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
-    script: {fileID: 11500000, guid: e18b797d352459e469c033bd08af7304, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreeExternalEdgesSystem,
+  - <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.TriMeshRendererSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Bounding Volume Tree Points System
-    <Guid>k__BackingField: bcd551dc94f7eb04b9f65ebcd9f33df7
-    script: {fileID: 11500000, guid: bcd551dc94f7eb04b9f65ebcd9f33df7, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreePointsSystem,
+  - <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreeExternalEdgesSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - tag: Bounding Volume Tree Triangles System
-    <Guid>k__BackingField: d6127d639e88d0c40aea6c6afb089647
-    script: {fileID: 11500000, guid: d6127d639e88d0c40aea6c6afb089647, type: 3}
-    assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundingVolumeTreeTrianglesSystem,
+  - <Guid>k__BackingField: bcd551dc94f7eb04b9f65ebcd9f33df7
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreePointsSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: d6127d639e88d0c40aea6c6afb089647
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreeTrianglesSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   undefinedTypes:
   - tag: Bounds System
     <Type>k__BackingField:
-      tag: Bounds System
       <Guid>k__BackingField: 05a956019230a6f479500b7b576c54f3
-      script: {fileID: 11500000, guid: 05a956019230a6f479500b7b576c54f3, type: 3}
-      assemblyQualifiedName: andywiecko.PBD2D.Systems.BoundsSystem, andywiecko.PBD2D.Systems,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundsSystem,
+        andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     <Step>k__BackingField: -1
