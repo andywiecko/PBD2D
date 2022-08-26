@@ -10,6 +10,13 @@ namespace andywiecko.PBD2D.Core
         public static void DrawRay(float2 a, float2 n, float z = 0) => Gizmos.DrawRay(a.ToFloat3(z), n.ToFloat3());
         public static void DrawCircle(float2 a, float r, float z = 0) => Gizmos.DrawWireSphere(a.ToFloat3(z), r);
 
+        public static void DrawTriangle(float2 a, float2 b, float2 c, float z = 0)
+        {
+            DrawLine(a, b, z);
+            DrawLine(b, c, z);
+            DrawLine(c, a, z);
+        }
+
         public static void DrawRectangle(float2 min, float2 max, float z = 0)
         {
             var (minx, miny) = min;

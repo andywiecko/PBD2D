@@ -114,61 +114,32 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            Gizmos.color = 0.7f * Color.yellow + 0.3f * Color.green;
-
-            if (!Application.isPlaying)
-            {
-                DrawPreview();
-                return;
-            }
-
-            foreach (var p in Positions.Value)
-            {
-                GizmosUtils.DrawCircle(p, 0.01f);
-            }
-
-            foreach (var edge in Edges.Value)
-            {
-                var (idA, idB) = edge;
-                var pA = Positions.Value[idA];
-                var pB = Positions.Value[idB];
-                GizmosUtils.DrawLine(pA, pB);
-            }
-
-            if (true)
-            {
-                Gizmos.color = Color.blue;
-                foreach (var p in Points.Value)
-                {
-                    var a = Positions.Value.At(p);
-                    var v = Velocities.Value.At(p);
-
-                    GizmosUtils.DrawRay(a, 0.001f * v);
-                }
-            }
-        }
-
-        private void DrawPreview()
-        {
             var rb = new RigidTransform(transform.rotation, transform.position);
             var s = transform.localScale.ToFloat4().xyz;
-            foreach (var p in SerializedData.Positions)
+            float2 T(float2 x) => Application.isPlaying ? x : math.transform(rb, s * (x.ToFloat3() - rb.pos) + s * rb.pos).xy;
+
+            ReadOnlySpan<float2> positions = Application.isPlaying ? Positions.Value : SerializedData.Positions;
+            Gizmos.color = 0.7f * Color.yellow + 0.3f * Color.green;
+            foreach (var p in positions)
             {
-                GizmosUtils.DrawCircle(T(p.ToFloat3()), 0.01f);
+                GizmosUtils.DrawCircle(T(p), 0.01f);
             }
 
-            var triangles = SerializedData.Triangles;
-            var positions = SerializedData.Positions;
-            for (int i = 0; i < triangles.Length / 3; i++)
-            {
-                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
-                var (pA, pB, pC) = (positions[a].ToFloat3(), positions[b].ToFloat3(), positions[c].ToFloat3());
-                GizmosUtils.DrawLine(T(pA), T(pB));
-                GizmosUtils.DrawLine(T(pB), T(pC));
-                GizmosUtils.DrawLine(T(pC), T(pA));
-            }
+            IEnumerable<(int, int, int)> triangles = Application.isPlaying ?
+                Triangles.Value.Select(i => ((int)i.IdA, (int)i.IdB, (int)i.IdC)) :
+                Enumerable
+                    .Range(0, SerializedData.Triangles.Length / 3)
+                    .Select(i =>
+                    {
+                        var t = SerializedData.Triangles;
+                        return (t[3 * i], t[3 * i + 1], t[3 * i + 2]);
+                    });
 
-            float2 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos).xy;
+            foreach (var (a, b, c) in triangles)
+            {
+                var (pA, pB, pC) = (positions[a], positions[b], positions[c]);
+                GizmosUtils.DrawTriangle(T(pA), T(pB), T(pC));
+            }
         }
     }
 }
