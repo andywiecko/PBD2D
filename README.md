@@ -83,7 +83,6 @@ click c href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
 - [ ] Add preview gifs for fluids and rods.
-- [ ] Refactor shape matching constraint
 
 **v1.0.0**
 

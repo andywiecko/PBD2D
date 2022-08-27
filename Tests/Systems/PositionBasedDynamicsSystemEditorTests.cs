@@ -16,7 +16,7 @@ namespace andywiecko.PBD2D.Editor.Tests
 
             public float2 ExternalAcceleration { get; set; } = 0;
             public float Damping { get; set; } = 0;
-            public Ref<NativeList<Point>> Points { get; } = new NativeList<Point>(PointsCount, DataAllocator) { Length = 1, [default] = new(default) };
+            public Ref<NativeList<Point>> Points { get; } = new NativeList<Point>(PointsCount, DataAllocator) { Length = 1, [default] = default };
             public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);
             public Ref<NativeIndexedArray<Id<Point>, float2>> Velocities { get; } = new NativeIndexedArray<Id<Point>, float2>(PointsCount, DataAllocator);

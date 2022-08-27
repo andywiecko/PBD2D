@@ -1,6 +1,5 @@
 using andywiecko.BurstMathUtils;
 using System;
-using System.Diagnostics;
 using Unity.Collections;
 using Unity.Mathematics;
 
@@ -9,66 +8,60 @@ namespace andywiecko.PBD2D.Core
     [BurstCompatible]
     public static class ShapeMatchingUtils
     {
-        public static float2 CalculateCenterOfMass(ReadOnlySpan<float2> positions, ReadOnlySpan<float> weights, float totalMass)
-        {
-            AssertBufferLengths(positions, weights);
-
-            var com = (float2)0;
-            foreach (var i in 0..positions.Length)
-            {
-                var p = positions[i];
-                var m = 1 / weights[i];
-                com += m * p;
-            }
-            com /= totalMass;
-            return com;
-        }
-
-        public static float CalculateTotalMass(ReadOnlySpan<float> weights)
+        public static float CalculateTotalMass(ReadOnlySpan<Point> points, ReadOnlySpan<float> weights)
         {
             var M = 0f;
-            foreach (var mInv in weights)
+            foreach (var p in points)
             {
-                M += 1 / mInv;
+                M += 1 / weights[(int)p.Id];
             }
             return M;
         }
 
-        public static float2x2 CalculateAqqMatrix(ReadOnlySpan<float2> relativePositions, ReadOnlySpan<float> weights)
+        public static float2x2 CalculateAqqMatrix(ReadOnlySpan<PointShapeMatchingConstraint> constraints, ReadOnlySpan<float> weights)
         {
-            AssertBufferLengths(relativePositions, weights);
-
             var Aqq = float2x2.zero;
-            foreach (var i in 0..relativePositions.Length)
+            foreach (var (i, _, q) in constraints)
             {
-                var q = relativePositions[i];
-                var m = 1 / weights[i];
+                var m = 1 / weights[(int)i];
                 Aqq += m * MathUtils.OuterProduct(q, q);
             }
             return math.inverse(Aqq);
         }
 
-        public static void CalculateRelativePositions(Span<float2> relativePositions, ReadOnlySpan<float2> positions, float2 com)
+        public static float2x2 CalculateApqMatrix(ReadOnlySpan<PointShapeMatchingConstraint> constraints, ReadOnlySpan<float> weights)
         {
-            AssertBufferLengths(relativePositions, positions);
-
-            foreach (var i in 0..positions.Length)
+            var Apq = float2x2.zero;
+            foreach (var (i, p, q) in constraints)
             {
-                relativePositions[i] = positions[i] - com;
+                var m = 1 / weights[(int)i];
+                Apq += m * MathUtils.OuterProduct(p, q);
+            }
+            return Apq;
+        }
+
+        public static void GenerateConstraints(NativeList<PointShapeMatchingConstraint> constraints, ReadOnlySpan<Point> points, ReadOnlySpan<float2> positions, float2 com)
+        {
+            foreach (var p in points)
+            {
+                var id = p.Id;
+                var q = positions[(int)id] - com;
+                constraints.Add(new(id, q));
             }
         }
 
-        [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS")]
-        private static void AssertBufferLengths<T1, T2>(ReadOnlySpan<T1> span0, ReadOnlySpan<T2> span1)
+        public static float2 CalculateCenterOfMass<T>(ReadOnlySpan<T> points, ReadOnlySpan<float2> positions, ReadOnlySpan<float> weights, float totalMass)
+            where T : struct, IPoint
         {
-            if (span0.Length != span1.Length)
+            var com = float2.zero;
+            foreach (var p in points)
             {
-                throw new ArgumentOutOfRangeException($"Buffers have not the same length! First = {span0.Length}, second = {span1.Length}");
+                var id = (int)p.Id;
+                var q = positions[id];
+                var m = 1 / weights[id];
+                com += m * q;
             }
+            return com / totalMass;
         }
-
-        [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS")]
-        private static void AssertBufferLengths<T>(ReadOnlySpan<T> span0, ReadOnlySpan<T> span1)
-            => AssertBufferLengths<T, T>(span0, span1);
     }
 }

@@ -30,13 +30,12 @@ namespace andywiecko.PBD2D.Core
         float Beta { get; }
         float TotalMass { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> InitialRelativePositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeIndexedArray<Id<Point>, float2>> RelativePositions { get; }
         Ref<NativeReference<float2>> CenterOfMass { get; }
         Ref<NativeReference<float2x2>> ApqMatrix { get; }
-        float2x2 AqqMatrix { get; }
+        Ref<NativeReference<float2x2>> AqqMatrix { get; }
         Ref<NativeReference<float2x2>> AMatrix { get; }
         Ref<NativeReference<Complex>> Rotation { get; }
+        Ref<NativeList<PointShapeMatchingConstraint>> Constraints { get; }
     }
 }

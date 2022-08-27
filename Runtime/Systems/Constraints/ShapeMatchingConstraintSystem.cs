@@ -15,78 +15,69 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct CalculateCenterOfMassJob : IJob
         {
-            private NativeReference<float2> com;
+            [ReadOnly]
+            private NativeArray<PointShapeMatchingConstraint> constraints;
+            private NativeReference<float2> comRef;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
-            private readonly float M;
+            private readonly float totalMass;
 
             public CalculateCenterOfMassJob(IShapeMatchingConstraint component)
             {
-                com = component.CenterOfMass;
+                constraints = component.Constraints.Value.AsDeferredJobArray();
+                comRef = component.CenterOfMass;
                 weights = component.Weights.Value.AsReadOnly();
                 positions = component.Positions.Value.AsReadOnly();
-                M = component.TotalMass;
+                totalMass = component.TotalMass;
             }
 
             public void Execute()
             {
-                com.Value = ShapeMatchingUtils.CalculateCenterOfMass(positions, weights, totalMass: M);
+                comRef.Value = ShapeMatchingUtils.CalculateCenterOfMass(constraints.AsReadOnlySpan(), positions, weights, totalMass);
             }
         }
 
         [BurstCompile]
-        private struct CalculateRelativePositionsJob : IJobParallelFor
+        private struct CalculateRelativePositionsJob : IJobParallelForDefer
         {
+            private NativeArray<PointShapeMatchingConstraint> constraints;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
-            private NativeIndexedArray<Id<Point>, float2> relativePositions;
-            private NativeReference<float2>.ReadOnly com;
+            private NativeReference<float2>.ReadOnly comRef;
 
             public CalculateRelativePositionsJob(IShapeMatchingConstraint component)
             {
+                constraints = component.Constraints.Value.AsDeferredJobArray();
                 positions = component.Positions.Value.AsReadOnly();
-                relativePositions = component.RelativePositions;
-                com = component.CenterOfMass.Value.AsReadOnly();
-            }
-
-            public JobHandle Schedule(JobHandle dependencies)
-            {
-                return this.Schedule(relativePositions.Length, innerloopBatchCount: 64, dependencies);
+                comRef = component.CenterOfMass.Value.AsReadOnly();
             }
 
             public void Execute(int i)
             {
-                var pId = (Id<Point>)i;
-                relativePositions[pId] = positions[pId] - com.Value;
+                var c = constraints[i];
+                var id = c.Id;
+                c.RelativePosition = positions[id] - comRef.Value;
+                constraints[i] = c;
             }
         }
 
         [BurstCompile]
         private struct CalculateApqMatrixJob : IJob
         {
-            private NativeReference<float2x2> Apq;
-            private NativeIndexedArray<Id<Point>, float2>.ReadOnly relativePositions;
-            private NativeIndexedArray<Id<Point>, float2>.ReadOnly initialRelativePositions;
+            private NativeReference<float2x2> ApqRef;
+            [ReadOnly]
+            private NativeArray<PointShapeMatchingConstraint> constraints;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
 
             public CalculateApqMatrixJob(IShapeMatchingConstraint component)
             {
-                Apq = component.ApqMatrix;
-                relativePositions = component.RelativePositions.Value.AsReadOnly();
-                initialRelativePositions = component.InitialRelativePositions.Value.AsReadOnly();
+                ApqRef = component.ApqMatrix;
+                constraints = component.Constraints.Value.AsDeferredJobArray();
                 weights = component.Weights.Value.AsReadOnly();
             }
 
             public void Execute()
             {
-                var apq = float2x2.zero;
-                foreach (var (pId, p) in relativePositions.IdsValues)
-                {
-                    var m = 1 / weights[pId];
-                    var q = initialRelativePositions[pId];
-                    apq += m * MathUtils.OuterProduct(p, q);
-                }
-
-                Apq.Value = apq;
+                ApqRef.Value = ShapeMatchingUtils.CalculateApqMatrix(constraints.AsReadOnlySpan(), weights);
             }
         }
 
@@ -94,7 +85,7 @@ namespace andywiecko.PBD2D.Systems
         private struct CalculateRotationMatrixJob : IJob
         {
             private NativeReference<float2x2>.ReadOnly ApqRef;
-            private readonly float2x2 Aqq;
+            private NativeReference<float2x2>.ReadOnly AqqRef;
 
             public NativeReference<Complex> RRef;
             public NativeReference<float2x2> ARef;
@@ -103,7 +94,7 @@ namespace andywiecko.PBD2D.Systems
             public CalculateRotationMatrixJob(IShapeMatchingConstraint component)
             {
                 ApqRef = component.ApqMatrix.Value.AsReadOnly();
-                Aqq = component.AqqMatrix;
+                AqqRef = component.AqqMatrix.Value.AsReadOnly();
                 RRef = component.Rotation;
                 ARef = component.AMatrix;
                 beta = component.Beta;
@@ -112,6 +103,7 @@ namespace andywiecko.PBD2D.Systems
             public void Execute()
             {
                 var Apq = ApqRef.Value;
+                var Aqq = AqqRef.Value;
                 MathUtils.PolarDecomposition(Apq, out var V);
                 RRef.Value = new Complex(V);
                 var A = math.mul(Apq, Aqq);
@@ -120,37 +112,35 @@ namespace andywiecko.PBD2D.Systems
         }
 
         [BurstCompile]
-        private struct ApplyShapeMatchingConstraintJob : IJobParallelFor
+        private struct ApplyShapeMatchingConstraintJob : IJob
         {
             private NativeIndexedArray<Id<Point>, float2> positions;
             private readonly float k;
             private NativeReference<float2x2>.ReadOnly ARef;
-            private NativeIndexedArray<Id<Point>, float2>.ReadOnly initialRelativePositions;
-            private NativeReference<float2>.ReadOnly comRef;
+            [ReadOnly]
+            private NativeArray<PointShapeMatchingConstraint> constraints;
 
             public ApplyShapeMatchingConstraintJob(IShapeMatchingConstraint component)
             {
                 positions = component.Positions;
                 k = component.Stiffness;
                 ARef = component.AMatrix.Value.AsReadOnly();
-                initialRelativePositions = component.InitialRelativePositions.Value.AsReadOnly();
-                comRef = component.CenterOfMass.Value.AsReadOnly();
+                constraints = component.Constraints.Value.AsDeferredJobArray();
             }
 
-            public JobHandle Schedule(JobHandle dependencies)
+            public void Execute()
             {
-                return this.Schedule(positions.Length, innerloopBatchCount: 64, dependencies);
+                foreach (var c in constraints)
+                {
+                    Execute(c);
+                }
             }
 
-            public void Execute(int index)
+            public void Execute(PointShapeMatchingConstraint c)
             {
-                var pId = (Id<Point>)index;
+                var (id, p, q) = c;
                 var A = ARef.Value;
-                var p = positions[pId];
-                var q = initialRelativePositions[pId];
-                var com = comRef.Value;
-
-                positions[pId] = math.lerp(p, com + math.mul(A, q), k);
+                positions[id] -= k * (p - math.mul(A, q));
             }
         }
 
@@ -159,7 +149,7 @@ namespace andywiecko.PBD2D.Systems
             foreach (var component in References)
             {
                 dependencies = new CalculateCenterOfMassJob(component).Schedule(dependencies);
-                dependencies = new CalculateRelativePositionsJob(component).Schedule(dependencies);
+                dependencies = new CalculateRelativePositionsJob(component).Schedule(component.Constraints.Value, 64, dependencies);
                 dependencies = new CalculateApqMatrixJob(component).Schedule(dependencies);
                 dependencies = new CalculateRotationMatrixJob(component).Schedule(dependencies);
                 dependencies = new ApplyShapeMatchingConstraintJob(component).Schedule(dependencies);
