@@ -2,10 +2,20 @@
 
 Unity Position Based Dynamics in two dimensions.
 
+TODO: Add note about packages/and possible upm registry
+
+
+Position based dynamics is a great method for interactive physics simulation.
+For the newcomers the [paper][muller.2007][^1] is highly recommended.
+
+... or [survey][bender.2017][^3]
+
+
+TODO: Add note about triangulation.
 
 **Package summary:**
 
-- (Extended) Position based dynamics, including constraints:
+- (Extended) position based dynamics, including:
   - Edge length constraint
   - Triangle area constraint
   - Shape matching constraint
@@ -21,7 +31,6 @@ Unity Position Based Dynamics in two dimensions.
 - [PBD2D](#pbd2d)
   - [Table od Contents](#table-od-contents)
   - [Getting started](#getting-started)
-  - [Introduction](#introduction)
   - [Architecture](#architecture)
   - [Roadmap](#roadmap)
   - [Dependencies](#dependencies)
@@ -29,31 +38,20 @@ Unity Position Based Dynamics in two dimensions.
 
 ## Getting started
 
-TODO: Add note about packages/and possible upm registry
-
-## Introduction
-
-Position based dynamics is a great method for interactive physics simulation.
-For the newcomers the [paper][muller.2007][^1] is highly recommended.
-
-... or [survey][bender.2017][^3]
-
-
-TODO: Add note about triangulation.
+Install **WRITE ME**
 
 
 ## Architecture
 
-The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern and it uses [andywiecko.ECS](https://github.com/andywiecko/ECS) package.
+The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern and it uses [andywiecko.ECS](https://github.com/andywiecko/ECS) as implementation of the core engine.
 
 The package consist of three main assemblies:
 
-- `andywiecko.PBD2D.Core` contains all contracts, common structs, and all required abstractions.
-- `andywiecko.PBD2D.Components` which consists of components implementations.
-- `andywiecko.PBD2D.Systems` contains all available systems for components, i.e. all logic can be found here.
+- [`andywiecko.PBD2D.Core`][Core] contains all contracts, common structs, and all required abstractions.
+- [`andywiecko.PBD2D.Components`][Components] which consists of components implementations.
+- [`andywiecko.PBD2D.Systems`][Systems] contains all available systems for components, i.e. all logic can be found here.
 
 Below one can find a dependency graph for the main project assemblies.
-Click on the selected graph element to see the details.
 
 ```mermaid
 %%{init: {"theme": "neutral", "flowchart": {"curve": "stepBefore", "useMaxwidth": false}}}%%
@@ -129,3 +127,7 @@ click c href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 [bender.2017]:https://doi.org/10.2312/egt.20171034
 [^3]:J.Bender, M.Müller, and M.Macklin, "A Survey on Position Based Dynamics," [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)][bender.2017].
+
+[Core]:https://github.com/andywiecko/PBD2D/tree/main/Runtime/Core
+[Components]:https://github.com/andywiecko/PBD2D/tree/main/Runtime/Components
+[Systems]:https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems
