@@ -38,23 +38,5 @@ namespace andywiecko.PBD2D.Core
             var (pA, pB, pC) = (positions[(int)pIdA], positions[(int)pIdB], positions[(int)pIdC]);
             return MathUtils.TriangleSignedArea2(pA, pB, pC);
         }
-
-        public static bool PointInside(this Triangle triangle, float2 point, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
-        {
-            var (idA, idB, idC) = triangle;
-            var (a, b, c) = (positions[idA], positions[idB], positions[idC]);
-            return MathUtils.PointInsideTriangle(point, a, b, c);
-        }
-
-        public static float2 GetCenter(this Triangle triangle, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
-        {
-            var (idA, idB, idC) = triangle;
-            return (positions[idA] + positions[idB] + positions[idC]) / 3;
-        }
-
-        public static Triangle[] ToTrianglesArray(this int[] tris) => Enumerable
-            .Range(0, tris.Length / 3)
-            .Select(i => (Triangle)(tris[3 * i], tris[3 * i + 1], tris[3 * i + 2]))
-            .ToArray();
     }
 }

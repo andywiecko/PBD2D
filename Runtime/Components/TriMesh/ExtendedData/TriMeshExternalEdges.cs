@@ -21,7 +21,7 @@ namespace andywiecko.PBD2D.Components
             base.Awake();
             triMesh = GetComponent<TriMesh>();
 
-            var triangles = triMesh.SerializedData.Triangles.ToTrianglesArray();
+            var triangles = triMesh.SerializedData.ToTrianglesArray();
             var edgesSet = new HashSet<Edge>();
             foreach (var (a, b, c) in triangles)
             {

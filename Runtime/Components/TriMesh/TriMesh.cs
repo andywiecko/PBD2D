@@ -43,34 +43,31 @@ namespace andywiecko.PBD2D.Components
 
             var s = transform.localScale;
             var rb = new RigidTransform(transform.rotation, transform.position);
-            var transformedPositions = SerializedData.Positions
-                .Select(i => T(i.ToFloat3()).xy)//  (float3)transform.TransformPoint(i.x, i.y, 0)).xy)
-                .ToArray();
+            var transformedPositions = SerializedData.Positions.Select(i => T(i)).ToArray();
 
-            float3 T(float3 x) => math.transform(rb, s * (x - rb.pos) + s * rb.pos);
+            float2 T(float2 x) => math.transform(rb, s * (x.ToFloat3() - rb.pos) + s * rb.pos).xy;
 
-            var points = Enumerable.Range(0, SerializedData.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
-
-            var weights = Enumerable.Repeat(0f, points.Length).ToArray();
-            var triangles = SerializedData.Triangles;
-            for (int i = 0; i < triangles.Length / 3; i++)
+            var pointsCount = SerializedData.Positions.Length;
+            var points = Enumerable.Range(0, pointsCount).Select(i => new Point((Id<Point>)i)).ToArray();
+            var triangles = SerializedData.ToTrianglesArray();
+            var edges = triangles.SelectMany(i => unpack(i)).ToArray();
+            var weights = new float[pointsCount];
+            foreach (var (a, b, c) in triangles)
             {
-                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
-                var (pA, pB, pC) = (transformedPositions[a], transformedPositions[b], transformedPositions[c]);
+                var (pA, pB, pC) = (transformedPositions[(int)a], transformedPositions[(int)b], transformedPositions[(int)c]);
                 var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
                 var w0 = 6f / math.abs(area); // 3 (points) * 2 (doubled area)
-                weights[a] += w0;
-                weights[b] += w0;
-                weights[c] += w0;
+                weights[(int)a] += w0;
+                weights[(int)b] += w0;
+                weights[(int)c] += w0;
             }
 
-            var edges = new HashSet<Edge>();
-            for (int i = 0; i < triangles.Length / 3; i++)
+            static IEnumerable<Edge> unpack(Triangle t)
             {
-                var (a, b, c) = (triangles[3 * i], triangles[3 * i + 1], triangles[3 * i + 2]);
-                edges.Add((a, b));
-                edges.Add((a, c));
-                edges.Add((b, c));
+                var (a, b, c) = t;
+                yield return new(a, b);
+                yield return new(a, c);
+                yield return new(b, c);
             }
 
             var allocator = Allocator.Persistent;
@@ -79,9 +76,9 @@ namespace andywiecko.PBD2D.Components
                 Weights = new NativeIndexedArray<Id<Point>, float>(weights, allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 PreviousPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
-                Velocities = new NativeIndexedArray<Id<Point>, float2>(SerializedData.Positions.Length, allocator),
-                Edges = new NativeIndexedArray<Id<Edge>, Edge>(edges.ToArray(), allocator),
-                Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.Triangles.ToTrianglesArray(), allocator)
+                Velocities = new NativeIndexedArray<Id<Point>, float2>(pointsCount, allocator),
+                Edges = new NativeIndexedArray<Id<Edge>, Edge>(edges, allocator),
+                Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(triangles, allocator)
             );
 
             transform.SetPositionAndRotation(default, quaternion.identity);
