@@ -13,7 +13,6 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshExternalEdges : BaseComponent
     {
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; private set; }
-        // TODO: store normals?
 
         private TriMesh triMesh;
 
@@ -32,7 +31,6 @@ namespace andywiecko.PBD2D.Components
             }
             var edges = edgesSet.ToArray();
 
-            // TODO: cache this inside editor to draw it during editor?
             var externalEdges = new List<ExternalEdge>();
 
             var edgeId = Id<Edge>.Zero;
