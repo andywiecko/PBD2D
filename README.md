@@ -1,6 +1,20 @@
 # PBD2D
 
-Unity Position Based Dynamics in two dimensions
+Unity Position Based Dynamics in two dimensions.
+
+
+**Package summary:**
+
+- (Extended) Position based dynamics, including constraints:
+  - Edge length constraint
+  - Triangle area constraint
+  - Shape matching constraint
+- Collision systems:
+  - point-line
+  - capsule-capsule
+  - point-trifield
+- Generating simulation bodies using sprites.
+- Mouse interaction
 
 ## Table od Contents
 
@@ -8,27 +22,9 @@ Unity Position Based Dynamics in two dimensions
   - [Table od Contents](#table-od-contents)
   - [Getting started](#getting-started)
   - [Introduction](#introduction)
-  - [Systems](#systems)
-    - [Constraints](#constraints)
-      - [Position Based Dynamics](#position-based-dynamics)
-      - [Edge Length Constraint System](#edge-length-constraint-system)
-      - [Triangle Area Constraint System](#triangle-area-constraint-system)
-      - [Shape Matching Constraint System](#shape-matching-constraint-system)
-    - [Collisions](#collisions)
-      - [Point Line Collision System](#point-line-collision-system)
-    - [Debug](#debug)
-      - [Mouse Interaction System](#mouse-interaction-system)
-    - [Graphics](#graphics)
-  - [Components](#components)
-    - [TriMesh](#trimesh)
-    - [Ground](#ground)
   - [Architecture](#architecture)
   - [Roadmap](#roadmap)
-    - [v0.1.0](#v010)
-    - [v1.0.0](#v100)
-    - [v2.0.0](#v200)
   - [Dependencies](#dependencies)
-  - [Contributors](#contributors)
   - [Bibliography](#bibliography)
 
 ## Getting started
@@ -45,109 +41,16 @@ For the newcomers the [paper][muller.2007][^1] is highly recommended.
 
 TODO: Add note about triangulation.
 
-## Systems
-
-### Constraints
-
-#### Position Based Dynamics
-
-#### Edge Length Constraint System
-
-System responsible for resolving edge length constraint, the most common constraint in PBD simulation.
-Constraint is defined in the following way
-
-$$ C(p_1, p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
-
-where $\ell$ is rest length of the edge $(p_1, p_2)$.
-
-#### Triangle Area Constraint System
-
-System responsible for resolving triangle area (signed) constraint.
-Constraint enforces that triangle area is conserved during the simulation.
-The constraint function is defined in the following way
-
-$$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
-
-where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
-
-#### Shape Matching Constraint System
-
-The system is responsible for resolving the shape matching constraint.
-Shape matching formulation can be found in the
-[paper][muller.2005][^2].
-The method has many advantages:
-
-- can be easly embeded withing PBD framework,
-- can be used for simulation _meshless_ objects,
-- it is computationally cheap,
-- can be used for simulation (quasi) rigid bodies.
-
-Shape matching problem can be formulated using the following function
-
-$$ f(\vec p, \vec q) = \sum_i w_i (R\vec q_i - \vec p_i)^2$$
-
-where weight $w_i$ corresponds to inverse mass,
-$q_i$ to the initial relative position with respect to the initial center of mass $t_0$,
-and $p_i$ to the current relative position with respect to the current center of mass $t$.
-
-The goal is to find rotation $R$, and translation $t$ that minimizes the function $f(\vec p, \vec q)$.
-It can be shown analytically that such rotation $R$ can be found as a rotational part of the given matrix
-
-$$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
-
-System supports the linear deformation model (see [^2] for more details).
-
-**TODO:...**
-
-### Collisions
-
-#### Point Line Collision System
-
-System responsible for detecting and resolving collisions between bodies which provide point and line (infinite).
-It works on components which implement the `IPointLineCollisionTuple`.
-For example system is responsible for resolving [TriMesh](#trimesh)-[Ground](#ground) collisions.
-
-### Debug
-
-#### Mouse Interaction System
-
-System used for interacting mouse pointer with the simulated object, rather for debug purposes.
-It works on components which implement the `IMouseInteractionComponent`.
-
-### Graphics
-
-## Components
-
-### TriMesh
-
-The simplest two-dimensional structure made of triangles.
-One can convert sprites to simulated objects using built-in triangulator and scriptable objects.
-**TODO**: tutorial how to.
-
-Supported constraints:
-
-- Edge length constraint (see [system](#edge-length-constraint-system)),
-- Triangle area constraint (see [system](#triangle-area-constraint-system)),
-- Shape matching constraint (see [system](#shape-matching-constraint-system))
-
-### Ground
-
-As the name suggests, the component represent the plane surface.
-**TODO:**...
-
-Implemented collisions:
-
-- with [TriMesh](#trimesh).
 
 ## Architecture
 
-The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern.
-The package is divided into three separate assemblies and the _Core_ one, which defines relations between them:
+The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern and it uses [andywiecko.ECS](https://github.com/andywiecko/ECS) package.
+
+The package consist of three main assemblies:
 
 - `andywiecko.PBD2D.Core` contains all contracts, common structs, and all required abstractions.
-- `andywiecko.PBD2D.Components` which consists of components contracts implementations.
+- `andywiecko.PBD2D.Components` which consists of components implementations.
 - `andywiecko.PBD2D.Systems` contains all available systems for components, i.e. all logic can be found here.
-- `andywiecko.PBD2D.Solver` where one can find logic for system scheduling and execution order.
 
 Below one can find a dependency graph for the main project assemblies.
 Click on the selected graph element to see the details.
@@ -156,28 +59,23 @@ Click on the selected graph element to see the details.
 %%{init: {"theme": "neutral", "flowchart": {"curve": "stepBefore", "useMaxwidth": false}}}%%
 
 graph TB
-b --> a
-c --> a
-d --> a
+b <--- a
+c <--- a
 
 a[Core]
 b[Components]
-c[Solver]
-d[Systems]
+c[Systems]
 
 click a href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Core"
 click b href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Components"
-click c href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Solver"
-click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
+click c href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 ```
 
 ## Roadmap
 
-### v0.1.0
+**v0.1.0**
 
 - [ ] Add friction for trifield-trifield collisions
-- [ ] Move external edges to trimesh
-- [ ] Refactor TriMesh gizmos
 - [ ] Test for most of the systems.
 - [ ] Sample scenes + build online.
   - [ ] Washing machine scene (collisions)
@@ -186,11 +84,10 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
   - [ ] Shape matching scene
 - [ ] Docs.
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [X] ~~refactor triangulator editor, add support for raw data~~.
 - [ ] Add preview gifs for fluids and rods.
 - [ ] Refactor shape matching constraint
 
-### v1.0.0
+**v1.0.0**
 
 - [ ] Add cheap collisions edge-edge
 - [ ] TriMesh self collisions (external points/bvt/collisions).
@@ -203,7 +100,7 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Shape matching clusters.
 - [ ] Investigate performance with combined dependencies.
 
-### v2.0.0
+**v2.0.0**
 
 - [ ] Position based rigid bodies
 - [ ] Continous collisions.
@@ -217,13 +114,10 @@ click d href "https://github.com/andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [`Unity.Mathematics`](https://docs.unity3d.com/Packages/com.unity.mathematics@1.2/manual/index.html)
 - [`Unity.Collections`](https://docs.unity3d.com/Packages/com.unity.collections@1.0/manual/index.html)
 - [`Unity.Jobs`](https://docs.unity3d.com/Manual/JobSystem.html)
+- [`andywiecko.ECS`](https://github.com/andywiecko/ECS)
 - [`andywiecko.BurstTriangulator`](https://github.com/andywiecko/BurstTriangulator)
 - [`andywiecko.BurstCollections`](https://github.com/andywiecko/BurstCollections)
 - [`andywiecko.BurstMathUtils`](https://github.com/andywiecko/BurstMathUtils)
-
-## Contributors
-
-- [Andrzej Więckowski, Ph.D](https://andywiecko.github.io/).
 
 ## Bibliography
 
