@@ -10,7 +10,13 @@ namespace andywiecko.PBD2D.Core
 
     public static class PointExtensions
     {
-        public static Point ToPoint<T>(this T point) where T : struct, IPoint => new(point.Id);
+        public static Point ToPoint<T>(this T point) where T : unmanaged, IPoint => new(point.Id);
+        public static AABB ToAABB<T>(this T point, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
+            where T : unmanaged, IPoint
+        {
+            var p = positions.At(point);
+            return new(min: p - margin, max: p + margin);
+        }
     }
 
     public readonly struct Point : IPoint, IConvertableToAABB
@@ -20,10 +26,6 @@ namespace andywiecko.PBD2D.Core
         public Point(int id) => Id = new(id);
         public static implicit operator Point(Id<Point> id) => new(id);
         public static implicit operator Point(int id) => new((Id<Point>)id);
-        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0f)
-        {
-            var p = positions[Id];
-            return new(min: p - margin, max: p + margin);
-        }
+        AABB IConvertableToAABB.ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin) => this.ToAABB(positions, margin);
     }
 }

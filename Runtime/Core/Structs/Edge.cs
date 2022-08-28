@@ -12,20 +12,29 @@ namespace andywiecko.PBD2D.Core
 
     public static class IEdgeExtensions
     {
-        public static Edge ToEdge<T>(this T edge) where T : struct, IEdge => (edge.IdA, edge.IdB);
-        public static void Deconstruct<T>(this T edge, out Id<Point> idA, out Id<Point> idB) where T : struct, IEdge
+        public static Edge ToEdge<T>(this T edge) where T : unmanaged, IEdge => (edge.IdA, edge.IdB);
+        public static void Deconstruct<T>(this T edge, out Id<Point> idA, out Id<Point> idB) where T : unmanaged, IEdge
             => (idA, idB) = (edge.IdA, edge.IdB);
-        public static float2 GetCenter<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions) where T : struct, IEdge =>
+        public static float2 GetCenter<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions) where T : unmanaged, IEdge =>
             0.5f * (positions[edge.IdA] + positions[edge.IdB]);
-        public static float2 GetCenter<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : struct, IEdge =>
+        public static float2 GetCenter<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : unmanaged, IEdge =>
             GetCenter(edge, positions.AsReadOnly());
-        public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions) where T : struct, IEdge =>
+        public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions) where T : unmanaged, IEdge =>
             math.distance(positions[edge.IdA], positions[edge.IdB]);
-        public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : struct, IEdge =>
+        public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : unmanaged, IEdge =>
             GetLength(edge, positions.AsReadOnly());
+        public static AABB ToAABB<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
+            where T : unmanaged, IEdge
+        {
+            var (pA, pB) = positions.At(edge);
+            return new
+            (
+                min: math.min(pA, pB) - margin,
+                max: math.max(pA, pB) + margin
+            );
+        }
     }
 
-    [Serializable]
     public readonly struct Edge : IEquatable<Edge>, IEdge, IConvertableToAABB
     {
         public readonly Id<Point> IdA { get; }
@@ -39,14 +48,6 @@ namespace andywiecko.PBD2D.Core
         public bool Equals(Edge other) => IdA == other.IdA && IdB == other.IdB;
         public bool Contains(Id<Point> id) => IdA == id || IdB == id;
         public override string ToString() => $"({nameof(Edge)})({IdA}, {IdB})";
-        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
-        {
-            var (pA, pB) = positions.At(this);
-            return new
-            (
-                min: math.min(pA, pB) - margin,
-                max: math.max(pA, pB) + margin
-            );
-        }
+        AABB IConvertableToAABB.ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin) => this.ToAABB(positions, margin);
     }
 }

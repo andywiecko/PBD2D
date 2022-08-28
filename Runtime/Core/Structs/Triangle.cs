@@ -14,12 +14,21 @@ namespace andywiecko.PBD2D.Core
 
     public static class ITriangleExtensions
     {
-        public static Triangle ToTriangle<T>(this T triangle) where T : struct, ITriangle => (triangle.IdA, triangle.IdB, triangle.IdC);
-        public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC) where T : struct, ITriangle =>
+        public static Triangle ToTriangle<T>(this T triangle) where T : unmanaged, ITriangle => (triangle.IdA, triangle.IdB, triangle.IdC);
+        public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC) where T : unmanaged, ITriangle =>
             (idA, idB, idC) = (triangle.IdA, triangle.IdB, triangle.IdC);
+        public static AABB ToAABB<T>(this T triangle, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
+            where T : unmanaged, ITriangle
+        {
+            var (pA, pB, pC) = positions.At(triangle);
+            return new
+            (
+                min: MathUtils.Min(pA, pB, pC) - margin,
+                max: MathUtils.Max(pA, pB, pC) + margin
+            );
+        }
     }
 
-    [Serializable]
     public readonly struct Triangle : IEquatable<Triangle>, ITriangle, IConvertableToAABB
     {
         public readonly Id<Point> IdA { get; }
@@ -42,15 +51,6 @@ namespace andywiecko.PBD2D.Core
         public bool Contains(Edge edge) => Contains(edge.IdA, edge.IdB);
         public bool Contains(Id<Point> idA, Id<Point> idB) => Contains(idA) && Contains(idB);
         public override string ToString() => $"{nameof(Triangle)}({IdA}, {IdB}, {IdC})";
-
-        public AABB ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
-        {
-            var (pA, pB, pC) = positions.At(this);
-            return new
-            (
-                min: MathUtils.Min(pA, pB, pC) - margin,
-                max: MathUtils.Max(pA, pB, pC) + margin
-            );
-        }
+        AABB IConvertableToAABB.ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin) => this.ToAABB(positions, margin);
     }
 }
