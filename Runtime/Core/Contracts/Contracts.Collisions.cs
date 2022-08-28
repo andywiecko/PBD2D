@@ -120,30 +120,33 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeBoundingVolumeTree<AABB>> Tree { get; }
     }
 
-    public interface ITriFieldCollideWithPoint : IEntityComponent
+    public interface ITriFieldCollideWithPoint<TField> : IEntityComponent
+        where TField : struct, ITriFieldLookup
     {
         AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
-        Ref<TriFieldLookup> TriFieldLookup { get; }
+        TField TriFieldLookup { get; }
     }
 
-    public interface IPointTriFieldCollisionTuple : IComponent
+    public interface IPointTriFieldCollisionTuple<TField> : IComponent
+        where TField : struct, ITriFieldLookup
     {
         Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; }
         Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; }
         IPointCollideWithTriField PointsComponent { get; }
-        ITriFieldCollideWithPoint TriFieldComponent { get; }
+        ITriFieldCollideWithPoint<TField> TriFieldComponent { get; }
     }
 
     public interface ITriMeshPointsCollideWithTriMeshTriField : IPointCollideWithTriField, IPointCollideWithTriFieldBroadphase { }
-    public interface ITriMeshTriFieldCollideWithTriMeshPoints : ITriFieldCollideWithPoint, ITriFieldCollideWithPointBroadphase { }
+    public interface ITriMeshTriFieldCollideWithTriMeshPoints : ITriFieldCollideWithPoint<TriFieldLookup.ReadOnly>, ITriFieldCollideWithPointBroadphase { }
 
     public static class IPointTriFieldCollisionTupleExtensions
     {
-        public static bool Intersecting(this IPointTriFieldCollisionTuple tuple) => tuple.PointsComponent.Bounds.Intersects(tuple.TriFieldComponent.Bounds);
+        public static bool Intersecting<T>(this IPointTriFieldCollisionTuple<T> tuple) where T : struct, ITriFieldLookup =>
+            tuple.PointsComponent.Bounds.Intersects(tuple.TriFieldComponent.Bounds);
     }
     #endregion
 }

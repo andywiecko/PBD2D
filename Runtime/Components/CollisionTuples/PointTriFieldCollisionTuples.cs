@@ -9,7 +9,7 @@ namespace andywiecko.PBD2D.Components
 {
     public class PointTriFieldCollisionTuple : ComponentsTuple<
           ITriMeshPointsCollideWithTriMeshTriField, ITriMeshTriFieldCollideWithTriMeshPoints>,
-          IPointTriFieldCollisionTuple, IBoundingVolumeTreesIntersectionTuple
+          IPointTriFieldCollisionTuple<TriFieldLookup.ReadOnly>, IBoundingVolumeTreesIntersectionTuple
     {
         public PointTriFieldCollisionTuple(ITriMeshPointsCollideWithTriMeshTriField item1, ITriMeshTriFieldCollideWithTriMeshPoints item2, ComponentsRegistry componentsRegistry) : base(item1, item2, componentsRegistry)
         {
@@ -19,7 +19,7 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; private set; }
 
         public IPointCollideWithTriField PointsComponent => Item1;
-        public ITriFieldCollideWithPoint TriFieldComponent => Item2;
+        public ITriFieldCollideWithPoint<TriFieldLookup.ReadOnly> TriFieldComponent => Item2;
 
         AABB IBoundingVolumeTreesIntersectionTuple.Bounds1 => Item1.Bounds;
         AABB IBoundingVolumeTreesIntersectionTuple.Bounds2 => Item2.Bounds;
