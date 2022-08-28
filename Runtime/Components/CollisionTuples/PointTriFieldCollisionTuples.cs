@@ -21,12 +21,11 @@ namespace andywiecko.PBD2D.Components
         public IPointCollideWithTriField PointsComponent => Item1;
         public ITriFieldCollideWithPoint TriFieldComponent => Item2;
 
+        AABB IBoundingVolumeTreesIntersectionTuple.Bounds1 => Item1.Bounds;
+        AABB IBoundingVolumeTreesIntersectionTuple.Bounds2 => Item2.Bounds;
         Ref<NativeBoundingVolumeTree<AABB>> IBoundingVolumeTreesIntersectionTuple.Tree1 => Item1.Tree;
         Ref<NativeBoundingVolumeTree<AABB>> IBoundingVolumeTreesIntersectionTuple.Tree2 => Item2.Tree;
         Ref<NativeList<int2>> IBoundingVolumeTreesIntersectionTuple.Result => result;
-
-        public AABB Bounds1 => Item1.Bounds;
-        public AABB Bounds2 => Item2.Bounds;
 
         private Ref<NativeList<int2>> result;
 

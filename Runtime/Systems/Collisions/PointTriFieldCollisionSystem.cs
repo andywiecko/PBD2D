@@ -117,9 +117,12 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new CommonJobs.ClearListJob<IdPair<Point, ExternalEdge>>(component.Collisions.Value).Schedule(dependencies);
-                dependencies = new CheckCollisionJob(component).Schedule(component.PotentialCollisions.Value, innerloopBatchCount: 64, dependencies);
-                dependencies = new ResolveCollisionsJob(component).Schedule(dependencies);
+                if (component.Intersecting())
+                {
+                    dependencies = new CommonJobs.ClearListJob<IdPair<Point, ExternalEdge>>(component.Collisions.Value).Schedule(dependencies);
+                    dependencies = new CheckCollisionJob(component).Schedule(component.PotentialCollisions.Value, innerloopBatchCount: 64, dependencies);
+                    dependencies = new ResolveCollisionsJob(component).Schedule(dependencies);
+                }
             }
 
             return dependencies;

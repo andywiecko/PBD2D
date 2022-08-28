@@ -132,8 +132,6 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPointTriFieldCollisionTuple : IComponent
     {
-        AABB Bounds1 { get; }
-        AABB Bounds2 { get; }
         Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; }
         Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; }
         IPointCollideWithTriField PointsComponent { get; }
@@ -142,5 +140,10 @@ namespace andywiecko.PBD2D.Core
 
     public interface ITriMeshPointsCollideWithTriMeshTriField : IPointCollideWithTriField, IPointCollideWithTriFieldBroadphase { }
     public interface ITriMeshTriFieldCollideWithTriMeshPoints : ITriFieldCollideWithPoint, ITriFieldCollideWithPointBroadphase { }
+
+    public static class IPointTriFieldCollisionTupleExtensions
+    {
+        public static bool Intersecting(this IPointTriFieldCollisionTuple tuple) => tuple.PointsComponent.Bounds.Intersects(tuple.TriFieldComponent.Bounds);
+    }
     #endregion
 }
