@@ -6,12 +6,11 @@ namespace andywiecko.PBD2D.Core
     {
         public static T TryAddComponent<T>(this GameObject gameObject) where T : Component
         {
-            var component = gameObject.GetComponent<T>();
-            if (component == null)
+            if (gameObject.TryGetComponent<T>(out var component))
             {
-                component = gameObject.AddComponent<T>();
+                return component;
             }
-            return component;
+            return gameObject.AddComponent<T>();
         }
 
         public static T TryAddComponent<T>(this Transform transform) where T : Component => transform.gameObject.TryAddComponent<T>();

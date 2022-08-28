@@ -8,7 +8,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Editor.Tests
 {
-    public class CapsuleCapsuleCollisionBroadphaseSystemEditorTests
+    public class BoundingVolumeTreesIntersectionSystemEditorTests
     {
         private class FakeComponent : TestComponent
         {
