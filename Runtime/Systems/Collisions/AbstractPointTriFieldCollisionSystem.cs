@@ -86,7 +86,7 @@ namespace andywiecko.PBD2D.Systems
                 var (we1, we2) = triFieldWeights.At(e);
 
                 MathUtils.PointClosestPointOnLineSegment(p, e1, e2, out var q);
-                var bar = MathUtils.BarycentricSafe(q, e1, e2, 0.5f);
+                var bar = MathUtils.BarycentricSafe(e1, e2, q, 0.5f);
                 var barSq = bar * bar;
                 var wpq = wp + we1 * barSq.x + we2 * barSq.y;
 
@@ -103,11 +103,11 @@ namespace andywiecko.PBD2D.Systems
                     return;
                 }
 
-                var dp = (p - q + n * eps) / wpq;
+                var dx = (p - q) / wpq;
 
-                pointPositions[pId] -= wp * dp;
-                triFieldPositions[e.IdA] += we1 * bar.x * dp;
-                triFieldPositions[e.IdB] += we2 * bar.y * dp;
+                pointPositions[pId] -= wp * dx;
+                triFieldPositions[e.IdA] += bar.x * we1 * dx;
+                triFieldPositions[e.IdB] += bar.y * we2 * dx;
 
                 // TODO: friction + tests
             }
