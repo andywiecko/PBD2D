@@ -7,8 +7,8 @@ namespace andywiecko.PBD2D.Core
 {
     public interface IMouseInteractionComponent : IComponent
     {
+        float Stiffness { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
-        Ref<NativeReference<Id<Point>>> InteractingPointId { get; }
-        Ref<NativeReference<float2>> Offset { get; }
+        Ref<NativeList<MouseInteractionConstraint>> Constraints { get; }
     }
 }

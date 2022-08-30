@@ -12,8 +12,10 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshMouseInteraction : BaseComponent, IMouseInteractionComponent
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
-        public Ref<NativeReference<Id<Point>>> InteractingPointId { get; private set; }
-        public Ref<NativeReference<float2>> Offset { get; private set; }
+        public Ref<NativeList<MouseInteractionConstraint>> Constraints { get; private set; }
+
+        [field: SerializeField, Range(0, 1)]
+        public float Stiffness { get; private set; } = 1;
 
         private TriMesh triMesh;
 
@@ -22,8 +24,7 @@ namespace andywiecko.PBD2D.Components
             triMesh = GetComponent<TriMesh>();
 
             DisposeOnDestroy(
-                InteractingPointId = new NativeReference<Id<Point>>(Id<Point>.Invalid, Allocator.Persistent),
-                Offset = new NativeReference<float2>(Allocator.Persistent)
+                Constraints = new NativeList<MouseInteractionConstraint>(triMesh.Points.Value.Length, Allocator.Persistent)
             );
         }
     }

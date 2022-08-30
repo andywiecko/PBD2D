@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.BurstMathUtils;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
@@ -12,114 +13,116 @@ namespace andywiecko.PBD2D.Systems
     [Category(PBDCategory.Debug)]
     public class MouseInteractionSystem : BaseSystem<IMouseInteractionComponent>
     {
-        private bool grabBody = false;
-        private bool releaseBody = false;
         private float2 mousePosition;
-
-        // TODO: this is no longer working since removing MonoBehaviour dependency for systems!
-        private void OnDrawGizmos()
-        {
-            if (!Application.isPlaying) return;
-
-            Gizmos.DrawSphere(mousePosition.ToFloat3(), 0.1f);
-
-            foreach (var a in References)
-            {
-                Gizmos.DrawRay(mousePosition.ToFloat3(), a.Offset.Value.Value.ToFloat3());
-            }
-        }
+        private Complex mouseRotation = Complex.PolarUnit(0);
+        private const float rotationSpeed = 0.1f;
 
         [SolverAction]
         public void MouseInteractionUpdate()
         {
-            grabBody = false;
-            releaseBody = false;
-
-            if (Camera.main)
+            if (!Camera.main)
             {
-                if (Input.GetMouseButtonDown(0))
+                return;
+            }
+
+            mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin.ToFloat2();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                mouseRotation = Complex.PolarUnit(0);
+                foreach (var c in References)
                 {
-                    grabBody = true;
+                    // TODO: use bounds
+                    new GrabBodyJob(c, mousePosition, radius: 1f).Schedule(default).Complete();
                 }
-                if (Input.GetMouseButton(0))
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                var time = 0.1f;
+                Debug.DrawRay(mousePosition.ToFloat3(), new(+.1f, 0, 0), Color.red, time);
+                Debug.DrawRay(mousePosition.ToFloat3(), new(-.1f, 0, 0), Color.red, time);
+                Debug.DrawRay(mousePosition.ToFloat3(), new(0, +.1f, 0), Color.red, time);
+                Debug.DrawRay(mousePosition.ToFloat3(), new(0, -.1f, 0), Color.red, time);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                foreach (var c in References)
                 {
-                    mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin.ToFloat2();
+                    c.Constraints.Value.Clear();
                 }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    releaseBody = true;
-                }
+            }
+
+            var delta = Input.mouseScrollDelta;
+            if (delta != default)
+            {
+                var sign = delta.y;
+                mouseRotation *= Complex.PolarUnit(sign * rotationSpeed);
             }
         }
 
         [BurstCompile]
-        private struct GrabBodyJob : IJob
+        private struct GrabBodyJob : IJobParallelFor
         {
-            private NativeReference<Id<Point>> interactingPointId;
-            private NativeReference<float2> offset;
-            private NativeIndexedArray<Id<Point>, float2> positions;
-            private readonly float2 mousePosition;
-            private readonly float minimalDistanceSq;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
+            private NativeList<MouseInteractionConstraint>.ParallelWriter constraints;
+            private readonly float2 m;
+            private readonly float radiusSq;
 
-            public GrabBodyJob(IMouseInteractionComponent component, float2 mousePosition, float minimalDistance)
+            public GrabBodyJob(IMouseInteractionComponent component, float2 mousePosition, float radius)
             {
-                interactingPointId = component.InteractingPointId;
-                offset = component.Offset;
-                positions = component.Positions;
-                this.mousePosition = mousePosition;
-                this.minimalDistanceSq = minimalDistance * minimalDistance;
+                positions = component.Positions.Value.AsReadOnly();
+                constraints = component.Constraints.Value.AsParallelWriter();
+                m = mousePosition;
+                radiusSq = radius * radius;
             }
 
-            public void Execute()
-            {
-                var minDistanceSq = float.MaxValue;
-                var minPointId = Id<Point>.Invalid;
-                foreach (var pointId in positions.Ids)
-                {
-                    var position = positions[pointId];
-                    var distanceSq = math.distancesq(position, mousePosition);
-                    if (minDistanceSq > distanceSq)
-                    {
-                        minDistanceSq = distanceSq;
-                        minPointId = pointId;
-                    }
-                }
+            public JobHandle Schedule(JobHandle dependencies) => this.Schedule(positions.Length, 64, dependencies);
 
-                if (minDistanceSq > minimalDistanceSq)
+            public void Execute(int i)
+            {
+                var pId = (Id<Point>)i;
+                var p = positions[pId];
+
+                if (math.distancesq(p, m) > radiusSq)
                 {
                     return;
                 }
 
-                interactingPointId.Value = minPointId;
-                offset.Value = mousePosition - positions[minPointId];
+                constraints.AddNoResize(new(pId, p - m));
             }
         }
 
         [BurstCompile]
-        private struct DragBody : IJob
+        private struct DragBody : IJobParallelForDefer
         {
-            private NativeReference<Id<Point>> interactingPointId;
-            private NativeReference<float2> offset;
-            private NativeIndexedArray<Id<Point>, float2> positions;
+            [ReadOnly]
+            private NativeArray<MouseInteractionConstraint> constraints;
+            [NativeDisableParallelForRestriction]
+            private NativeArray<float2> positions;
             private readonly float2 mousePosition;
+            private readonly Complex mouseRotation;
+            private readonly float k;
 
-            public DragBody(IMouseInteractionComponent component, float2 mousePosition)
+            public DragBody(IMouseInteractionComponent component, float2 mousePosition, Complex mouseRotation)
             {
-                interactingPointId = component.InteractingPointId;
-                offset = component.Offset;
-                positions = component.Positions;
+                constraints = component.Constraints.Value.AsDeferredJobArray();
+                positions = component.Positions.Value.GetInnerArray();
                 this.mousePosition = mousePosition;
+                this.mouseRotation = mouseRotation;
+                k = component.Stiffness;
             }
 
-            public void Execute()
+            public void Execute(int i)
             {
-                var pointId = interactingPointId.Value;
-                if (!pointId.IsValid)
-                {
-                    return;
-                }
-
-                positions[pointId] = mousePosition + offset.Value;
+                var c = constraints[i];
+                var id = (int)c.Id;
+                var p = positions[id];
+                var q = mousePosition + (mouseRotation * new Complex(c.Offset)).Value;
+                var n = math.normalizesafe(p - q);
+                var C = math.distance(p, q);
+                positions[id] -= k * n * C;
             }
         }
 
@@ -127,17 +130,7 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                if (grabBody)
-                {
-                    dependencies = new GrabBodyJob(component, mousePosition, 1f).Schedule(dependencies);
-                }
-
-                dependencies = new DragBody(component, mousePosition).Schedule(dependencies);
-
-                if (releaseBody)
-                {
-                    dependencies = new CommonJobs.SetNativeReferenceValueJob<Id<Point>>(component.InteractingPointId, Id<Point>.Invalid).Schedule(dependencies);
-                }
+                dependencies = new DragBody(component, mousePosition, mouseRotation).Schedule(component.Constraints.Value, 64, dependencies);
             }
             return dependencies;
         }
