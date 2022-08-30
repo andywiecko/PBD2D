@@ -53,19 +53,25 @@ namespace andywiecko.PBD2D.Systems
             [ReadOnly]
             private NativeArray<IdPair<Point, ExternalEdge>> collisions;
             private NativeIndexedArray<Id<Point>, float2> pointPositions;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly pointPreviousPosisions;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly pointWeights;
             private NativeIndexedArray<Id<Point>, float2> triFieldPositions;
+            private NativeIndexedArray<Id<Point>, float2>.ReadOnly triFieldPreviousPositions;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly triFieldWeights;
             private NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>.ReadOnly externalEdges;
+            private readonly float mu;
 
             public ResolveCollisionsJob(IPointTriFieldCollisionTuple<TField> tuple)
             {
                 collisions = tuple.Collisions.Value.AsDeferredJobArray();
                 pointPositions = tuple.PointsComponent.Positions;
+                pointPreviousPosisions = tuple.PointsComponent.PreviousPositions.Value.AsReadOnly();
                 pointWeights = tuple.PointsComponent.Weights.Value.AsReadOnly();
                 triFieldPositions = tuple.TriFieldComponent.Positions;
+                triFieldPreviousPositions = tuple.TriFieldComponent.PreviousPositions.Value.AsReadOnly();
                 triFieldWeights = tuple.TriFieldComponent.Weights.Value.AsReadOnly();
                 externalEdges = tuple.TriFieldComponent.ExternalEdges.Value.AsReadOnly();
+                mu = tuple.Friction;
             }
 
             public void Execute()
@@ -88,7 +94,8 @@ namespace andywiecko.PBD2D.Systems
                 MathUtils.PointClosestPointOnLineSegment(p, e1, e2, out var q);
                 var bar = MathUtils.BarycentricSafe(e1, e2, q, 0.5f);
                 var barSq = bar * bar;
-                var wpq = wp + we1 * barSq.x + we2 * barSq.y;
+                var wq = we1 * barSq.x + we2 * barSq.y;
+                var wpq = wp + wq;
 
                 if (wpq == 0)
                 {
@@ -97,8 +104,7 @@ namespace andywiecko.PBD2D.Systems
 
                 var n = e.GetNormal(triFieldPositions);
 
-                const float eps = 1e-9f;
-                if (math.dot(p - q, n) > eps)
+                if (math.dot(p - q, n) > math.EPSILON)
                 {
                     return;
                 }
@@ -109,7 +115,22 @@ namespace andywiecko.PBD2D.Systems
                 triFieldPositions[e.IdA] += bar.x * we1 * dx;
                 triFieldPositions[e.IdB] += bar.y * we2 * dx;
 
-                // TODO: friction + tests
+                var (dp1, dp2) = FrictionUtils.GetFrictionCorrections(
+                    pA: pointPositions[pId],
+                    qA: pointPreviousPosisions[pId],
+                    wp,
+                    pB: bar.x * triFieldPositions[e.IdA] + bar.y * triFieldPositions[e.IdB],
+                    qB: bar.x * triFieldPreviousPositions[e.IdA] + bar.y * triFieldPreviousPositions[e.IdB],
+                    wq,
+                    n, mu, fn: p - q);
+
+                pointPositions[pId] += dp1;
+
+                if (wq != 0)
+                {
+                    triFieldPositions[e.IdA] += bar.x * we1 / wq * dp2;
+                    triFieldPositions[e.IdB] += bar.y * we2 / wq * dp2;
+                }
             }
         }
 

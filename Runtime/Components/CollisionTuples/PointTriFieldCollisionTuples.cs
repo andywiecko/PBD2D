@@ -15,6 +15,7 @@ namespace andywiecko.PBD2D.Components
         {
         }
 
+        public float Friction => 0.5f * (Item1.Friction + Item2.Friction);
         public Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; private set; }
         public Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; private set; }
 

@@ -14,12 +14,14 @@ namespace andywiecko.PBD2D.Components
     public class TriMeshTriFieldCollideWithTriMeshPoints : BaseComponent, ITriMeshTriFieldCollideWithTriMeshPoints
     {
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions => triMesh.PreviousPositions;
         public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles => triMesh.Triangles;
         public Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges => triMeshExternalEdges.ExternalEdges;
         public Ref<NativeBoundingVolumeTree<AABB>> Tree => treeComponent.Tree;
         public TriFieldLookup.ReadOnly TriFieldLookup => triFieldComponent.TriFieldLookup.Value.AsReadOnly();
         public AABB Bounds => treeComponent.Bounds;
+        public float Friction => triMesh.PhysicalMaterial.Friction;
 
         private TriMesh triMesh;
         private TriMeshExternalEdges triMeshExternalEdges;

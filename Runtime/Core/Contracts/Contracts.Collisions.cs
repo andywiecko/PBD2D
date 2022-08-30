@@ -48,8 +48,6 @@ namespace andywiecko.PBD2D.Core
     }
 
     public interface ITriMeshCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule, ICapsuleCollideWithCapsuleBroadphase { }
-    public interface IRodCapsulesCollideWithTriMeshCapsules : ICapsuleCollideWithCapsule { }
-    public interface ITriMeshCapsulesCollideWithRodCapsules : ICapsuleCollideWithCapsule { }
 
     public interface ICapsuleCapsuleCollisionTuple : IComponent
     {
@@ -110,8 +108,10 @@ namespace andywiecko.PBD2D.Core
 
     public interface IPointCollideWithTriField : IEntityComponent
     {
+        float Friction { get; }
         AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
     }
 
@@ -123,8 +123,10 @@ namespace andywiecko.PBD2D.Core
     public interface ITriFieldCollideWithPoint<TField> : IEntityComponent
         where TField : struct, ITriFieldLookup
     {
+        float Friction { get; }
         AABB Bounds { get; }
         Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> PreviousPositions { get; }
         Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
         Ref<NativeIndexedArray<Id<Triangle>, Triangle>> Triangles { get; }
         Ref<NativeIndexedArray<Id<ExternalEdge>, ExternalEdge>> ExternalEdges { get; }
@@ -134,6 +136,7 @@ namespace andywiecko.PBD2D.Core
     public interface IPointTriFieldCollisionTuple<TField> : IComponent
         where TField : struct, ITriFieldLookup
     {
+        float Friction { get; }
         Ref<NativeList<IdPair<Point, Triangle>>> PotentialCollisions { get; }
         Ref<NativeList<IdPair<Point, ExternalEdge>>> Collisions { get; }
         IPointCollideWithTriField PointsComponent { get; }
