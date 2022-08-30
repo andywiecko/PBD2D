@@ -13,9 +13,24 @@ namespace andywiecko.PBD2D.Systems
     [Category(PBDCategory.Debug)]
     public class MouseInteractionSystem : BaseSystem<IMouseInteractionComponent>
     {
-        private float2 mousePosition;
-        private Complex mouseRotation = Complex.PolarUnit(0);
-        private const float rotationSpeed = 0.1f;
+        private MouseInteractionConfiguration Configuration
+        {
+            get
+            {
+                if (configuration == null && !World.ConfigurationsRegistry.TryGet(out configuration))
+                {
+                    configuration = new();
+                }
+                return configuration;
+            }
+        }
+        private MouseInteractionConfiguration configuration;
+
+        private float2 MousePosition { get => Configuration.MousePosition; set => Configuration.MousePosition = value; }
+        private Complex MouseRotation { get => Configuration.MouseRotation; set => Configuration.MouseRotation = value; }
+        private bool IsPressed { set => Configuration.IsPressed = value; }
+        private float Radius => Configuration.Radius;
+        private float RotationSpeed => Configuration.RotationSpeed;
 
         [SolverAction]
         public void MouseInteractionUpdate()
@@ -25,25 +40,17 @@ namespace andywiecko.PBD2D.Systems
                 return;
             }
 
-            mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin.ToFloat2();
+            MousePosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin.ToFloat2();
+            IsPressed = Input.GetMouseButton(0);
 
             if (Input.GetMouseButtonDown(0))
             {
-                mouseRotation = Complex.PolarUnit(0);
+                MouseRotation = Complex.PolarUnit(0);
                 foreach (var c in References)
                 {
                     // TODO: use bounds
-                    new GrabBodyJob(c, mousePosition, radius: 1f).Schedule(default).Complete();
+                    new GrabBodyJob(c, MousePosition, Radius).Schedule(default).Complete();
                 }
-            }
-
-            if (Input.GetMouseButton(0))
-            {
-                var time = 0.1f;
-                Debug.DrawRay(mousePosition.ToFloat3(), new(+.1f, 0, 0), Color.red, time);
-                Debug.DrawRay(mousePosition.ToFloat3(), new(-.1f, 0, 0), Color.red, time);
-                Debug.DrawRay(mousePosition.ToFloat3(), new(0, +.1f, 0), Color.red, time);
-                Debug.DrawRay(mousePosition.ToFloat3(), new(0, -.1f, 0), Color.red, time);
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -57,8 +64,7 @@ namespace andywiecko.PBD2D.Systems
             var delta = Input.mouseScrollDelta;
             if (delta != default)
             {
-                var sign = delta.y;
-                mouseRotation *= Complex.PolarUnit(sign * rotationSpeed);
+                MouseRotation *= Complex.PolarUnit(delta.y * RotationSpeed);
             }
         }
 
@@ -130,7 +136,7 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new DragBody(component, mousePosition, mouseRotation).Schedule(component.Constraints.Value, 64, dependencies);
+                dependencies = new DragBody(component, MousePosition, MouseRotation).Schedule(component.Constraints.Value, 64, dependencies);
             }
             return dependencies;
         }
