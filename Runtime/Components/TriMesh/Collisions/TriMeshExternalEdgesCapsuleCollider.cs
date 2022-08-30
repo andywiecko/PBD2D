@@ -6,7 +6,7 @@ namespace andywiecko.PBD2D.Components
 {
     [RequireComponent(typeof(TriMesh))]
     [RequireComponent(typeof(TriMeshExternalEdges))]
-    [Category(PBDCategory.Collisions)]
+    [Category(PBDCategory.ExtendedData)]
     public class TriMeshExternalEdgesCapsuleCollider : BaseComponent
     {
         [field: SerializeField]
