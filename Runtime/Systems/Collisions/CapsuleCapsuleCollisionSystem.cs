@@ -152,10 +152,17 @@ namespace andywiecko.PBD2D.Systems
                     wB,
                     n, mu, fn: math.float2(C, 0));
 
-                positions1[a0Id] += barA.x * wa0 / wA * dp1;
-                positions1[a1Id] += barA.y * wa1 / wA * dp1;
-                positions2[b0Id] += barB.x * wb0 / wB * dp2;
-                positions2[b1Id] += barB.y * wb1 / wB * dp2;
+                if (wA != 0)
+                {
+                    positions1[a0Id] += barA.x * wa0 / wA * dp1;
+                    positions1[a1Id] += barA.y * wa1 / wA * dp1;
+                }
+
+                if (wB != 0)
+                {
+                    positions2[b0Id] += barB.x * wb0 / wB * dp2;
+                    positions2[b1Id] += barB.y * wb1 / wB * dp2;
+                }
             }
         }
 
