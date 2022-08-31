@@ -5,7 +5,7 @@ namespace andywiecko.PBD2D.Core
     public interface IPhysicalMaterial
     {
         float Friction { get; }
-        float Restitution { get; }
+        float Density { get; }
     }
 
     [PreferBinarySerialization]
@@ -15,7 +15,7 @@ namespace andywiecko.PBD2D.Core
         private class InternalDefault : IPhysicalMaterial
         {
             public float Friction => 1;
-            public float Restitution => 0.5f;
+            public float Density => 1;
         }
 
         public static readonly IPhysicalMaterial Default = new InternalDefault();
@@ -23,7 +23,7 @@ namespace andywiecko.PBD2D.Core
         [field: SerializeField, Min(0)]
         public float Friction { get; private set; } = Default.Friction;
 
-        [field: SerializeField, Range(0, 1)]
-        public float Restitution { get; private set; } = Default.Restitution;
+        [field: SerializeField, Min(0)]
+        public float Density { get; private set; } = Default.Density;
     }
 }

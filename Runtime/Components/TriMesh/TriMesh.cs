@@ -52,11 +52,12 @@ namespace andywiecko.PBD2D.Components
             var triangles = SerializedData.ToTrianglesArray();
             var edges = triangles.SelectMany(i => unpack(i)).ToArray();
             var weights = new float[pointsCount];
+            var rho = PhysicalMaterial.Density;
             foreach (var (a, b, c) in triangles)
             {
                 var (pA, pB, pC) = (transformedPositions[(int)a], transformedPositions[(int)b], transformedPositions[(int)c]);
                 var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
-                var w0 = 6f / math.abs(area); // 3 (points) * 2 (doubled area)
+                var w0 = 6f / rho / math.abs(area); // 3 (points) * 2 (doubled area)
                 weights[(int)a] += w0;
                 weights[(int)b] += w0;
                 weights[(int)c] += w0;
