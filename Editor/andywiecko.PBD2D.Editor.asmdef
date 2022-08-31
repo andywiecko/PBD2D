@@ -1,0 +1,21 @@
+{
+    "name": "andywiecko.PBD2D.Editor",
+    "rootNamespace": "",
+    "references": [
+        "andywiecko.PBD2D.Components",
+        "andywiecko.PBD2D.Core",
+        "andywiecko.PBD2D.Systems",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
