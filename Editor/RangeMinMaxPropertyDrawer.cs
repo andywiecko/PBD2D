@@ -1,10 +1,11 @@
+using andywiecko.PBD2D.Core;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace andywiecko.PBD2D.Core.Editor
+namespace andywiecko.PBD2D.Editor
 {
     [CustomPropertyDrawer(typeof(RangeMinMaxAttribute))]
     public class RangeMinMaxPropertyDrawer : PropertyDrawer

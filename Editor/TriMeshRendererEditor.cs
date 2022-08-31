@@ -1,6 +1,7 @@
+using andywiecko.PBD2D.Components;
 using UnityEditor;
 
-namespace andywiecko.PBD2D.Components.Editor
+namespace andywiecko.PBD2D.Editor
 {
     [CustomEditor(typeof(TriMeshRenderer))]
     public class TriMeshRendererEditor : UnityEditor.Editor

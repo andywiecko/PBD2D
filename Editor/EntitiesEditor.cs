@@ -1,8 +1,9 @@
 using andywiecko.ECS;
+using andywiecko.PBD2D.Components;
 using UnityEditor;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Components.Editor
+namespace andywiecko.PBD2D.Editor
 {
     public static class EntitiesEditor
     {

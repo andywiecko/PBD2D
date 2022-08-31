@@ -1,7 +1,8 @@
+using andywiecko.PBD2D.Components;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace andywiecko.PBD2D.Components.Editor
+namespace andywiecko.PBD2D.Editor
 {
     [CustomEditor(typeof(TriMeshSerializedDataTexture2d), editorForChildClasses: true)]
     public class TriMeshSerializedDataTexture2dEditor : UnityEditor.Editor
