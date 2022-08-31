@@ -5,7 +5,9 @@
         "andywiecko.PBD2D.Components",
         "andywiecko.PBD2D.Core",
         "andywiecko.PBD2D.Systems",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "andywiecko.ECS",
+        "andywiecko.ECS.Editor"
     ],
     "includePlatforms": [
         "Editor"
