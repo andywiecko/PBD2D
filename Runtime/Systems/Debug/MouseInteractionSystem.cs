@@ -13,19 +13,7 @@ namespace andywiecko.PBD2D.Systems
     [Category(PBDCategory.Debug)]
     public class MouseInteractionSystem : BaseSystem<IMouseInteractionComponent>
     {
-        private MouseInteractionConfiguration Configuration
-        {
-            get
-            {
-                if (configuration == null && !World.ConfigurationsRegistry.TryGet(out configuration))
-                {
-                    configuration = new();
-                }
-                return configuration;
-            }
-        }
-        private MouseInteractionConfiguration configuration;
-
+        private MouseInteractionConfiguration Configuration => World.ConfigurationsRegistry.GetOrCreate<MouseInteractionConfiguration>();
         private float2 MousePosition { get => Configuration.MousePosition; set => Configuration.MousePosition = value; }
         private Complex MouseRotation { get => Configuration.MouseRotation; set => Configuration.MouseRotation = value; }
         private bool IsPressed { set => Configuration.IsPressed = value; }
