@@ -1,7 +1,6 @@
 using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
 using System;
-using System.Linq;
 using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
@@ -30,13 +29,6 @@ namespace andywiecko.PBD2D.Core
             }
 
             return true;
-        }
-
-        public static float GetSignedArea2(this Triangle triangle, ReadOnlySpan<float2> positions)
-        {
-            var (pIdA, pIdB, pIdC) = triangle;
-            var (pA, pB, pC) = (positions[(int)pIdA], positions[(int)pIdB], positions[(int)pIdC]);
-            return MathUtils.TriangleSignedArea2(pA, pB, pC);
         }
     }
 }

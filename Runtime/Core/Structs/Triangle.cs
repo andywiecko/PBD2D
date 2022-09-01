@@ -15,8 +15,8 @@ namespace andywiecko.PBD2D.Core
     public static class ITriangleExtensions
     {
         public static Triangle ToTriangle<T>(this T triangle) where T : unmanaged, ITriangle => (triangle.IdA, triangle.IdB, triangle.IdC);
-        public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC) where T : unmanaged, ITriangle =>
-            (idA, idB, idC) = (triangle.IdA, triangle.IdB, triangle.IdC);
+        public static void Deconstruct<T>(this T triangle, out Id<Point> idA, out Id<Point> idB, out Id<Point> idC)
+            where T : unmanaged, ITriangle => (idA, idB, idC) = (triangle.IdA, triangle.IdB, triangle.IdC);
         public static AABB ToAABB<T>(this T triangle, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
             where T : unmanaged, ITriangle
         {
@@ -27,6 +27,14 @@ namespace andywiecko.PBD2D.Core
                 max: MathUtils.Max(pA, pB, pC) + margin
             );
         }
+        public static float GetSignedArea2<T>(this T triangle, ReadOnlySpan<float2> positions) where T : unmanaged, ITriangle
+        {
+            var (pIdA, pIdB, pIdC) = triangle;
+            var (pA, pB, pC) = (positions[(int)pIdA], positions[(int)pIdB], positions[(int)pIdC]);
+            return MathUtils.TriangleSignedArea2(pA, pB, pC);
+        }
+        public static float GetSignedArea2<T>(this T triangle, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions)
+            where T : unmanaged, ITriangle => GetSignedArea2<T>(triangle, positions.AsReadOnlySpan());
     }
 
     public readonly struct Triangle : IEquatable<Triangle>, ITriangle, IConvertableToAABB
