@@ -11,8 +11,8 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Constraints)]
     public class TriMeshTriangleAreaConstraints : BaseComponent, ITriangleAreaConstraints
     {
-        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
-        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => TriMesh.Weights;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeList<TriangleAreaConstraint>> Constraints { get; private set; }
 
         [field: SerializeField, Min(0)]
@@ -21,18 +21,18 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1f;
 
-        private TriMesh TriMesh { get; set; }
+        private TriMesh triMesh;
 
         private void Start()
         {
-            TriMesh = GetComponent<TriMesh>();
+            triMesh = GetComponent<TriMesh>();
 
             DisposeOnDestroy(
-                Constraints = new NativeList<TriangleAreaConstraint>(TriMesh.Triangles.Value.Length, Allocator.Persistent)
+                Constraints = new NativeList<TriangleAreaConstraint>(triMesh.Triangles.Value.Length, Allocator.Persistent)
             );
 
-            var positions = TriMesh.Positions.Value.AsReadOnly();
-            foreach (var t in TriMesh.Triangles.Value.AsReadOnly())
+            var positions = triMesh.Positions.Value.AsReadOnly();
+            foreach (var t in triMesh.Triangles.Value.AsReadOnly())
             {
                 var a2 = t.GetSignedArea2(positions);
                 Constraints.Value.Add(new(t, a2));

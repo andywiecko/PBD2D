@@ -11,8 +11,8 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Constraints)]
     public class TriMeshEdgeLengthConstraints : BaseComponent, IEdgeLengthConstraints
     {
-        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => TriMesh.Positions;
-        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => TriMesh.Weights;
+        public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
+        public Ref<NativeIndexedArray<Id<Point>, float>> Weights => triMesh.Weights;
         public Ref<NativeList<EdgeLengthConstraint>> Constraints { get; private set; }
 
         [field: SerializeField, Min(0)]
@@ -21,18 +21,18 @@ namespace andywiecko.PBD2D.Components
         [field: SerializeField, Range(0, 1)]
         public float Stiffness { get; private set; } = 1f;
 
-        private TriMesh TriMesh { get; set; }
+        private TriMesh triMesh;
 
         private void Start()
         {
-            TriMesh = GetComponent<TriMesh>();
+            triMesh = GetComponent<TriMesh>();
 
             DisposeOnDestroy(
-                Constraints = new NativeList<EdgeLengthConstraint>(TriMesh.Edges.Value.Length, Allocator.Persistent)
+                Constraints = new NativeList<EdgeLengthConstraint>(triMesh.Edges.Value.Length, Allocator.Persistent)
             );
 
-            var positions = TriMesh.Positions.Value.AsReadOnly();
-            foreach (var e in TriMesh.Edges.Value.AsReadOnly())
+            var positions = triMesh.Positions.Value.AsReadOnly();
+            foreach (var e in triMesh.Edges.Value.AsReadOnly())
             {
                 var l = e.GetLength(positions);
                 Constraints.Value.Add(new(e, l));

@@ -23,9 +23,12 @@ namespace andywiecko.PBD2D.Components
 
         protected void SubscribeDelayedCreateMesh()
         {
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.update += DelayedCreateMesh;
+#endif
         }
 
+#if UNITY_EDITOR
         private void DelayedCreateMesh()
         {
             if (UnityEditor.EditorUtility.IsPersistent(this))
@@ -53,5 +56,6 @@ namespace andywiecko.PBD2D.Components
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssetIfDirty(this);
         }
+#endif
     }
 }

@@ -11,7 +11,7 @@ namespace andywiecko.PBD2D.Components
         {
         }
 
-        public float Friction => (Item1.Friction + Item2.Friction) / 2f;
+        public float Friction => 0.5f * (Item1.Friction + Item2.Friction);
         public IPointCollideWithLine PointComponent => Item1;
         public ILineCollideWithPoint LineComponent => Item2;
     }

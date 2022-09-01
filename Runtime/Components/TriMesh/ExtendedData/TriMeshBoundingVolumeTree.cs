@@ -17,7 +17,7 @@ namespace andywiecko.PBD2D.Components
         public AABB Bounds { get; private set; }
 
         [field: SerializeField, Min(0)]
-        public float Margin { get; set; } = 0.2f;
+        public float Margin { get; private set; } = 0.2f;
 
         Ref<NativeArray<AABB>> IBoundingVolumeTreeComponent<T>.Volumes => volumes;
         protected Ref<NativeArray<AABB>> volumes;

@@ -15,15 +15,15 @@ namespace andywiecko.PBD2D.Components
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
-        [field: SerializeField, HideInInspector]
-        public Transform RendererTransform { get; set; } = default;
+        [SerializeField, HideInInspector]
+        private Transform rendererTransform = default;
 
         private TriMesh triMesh;
         private Mesh mesh;
 
         private void TryCreateRenderer()
         {
-            if (RendererTransform != null)
+            if (this.rendererTransform != null)
             {
                 return;
             }
@@ -42,7 +42,7 @@ namespace andywiecko.PBD2D.Components
             rendererTransform.TryAddComponent<MeshRenderer>();
             var filter = rendererTransform.TryAddComponent<MeshFilter>();
             filter.sharedMesh = triMesh.SerializedData.Mesh;
-            RendererTransform = rendererTransform;
+            this.rendererTransform = rendererTransform;
         }
 
         private void OnValidate()
@@ -53,19 +53,21 @@ namespace andywiecko.PBD2D.Components
         public void UpdateMeshReference()
         {
             TryCreateRenderer();
-            var meshFilter = RendererTransform.GetComponent<MeshFilter>();
+            var meshFilter = rendererTransform.GetComponent<MeshFilter>();
             var triMesh = GetComponent<TriMesh>();
             meshFilter.mesh = triMesh.SerializedData?.Mesh;
         }
 
         private void EditorDelayed(Action a)
         {
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.delayCall += b;
             void b()
             {
                 a();
                 UnityEditor.EditorApplication.delayCall -= b;
             };
+#endif
         }
 
         private void Start()
@@ -73,8 +75,8 @@ namespace andywiecko.PBD2D.Components
             TryCreateRenderer();
 
             triMesh = GetComponent<TriMesh>();
-            RendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
-            var meshFilter = RendererTransform.GetComponent<MeshFilter>();
+            rendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
+            var meshFilter = rendererTransform.GetComponent<MeshFilter>();
             mesh = meshFilter.mesh;
 
             DisposeOnDestroy(
