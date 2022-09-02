@@ -13,6 +13,9 @@ namespace andywiecko.PBD2D.Components
         public float Friction => ground.PhysicalMaterial.Friction;
         public float2 Displacement => pos - prevPos;
 
+        [SerializeField]
+        private Transform overrideDisplacementTransform;
+
         private Ground ground;
         private float2 pos;
         private float2 prevPos;
@@ -25,7 +28,8 @@ namespace andywiecko.PBD2D.Components
         private void Update()
         {
             prevPos = pos;
-            pos = transform.position.ToFloat2();
+            var t = overrideDisplacementTransform == null ? transform : overrideDisplacementTransform;
+            pos = t.position.ToFloat2();
         }
     }
 }
