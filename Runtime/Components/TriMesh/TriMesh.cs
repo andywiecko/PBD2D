@@ -49,27 +49,21 @@ namespace andywiecko.PBD2D.Components
 
             var pointsCount = SerializedData.Positions.Length;
             var points = Enumerable.Range(0, pointsCount).Select(i => new Point((Id<Point>)i)).ToArray();
-            var triangles = SerializedData.ToTrianglesArray();
-            var edges = triangles.SelectMany(i => unpack(i)).ToArray();
+            var triangles = SerializedData.ToTriangles();
+            var edges = SerializedData.ToEdges();
             var weights = new float[pointsCount];
             var rho = PhysicalMaterial.Density;
-            foreach (var (a, b, c) in triangles)
+            foreach (var t in triangles)
             {
-                var (pA, pB, pC) = (transformedPositions[(int)a], transformedPositions[(int)b], transformedPositions[(int)c]);
-                var area = MathUtils.TriangleSignedArea2(pA, pB, pC);
+                var (a, b, c) = t;
+                var area = t.GetSignedArea2(transformedPositions);
                 var w0 = 6f / rho / math.abs(area); // 3 (points) * 2 (doubled area)
                 weights[(int)a] += w0;
                 weights[(int)b] += w0;
                 weights[(int)c] += w0;
             }
 
-            static IEnumerable<Edge> unpack(Triangle t)
-            {
-                var (a, b, c) = t;
-                yield return new(a, b);
-                yield return new(a, c);
-                yield return new(b, c);
-            }
+            Debug.Log($"{edges.Length}");
 
             var allocator = Allocator.Persistent;
             DisposeOnDestroy(
