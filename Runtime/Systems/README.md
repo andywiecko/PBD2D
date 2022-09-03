@@ -36,6 +36,8 @@ $$ C(p_1, p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
 
 where $\ell$ is rest length of the edge $(p_1, p_2)$.
 
+System supports XPBD compliance and PBD stiffness.
+
 ### Triangle Area Constraint System
 
 System responsible for resolving triangle area (signed) constraint.
@@ -45,6 +47,8 @@ The constraint function is defined in the following way
 $$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
 
 where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
+
+System supports XPBD compliance and PBD stiffness.
 
 ### Shape Matching Constraint System
 
@@ -73,23 +77,25 @@ $$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
 
 System supports the linear deformation model (see [^2] for more details).
 
-**TODO:...**
-
 ## Collisions
 
 ### Point Line Collision System
 
-System responsible for detecting and resolving collisions between bodies which provide point and line (infinite).
-It works on components which implement the `IPointLineCollisionTuple`.
-For example system is responsible for resolving [TriMesh](#trimesh)-[Ground](#ground) collisions.
+System responsible for resolving collisions between bodies, which provide points, and line (unbounded).
+System supports friction (use `PhysicalMaterial` to control the behaviour) for both, i.e. body and line can be translated.
 
 ### Point TriField Collision System
 
-**TODO**
+System implements collision algorightm between points and `TriField`.
+The algorithm prevents from bodies stacking and since its "volumetrical" can be a good competitor with continous collisions algorithms which are more costly.
+System supports friction (use `PhysicalMaterial` to control the behaviour).
 
 ### Capsule Capsule Collision System
 
-**todo**
+Experimental system which implements capsule-capsule collision algorithm.
+It resolves capsules distance constraint.
+System supports friction (use `PhysicalMaterial` to control the behaviour).
+Currently algorightm implementation does not resolve case for capsules segments intersection.
 
 ## Debug
 
