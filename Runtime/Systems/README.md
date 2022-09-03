@@ -10,8 +10,9 @@
     - [Point TriField Collision System](#point-trifield-collision-system)
     - [Capsule Capsule Collision System](#capsule-capsule-collision-system)
   - [Debug](#debug)
-    - [Mouse Interaction](#mouse-interaction)
+    - [Mouse Interaction System](#mouse-interaction-system)
   - [Extended data](#extended-data)
+    - [Bounding Volume Tree System](#bounding-volume-tree-system)
     - [Bounding Volume Tree External Edges System](#bounding-volume-tree-external-edges-system)
     - [Bounding Volume Tree Points System](#bounding-volume-tree-points-system)
     - [Bounding Volume Tree Triangles System](#bounding-volume-tree-triangles-system)
@@ -88,52 +89,78 @@ For example system is responsible for resolving [TriMesh](#trimesh)-[Ground](#gr
 
 ### Capsule Capsule Collision System
 
-**TODO**
+**todo**
 
 ## Debug
 
-### Mouse Interaction
+### Mouse Interaction System
 
-System used for interacting mouse pointer with the simulated object, rather for debug purposes.
-It works on components which implement the `IMouseInteractionComponent`.
+The system used for interacting mouse pointer with the simulated object (currently rather for debugging purposes).
+It supports translation and rotation of multiple points.
+To grab a body use left mouse click, when draging a body use mouse scroll to rotate a body around current mouse position.
+For additinal settings or debugging attach `MouseInteractionConfiguration` for your `World`.
 
 ## Extended data
 
+### Bounding Volume Tree System
+
+A generic abstract system `BoundingVolumeTreeSystem<T>` responsible for updating the `NativeBoundingVolumeTree<AABB>`, where `T` is `IConvertableToAABB`.
+
 ### Bounding Volume Tree External Edges System
 
-**TODO**
+Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `ExternalEdge`.
 
 ### Bounding Volume Tree Points System
 
-**TODO**
+Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `Point`.
 
 ### Bounding Volume Tree Triangles System
 
-**TODO**
+Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `Triangle`.
 
 ### Bounding Volume Trees Intersections System
 
-**TODO**
+System gathers the results of `NativeBoundingVolumeTree<AABB>` intersections.
+The result of intersection is stored in list of `int2` structs.
 
 ### Bounds System
 
-**TODO**
+Action only system responsible for updating bounds of the object.
+Bounds are used in collision algorithms scheduling.
 
 ## Position based dynamics
 
 ### Position Based Dynamics Step Start System
 
-**TODO**
+The system implements the first step of PBD algorighm.
+It updates velocity $\vec v$ using acceleration $\vec a$ and damping $\gamma$, solves position $\vec p$ using the updated velocity, and copies previous position $\vec q$
+
+$$
+\begin{cases}
+\vec v \to \vec v + (\vec a - \gamma \vec v) \,\Delta t\\
+\vec q \to \vec p\\
+\vec p \to \vec p + \vec v \,\Delta t,
+\end{cases}
+$$
+
+where $\Delta t = \text dt / n$ is reduced time step size.
 
 ### Position Based Dynamics Step End System
 
-**TODO**
+System updates the velocity $\vec v$ for position based dynamics body
+
+$$
+\vec v = \frac{\vec p - \vec q}{\Delta t},
+$$
+
+where $\vec p$ is position, $\vec q$ is previous position, and $\Delta t = \text dt / n$ is reduced time step size.
 
 ## Graphics
 
 ### TriMesh Renderer System
 
-**TODO**
+System responsible for updating the `Mesh`.
+It sync mesh verticies with simulation positions and updates the bounds.
 
 ## Bibliography
 
