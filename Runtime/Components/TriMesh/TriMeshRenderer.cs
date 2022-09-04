@@ -2,6 +2,7 @@ using andywiecko.BurstCollections;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Graphics)]
     public class TriMeshRenderer : BaseComponent, ITriMeshRenderer
     {
+        public Mesh Mesh { get; private set; }
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
 
@@ -19,7 +21,6 @@ namespace andywiecko.PBD2D.Components
         private Transform rendererTransform = default;
 
         private TriMesh triMesh;
-        private Mesh mesh;
 
         private void TryCreateRenderer()
         {
@@ -77,15 +78,15 @@ namespace andywiecko.PBD2D.Components
             triMesh = GetComponent<TriMesh>();
             rendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
             var meshFilter = rendererTransform.GetComponent<MeshFilter>();
-            mesh = meshFilter.mesh;
+            Mesh = meshFilter.mesh;
 
+            var vertices = triMesh.Positions.Value.Select(i => i.ToFloat3()).ToArray();
             DisposeOnDestroy(
-                MeshVertices = new NativeArray<float3>(triMesh.Positions.Value.Length, Allocator.Persistent)
+                MeshVertices = new NativeArray<float3>(vertices, Allocator.Persistent)
             );
 
-            Redraw();
+            Mesh.SetVertices(MeshVertices.Value);
+            Mesh.RecalculateBounds();
         }
-
-        public void Redraw() { mesh.SetVertices(MeshVertices.Value); mesh.RecalculateBounds(); }
     }
 }

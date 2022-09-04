@@ -23,23 +23,18 @@ namespace andywiecko.PBD2D.Systems
                 positions = renderer.Positions.Value.AsReadOnly();
             }
 
-            public JobHandle Schedule(JobHandle dependencies)
-            {
-                return this.Schedule(vertices.Length, 64, dependencies);
-            }
-
-            public void Execute(int index)
-            {
-                vertices[index] = positions[(Id<Point>)index].ToFloat3();
-            }
+            public JobHandle Schedule(JobHandle dependencies) => this.Schedule(vertices.Length, 64, dependencies);
+            public void Execute(int index) => vertices[index] = positions[(Id<Point>)index].ToFloat3();
         }
 
         [SolverAction]
-        public void Redraw()
+        private void Redraw()
         {
             foreach (var renderer in References)
             {
-                renderer.Redraw();
+                var mesh = renderer.Mesh;
+                mesh.SetVertices(renderer.MeshVertices.Value);
+                mesh.RecalculateBounds();
             }
         }
 
