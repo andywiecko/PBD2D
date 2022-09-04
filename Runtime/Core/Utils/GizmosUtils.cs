@@ -22,32 +22,37 @@ namespace andywiecko.PBD2D.Core
             var (minx, miny) = min;
             var (maxx, maxy) = max;
 
-            var pA = math.float2(min);
-            var pB = math.float2(maxx, miny);
-            var pC = math.float2(max);
-            var pD = math.float2(minx, maxy);
+            var a = math.float2(min);
+            var b = math.float2(maxx, miny);
+            var c = math.float2(max);
+            var d = math.float2(minx, maxy);
 
-            DrawLine(pA, pB, z);
-            DrawLine(pB, pC, z);
-            DrawLine(pC, pD, z);
-            DrawLine(pD, pA, z);
+            DrawQuadrilateral(a, b, c, d, z);
         }
 
-        public static void DrawCapsule(float2 pA, float2 pB, float radius, float z = 0)
+        public static void DrawQuadrilateral(float2 a, float2 b, float2 c, float2 d, float z = 0)
         {
-            DrawCircle(pA, radius, z);
-            DrawCircle(pB, radius, z);
-            var pAB = pB - pA;
-            var pR = radius * math.normalize(MathUtils.Rotate90CW(pAB));
-            DrawLine(pA + pR, pB + pR, z);
-            DrawLine(pA - pR, pB - pR, z);
+            DrawLine(a, b, z);
+            DrawLine(b, c, z);
+            DrawLine(c, d, z);
+            DrawLine(d, a, z);
         }
 
-        public static void DrawArrow(float2 pA, float2 pB, float headSizeRatio = 0.33f)
+        public static void DrawCapsule(float2 a, float2 b, float r, float z = 0)
         {
-            Gizmos.DrawLine(pA.ToFloat3(), pB.ToFloat3());
+            DrawCircle(a, r, z);
+            DrawCircle(b, r, z);
+            var pAB = b - a;
+            var pR = r * math.normalize(MathUtils.Rotate90CW(pAB));
+            DrawLine(a + pR, b + pR, z);
+            DrawLine(a - pR, b - pR, z);
+        }
 
-            var len = math.distance(pA, pB);
+        public static void DrawArrow(float2 a, float2 b, float headSizeRatio = 0.33f)
+        {
+            Gizmos.DrawLine(a.ToFloat3(), b.ToFloat3());
+
+            var len = math.distance(a, b);
             // TODO
         }
     }
