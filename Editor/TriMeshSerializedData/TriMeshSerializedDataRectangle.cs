@@ -1,14 +1,14 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Components
+namespace andywiecko.PBD2D.Editor
 {
     [PreferBinarySerialization]
     [CreateAssetMenu(
         fileName = "TriMeshSerializedDataRectangle",
         menuName = "PBD2D/TriMesh/Serialized Data (Rectangle)"
     )]
-    public class TriMeshSerializedDataRectangle : TriMeshSerializedData
+    public class TriMeshSerializedDataRectangle : TriMeshSerializedDataImpl
     {
         [SerializeField]
         private float2 size = 1;

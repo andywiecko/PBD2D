@@ -5,16 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Components
+namespace andywiecko.PBD2D.Editor
 {
     [PreferBinarySerialization]
     [CreateAssetMenu(
         fileName = "TriMeshSerializedDataTexture2d",
         menuName = "PBD2D/TriMesh/Serialized Data (Texture2d)"
     )]
-    public class TriMeshSerializedDataTexture2d : TriMeshSerializedData
+    public class TriMeshSerializedDataTexture2d : TriMeshSerializedDataImpl
     {
         [Serializable]
         private class SettingsWrapper
@@ -102,9 +103,7 @@ namespace andywiecko.PBD2D.Components
 
         protected virtual void OnValidate()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.delayCall += GetPointsFromCollider;
-#endif
+            EditorApplication.delayCall += GetPointsFromCollider;
         }
 
         private void GetPointsFromCollider()
@@ -122,9 +121,7 @@ namespace andywiecko.PBD2D.Components
                 DestroyImmediate(go);
             }
 
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.delayCall -= GetPointsFromCollider;
-#endif 
+            EditorApplication.delayCall -= GetPointsFromCollider;
         }
 
         private void Awake()

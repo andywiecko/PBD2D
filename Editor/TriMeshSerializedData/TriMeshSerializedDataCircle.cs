@@ -2,14 +2,14 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Components
+namespace andywiecko.PBD2D.Editor
 {
     [PreferBinarySerialization]
     [CreateAssetMenu(
         fileName = "TriMeshSerializedDataCircle",
         menuName = "PBD2D/TriMesh/Serialized Data (Circle)"
     )]
-    public class TriMeshSerializedDataCircle : TriMeshSerializedData
+    public class TriMeshSerializedDataCircle : TriMeshSerializedDataImpl
     {
         [SerializeField, Min(0)]
         private float radius = 1f;
