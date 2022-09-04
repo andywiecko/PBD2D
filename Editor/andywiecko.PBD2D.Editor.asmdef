@@ -7,7 +7,9 @@
         "andywiecko.PBD2D.Systems",
         "Unity.Mathematics",
         "andywiecko.ECS",
-        "andywiecko.ECS.Editor"
+        "andywiecko.ECS.Editor",
+        "andywiecko.BurstTriangulator",
+        "Unity.Collections"
     ],
     "includePlatforms": [
         "Editor"

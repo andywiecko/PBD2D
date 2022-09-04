@@ -7,7 +7,6 @@
         "Unity.Collections",
         "Unity.Mathematics",
         "andywiecko.BurstMathUtils",
-        "andywiecko.BurstTriangulator",
         "andywiecko.ECS"
     ],
     "includePlatforms": [],
