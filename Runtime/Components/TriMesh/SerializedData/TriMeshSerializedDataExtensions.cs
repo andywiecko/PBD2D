@@ -1,4 +1,6 @@
+using andywiecko.BurstCollections;
 using andywiecko.PBD2D.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -7,6 +9,31 @@ namespace andywiecko.PBD2D.Components
 {
     public static class TriMeshSerializedDataExtensions
     {
+        public static Point[] ToPoints(this TriMeshSerializedData data) => Enumerable
+            .Range(0, data.Positions.Length).Select(i => new Point((Id<Point>)i)).ToArray();
+
+        public static float2[] ToPositions(this TriMeshSerializedData data, Func<float2, float2> transformation) =>
+            data.Positions.Select(i => transformation(i)).ToArray();
+
+        public static float[] ToWeights(this TriMeshSerializedData data, Func<float2, float2> transformation, float density)
+        {
+            var pointsCount = data.Positions.Length;
+            var weights = new float[pointsCount];
+            var triangles = data.ToTriangles();
+            var positions = data.ToPositions(transformation);
+            foreach (var t in triangles)
+            {
+                var (a, b, c) = t;
+                var area = t.GetSignedArea2(positions);
+                var w0 = 6f / density / math.abs(area); // 3 (points) * 2 (doubled area)
+                weights[(int)a] += w0;
+                weights[(int)b] += w0;
+                weights[(int)c] += w0;
+            }
+
+            return weights;
+        }
+
         public static Triangle[] ToTriangles(this TriMeshSerializedData data) => data
             .GetTriangles()
             .Select(i => (Triangle)(i.x, i.y, i.z))

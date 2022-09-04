@@ -1,12 +1,10 @@
 using andywiecko.BurstCollections;
-using andywiecko.BurstMathUtils;
 using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
-using Unity.Collections.NotBurstCompatible;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -43,37 +41,19 @@ namespace andywiecko.PBD2D.Components
 
             var s = transform.localScale;
             var rb = new RigidTransform(transform.rotation, transform.position);
-            var transformedPositions = SerializedData.Positions.Select(i => T(i)).ToArray();
-
             float2 T(float2 x) => math.transform(rb, s * (x.ToFloat3() - rb.pos) + s * rb.pos).xy;
-
+            var transformedPositions = SerializedData.ToPositions(transformation: T);
             var pointsCount = SerializedData.Positions.Length;
-            var points = Enumerable.Range(0, pointsCount).Select(i => new Point((Id<Point>)i)).ToArray();
-            var triangles = SerializedData.ToTriangles();
-            var edges = SerializedData.ToEdges();
-            var weights = new float[pointsCount];
-            var rho = PhysicalMaterial.Density;
-            foreach (var t in triangles)
-            {
-                var (a, b, c) = t;
-                var area = t.GetSignedArea2(transformedPositions);
-                var w0 = 6f / rho / math.abs(area); // 3 (points) * 2 (doubled area)
-                weights[(int)a] += w0;
-                weights[(int)b] += w0;
-                weights[(int)c] += w0;
-            }
-
-            Debug.Log($"{edges.Length}");
 
             var allocator = Allocator.Persistent;
             DisposeOnDestroy(
-                Points = new NativeArray<Point>(points, allocator),
-                Weights = new NativeIndexedArray<Id<Point>, float>(weights, allocator),
+                Points = new NativeArray<Point>(SerializedData.ToPoints(), allocator),
+                Weights = new NativeIndexedArray<Id<Point>, float>(SerializedData.ToWeights(transformation: T, PhysicalMaterial.Density), allocator),
                 Positions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 PreviousPositions = new NativeIndexedArray<Id<Point>, float2>(transformedPositions, allocator),
                 Velocities = new NativeIndexedArray<Id<Point>, float2>(pointsCount, allocator),
-                Edges = new NativeIndexedArray<Id<Edge>, Edge>(edges, allocator),
-                Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(triangles, allocator)
+                Edges = new NativeIndexedArray<Id<Edge>, Edge>(SerializedData.ToEdges(), allocator),
+                Triangles = new NativeIndexedArray<Id<Triangle>, Triangle>(SerializedData.ToTriangles(), allocator)
             );
 
             transform.SetPositionAndRotation(default, quaternion.identity);
