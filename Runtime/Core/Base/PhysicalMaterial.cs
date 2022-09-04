@@ -8,7 +8,6 @@ namespace andywiecko.PBD2D.Core
         float Density { get; }
     }
 
-    [PreferBinarySerialization]
     [CreateAssetMenu(fileName = "PhysicalMaterial", menuName = "PBD2D/Physical Material")]
     public class PhysicalMaterial : ScriptableObject, IPhysicalMaterial
     {

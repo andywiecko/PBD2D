@@ -11,9 +11,6 @@ namespace andywiecko.PBD2D.Systems
     [Category(PBDCategory.PBD)]
     public class PositionBasedDynamicsStepStartSystem : BaseSystemWithConfiguration<IPositionBasedDynamics, PBDConfiguration>
     {
-        private float GlobalDamping => Configuration.GlobalDamping;
-        private float2 GlobalExternalAcceleration => Configuration.GlobalExternalAcceleration;
-
         [BurstCompile]
         private struct SolveStepStartJob : IJobParallelForDefer
         {
@@ -53,8 +50,8 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                var acceleration = component.ExternalAcceleration + GlobalExternalAcceleration;
-                var damping = component.Damping + GlobalDamping;
+                var acceleration = component.ExternalAcceleration + Configuration.GlobalExternalAcceleration;
+                var damping = component.Damping + Configuration.GlobalDamping;
                 dependencies = new SolveStepStartJob(component, damping, acceleration, Configuration.ReducedDeltaTime)
                     .Schedule(component.Points.Value, innerloopBatchCount: 64, dependencies);
             }

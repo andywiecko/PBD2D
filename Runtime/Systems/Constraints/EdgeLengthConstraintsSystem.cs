@@ -61,9 +61,9 @@ namespace andywiecko.PBD2D.Systems
                 var n = -pAB / pABabs;
                 var C = pABabs - l;
                 var lambda = -C / wAB;
-                var dp = k * lambda * n;
-                positions[idA] += wA * dp;
-                positions[idB] -= wB * dp;
+                var dx = k * lambda * n;
+                positions[idA] += wA * dx;
+                positions[idB] -= wB * dx;
             }
         }
 

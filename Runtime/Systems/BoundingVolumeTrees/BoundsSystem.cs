@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Systems
         }
 
         [SolverAction]
-        public void UpdateBounds()
+        private void UpdateBounds()
         {
             for (int i = 0; i < References.Count; i++)
             {

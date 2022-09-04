@@ -20,7 +20,7 @@ namespace andywiecko.PBD2D.Systems
         private float RotationSpeed => Configuration.RotationSpeed;
 
         [SolverAction]
-        public void MouseInteractionUpdate()
+        private void MouseInteractionUpdate()
         {
             if (!Camera.main)
             {
@@ -88,7 +88,7 @@ namespace andywiecko.PBD2D.Systems
         }
 
         [BurstCompile]
-        private struct DragBody : IJobParallelForDefer
+        private struct DragBodyJob : IJobParallelForDefer
         {
             [ReadOnly]
             private NativeArray<MouseInteractionConstraint> constraints;
@@ -98,7 +98,7 @@ namespace andywiecko.PBD2D.Systems
             private readonly Complex mouseRotation;
             private readonly float k;
 
-            public DragBody(IMouseInteractionComponent component, float2 mousePosition, Complex mouseRotation)
+            public DragBodyJob(IMouseInteractionComponent component, float2 mousePosition, Complex mouseRotation)
             {
                 constraints = component.Constraints.Value.AsDeferredJobArray();
                 positions = component.Positions.Value.GetInnerArray();
@@ -123,7 +123,7 @@ namespace andywiecko.PBD2D.Systems
         {
             foreach (var component in References)
             {
-                dependencies = new DragBody(component, MousePosition, MouseRotation).Schedule(component.Constraints.Value, 64, dependencies);
+                dependencies = new DragBodyJob(component, MousePosition, MouseRotation).Schedule(component.Constraints.Value, 64, dependencies);
             }
             return dependencies;
         }
