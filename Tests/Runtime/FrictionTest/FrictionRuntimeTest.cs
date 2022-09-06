@@ -10,7 +10,7 @@ namespace andywiecko.PBD2D.Tests
         public IEnumerator Test()
         {
             yield return LoadSceneAsync();
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2f);
         }
     }
 }
