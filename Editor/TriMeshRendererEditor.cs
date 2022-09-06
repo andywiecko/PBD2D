@@ -1,5 +1,6 @@
 using andywiecko.PBD2D.Components;
 using UnityEditor;
+using UnityEngine;
 
 namespace andywiecko.PBD2D.Editor
 {
@@ -28,6 +29,14 @@ namespace andywiecko.PBD2D.Editor
             }
 
             triMesh.OnSerializedDataChange -= Target.UpdateMeshReference;
+        }
+
+        private void OnDestroy()
+        {
+            if (!Application.isPlaying)
+            {
+                triMesh.OnSerializedDataChange -= Target.UpdateMeshReference;
+            }
         }
     }
 }

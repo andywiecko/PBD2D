@@ -42,7 +42,10 @@ namespace andywiecko.PBD2D.Components
 
             rendererTransform.TryAddComponent<MeshRenderer>();
             var filter = rendererTransform.TryAddComponent<MeshFilter>();
-            filter.sharedMesh = triMesh.SerializedData.Mesh;
+            if (triMesh.SerializedData != null)
+            {
+                filter.sharedMesh = triMesh.SerializedData.Mesh;
+            }
             this.rendererTransform = rendererTransform;
         }
 
