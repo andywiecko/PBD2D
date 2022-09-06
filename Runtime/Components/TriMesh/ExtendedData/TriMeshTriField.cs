@@ -65,7 +65,6 @@ namespace andywiecko.PBD2D.Components
                     var edge = external[externalId];
                     var (e0, e1) = positions.At(edge);
                     var p = pA * b.x + pB * b.y + pC * b.z;
-                    // TODO: this should be cached, it can be valuable!
                     MathUtils.PointClosestPointOnLineSegment(p, e0, e1, out var q);
                     GizmosUtils.DrawLine(p, q);
                 }
