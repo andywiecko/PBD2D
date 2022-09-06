@@ -1,29 +1,48 @@
 # PBD2D.Systems
 
 - [PBD2D.Systems](#pbd2dsystems)
-  - [Constraints](#constraints)
-    - [Edge Length Constraint System](#edge-length-constraint-system)
-    - [Triangle Area Constraint System](#triangle-area-constraint-system)
-    - [Shape Matching Constraint System](#shape-matching-constraint-system)
   - [Collisions](#collisions)
+    - [Capsule Capsule Collision System](#capsule-capsule-collision-system)
     - [Point Line Collision System](#point-line-collision-system)
     - [Point TriField Collision System](#point-trifield-collision-system)
-    - [Capsule Capsule Collision System](#capsule-capsule-collision-system)
+  - [Constraints](#constraints)
+    - [Edge Length Constraint System](#edge-length-constraint-system)
+    - [Shape Matching Constraint System](#shape-matching-constraint-system)
+    - [Triangle Area Constraint System](#triangle-area-constraint-system)
   - [Debug](#debug)
     - [Mouse Interaction System](#mouse-interaction-system)
   - [Extended data](#extended-data)
     - [Bounding Volume Tree System](#bounding-volume-tree-system)
     - [Bounding Volume Tree External Edges System](#bounding-volume-tree-external-edges-system)
     - [Bounding Volume Tree Points System](#bounding-volume-tree-points-system)
-    - [Bounding Volume Tree Triangles System](#bounding-volume-tree-triangles-system)
     - [Bounding Volume Trees Intersections System](#bounding-volume-trees-intersections-system)
+    - [Bounding Volume Tree Triangles System](#bounding-volume-tree-triangles-system)
     - [Bounds System](#bounds-system)
-  - [Position based dynamics](#position-based-dynamics)
-    - [Position Based Dynamics Step Start System](#position-based-dynamics-step-start-system)
-    - [Position Based Dynamics Step End System](#position-based-dynamics-step-end-system)
   - [Graphics](#graphics)
     - [TriMesh Renderer System](#trimesh-renderer-system)
-  - [Bibliography](#bibliography)
+  - [Position based dynamics](#position-based-dynamics)
+    - [Position Based Dynamics Step End System](#position-based-dynamics-step-end-system)
+    - [Position Based Dynamics Step Start System](#position-based-dynamics-step-start-system)
+
+## Collisions
+
+### Capsule Capsule Collision System
+
+Experimental system which implements capsule-capsule collision algorithm.
+It resolves capsules distance constraint.
+System supports friction (use `PhysicalMaterial` to control the behaviour).
+Currently algorightm implementation does not resolve case for capsules segments intersection.
+
+### Point Line Collision System
+
+System responsible for resolving collisions between bodies, which provide points, and line (unbounded).
+System supports friction (use `PhysicalMaterial` to control the behaviour) for both, i.e. body and line can be translated.
+
+### Point TriField Collision System
+
+System implements collision algorightm between points and `TriField`.
+The algorithm prevents from bodies stacking and since its "volumetrical" can be a good competitor with continous collisions algorithms which are more costly.
+System supports friction (use `PhysicalMaterial` to control the behaviour).
 
 ## Constraints
 
@@ -38,23 +57,9 @@ where $\ell$ is rest length of the edge $(p_1, p_2)$.
 
 System supports XPBD compliance and PBD stiffness.
 
-### Triangle Area Constraint System
-
-System responsible for resolving triangle area (signed) constraint.
-Constraint enforces that triangle area is conserved during the simulation.
-The constraint function is defined in the following way
-
-$$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
-
-where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
-
-System supports XPBD compliance and PBD stiffness.
-
 ### Shape Matching Constraint System
 
 The system is responsible for resolving the shape matching constraint.
-Shape matching formulation can be found in the
-[paper][muller.2005][^2].
 The method has many advantages:
 
 - can be easly embeded withing PBD framework,
@@ -75,27 +80,19 @@ It can be shown analytically that such rotation $R$ can be found as a rotational
 
 $$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
 
-System supports the linear deformation model (see [^2] for more details).
+System supports the linear deformation model.
 
-## Collisions
+### Triangle Area Constraint System
 
-### Point Line Collision System
+System responsible for resolving triangle area (signed) constraint.
+Constraint enforces that triangle area is conserved during the simulation.
+The constraint function is defined in the following way
 
-System responsible for resolving collisions between bodies, which provide points, and line (unbounded).
-System supports friction (use `PhysicalMaterial` to control the behaviour) for both, i.e. body and line can be translated.
+$$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
 
-### Point TriField Collision System
+where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
 
-System implements collision algorightm between points and `TriField`.
-The algorithm prevents from bodies stacking and since its "volumetrical" can be a good competitor with continous collisions algorithms which are more costly.
-System supports friction (use `PhysicalMaterial` to control the behaviour).
-
-### Capsule Capsule Collision System
-
-Experimental system which implements capsule-capsule collision algorithm.
-It resolves capsules distance constraint.
-System supports friction (use `PhysicalMaterial` to control the behaviour).
-Currently algorightm implementation does not resolve case for capsules segments intersection.
+System supports XPBD compliance and PBD stiffness.
 
 ## Debug
 
@@ -120,21 +117,38 @@ Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) fo
 
 Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `Point`.
 
-### Bounding Volume Tree Triangles System
-
-Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `Triangle`.
-
 ### Bounding Volume Trees Intersections System
 
 System gathers the results of `NativeBoundingVolumeTree<AABB>` intersections.
 The result of intersection is stored in list of `int2` structs.
+
+### Bounding Volume Tree Triangles System
+
+Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) for `T` equals `Triangle`.
 
 ### Bounds System
 
 Action only system responsible for updating bounds of the object.
 Bounds are used in collision algorithms scheduling.
 
+## Graphics
+
+### TriMesh Renderer System
+
+System responsible for updating the `Mesh`.
+It sync mesh verticies with simulation positions and updates the bounds.
+
 ## Position based dynamics
+
+### Position Based Dynamics Step End System
+
+System updates the velocity $\vec v$ for position based dynamics body
+
+$$
+\vec v = \frac{\vec p - \vec q}{\Delta t},
+$$
+
+where $\vec p$ is position, $\vec q$ is previous position, and $\Delta t = \text dt / n$ is reduced time step size.
 
 ### Position Based Dynamics Step Start System
 
@@ -150,31 +164,3 @@ $$
 $$
 
 where $\Delta t = \text dt / n$ is reduced time step size.
-
-### Position Based Dynamics Step End System
-
-System updates the velocity $\vec v$ for position based dynamics body
-
-$$
-\vec v = \frac{\vec p - \vec q}{\Delta t},
-$$
-
-where $\vec p$ is position, $\vec q$ is previous position, and $\Delta t = \text dt / n$ is reduced time step size.
-
-## Graphics
-
-### TriMesh Renderer System
-
-System responsible for updating the `Mesh`.
-It sync mesh verticies with simulation positions and updates the bounds.
-
-## Bibliography
-
-[muller.2007]:https://doi.org/10.1016/j.jvcir.2007.01.005
-[^1]:M.Müller, B.Heidelberger, M.Hennix, and J.Ratcliff, "Position based dynamics," [J. Vis. Commun. Image Represent., **18**, 2 (2007)][muller.2007].
-
-[muller.2005]:https://doi.org/10.1145/1073204.1073216
-[^2]:M.Müller, B.Heidelberger, M.Teschner, and M.Gros, "Meshless deformations based on shape matching," [ACM Trans. Graph. **24**, 3 (2005)][muller.2005].
-
-[bender.2017]:https://doi.org/10.2312/egt.20171034
-[^3]:J.Bender, M.Müller, and M.Macklin, "A Survey on Position Based Dynamics," [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)][bender.2017].

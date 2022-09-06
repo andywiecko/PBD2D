@@ -57,13 +57,13 @@ foreach(var i in 2..10)
 Attribute is used for marking serialized data with min/max restrictions, e.g.
 
 ```csharp
-[SerializeField, Range(min: 0, max: 1)]
-float2 value = new(0.25f, 0.75f);
+[SerializeField, RangeMinMax(min: 0, max: 1)]
+private float2 value = new(0.25f, 0.75f);
 ```
 
 Custom property drawer preview can be found below:
 
-**TODO ADD IMG HERE**
+![range-min-max-property-drawer](../../Documentation~/range-min-max-property-drawer.png)
 
 Attribute supports for `Vector2` and `float2` types.
 

@@ -2,9 +2,13 @@
 
 Unity package for Position Based Dynamics in two dimensions.
 
-[^1] [^2] [^3]
+> **Warning**
+>
+> The package is in a preview state.
+> The API may change without advance notice.
+> Production usage is not recommended.
 
----
+TODO [^1] [^2] [^3] [^4]
 
 **Package summary:**
 
@@ -74,43 +78,52 @@ click c href "Runtime/Systems"
 
 - **Elastic rods**
 
-TODO IMG
+![elastic-rod-pendulom](Documentation~/elastic-rod-pendulum.gif)
+![elastic-rod-tree](Documentation~/elastic-rod-tree.gif)
 
 - **Position based fluid**
 
-TODO IMG
+![fluid-one-sided](Documentation~/fluid-one-sided.gif)
+![fluid-two-sided](Documentation~/fluid-two-sided.gif)
 
 ## Roadmap
 
 **v0.1.0**
 
 - [ ] Sample scenes + build online.
-  - [ ] Washing machine scene (collisions)
+    (Tests)
   - [ ] Constraint scene
   - [ ] Friction scene
   - [ ] Shape matching scene
+  - [ ] add player test for collisions
+    (Demos)
+  - [ ] Washing machine scene (collisions)
+  - [ ] Ramp pendulum / box pile collision
+  - [ ] Duck + heavy weight scene
 - [ ] CI/CD, git dependencies for unity-test-runner?
-- [ ] Add preview gifs for fluids and rods.
-- [ ] Add edge-edge collisions
+- [ ] Add imgs in readmes
 
 **v1.0.0**
 
-- [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Reimport and refactor rod structure.
 - [ ] Reimport and refactor position based fluid.
-- [ ] Fluid "fancy" shader.
-- [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
-- [ ] Destructible bodies.
+- [ ] Destructible bodies (removing points/triangles during runtime).
+- [ ] Refactor collision component and introduce collision layers.
+- [ ] GC alloc free component iterators for system scheduling.
+- [ ] TriMesh self collisions (external points/bvt/collisions).
 - [ ] Connectors and lockers.
 - [ ] Shape matching clusters.
+- [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
 - [ ] Investigate performance with combined dependencies.
+- [ ] Fluid "fancy" shader.
 
 **v2.0.0**
 
-- [ ] Position based rigid bodies
+- [ ] (Smooth) cuttable bodies (adding points/triangles during runtime).
 - [ ] Continous collisions.
-- [ ] GPU fluids.
+- [ ] Position based rigid bodies
 - [ ] Sign distance field collisions.
+- [ ] GPU fluids.
 - [ ] Position based "smoke".
 
 ## Dependencies
@@ -129,3 +142,4 @@ TODO IMG
 [^1]:M.Müller, B.Heidelberger, M.Hennix, and J.Ratcliff, "Position based dynamics," [J. Vis. Commun. Image Represent., **18**, 2 (2007)](https://doi.org/10.1016/j.jvcir.2007.01.005).
 [^2]:M.Müller, B.Heidelberger, M.Teschner, and M.Gros, "Meshless deformations based on shape matching," [ACM Trans. Graph. **24**, 3 (2005)](https://doi.org/10.1145/1073204.1073216).
 [^3]:J.Bender, M.Müller, and M.Macklin, "A Survey on Position Based Dynamics," [EG '17: Proceedings of the European Association for Computer Graphics: Tutorials (2017)](https://doi.org/10.2312/egt.20171034).
+[^4]:M.Macklin, M.Müller, N.Chentanez, "XPBD: position-based simulation of compliant constrained dynamics," [Proceedings of the 9th International Conference on Motion in Games (2016)](https://doi.org/10.1145/2994258.2994272).
