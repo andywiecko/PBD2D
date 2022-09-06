@@ -37,9 +37,10 @@ namespace andywiecko.PBD2D.Components
         {
             var allocator = Allocator.Persistent;
 
+            var count = Item1.CollidableEdges.Value.Length * Item2.CollidableEdges.Value.Length;
             DisposeOnDestroy(
-                PotentialCollisions = new NativeList<IdPair<CollidableEdge>>(initialCapacity: 256, allocator),
-                Collisions = new NativeList<EdgeEdgeContactInfo>(initialCapacity: 256, allocator)
+                PotentialCollisions = new NativeList<IdPair<CollidableEdge>>(initialCapacity: count, allocator),
+                Collisions = new NativeList<EdgeEdgeContactInfo>(initialCapacity: count, allocator)
             );
 
             result = UnsafeUtility.As<NativeList<IdPair<CollidableEdge>>, NativeList<int2>>(ref PotentialCollisions.Value);
