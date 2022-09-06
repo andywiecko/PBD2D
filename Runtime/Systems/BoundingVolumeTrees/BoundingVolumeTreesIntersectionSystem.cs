@@ -30,7 +30,6 @@ namespace andywiecko.PBD2D.Systems
 
         public override JobHandle Schedule(JobHandle dependencies = default)
         {
-            //foreach (var component in References)
             for (int i = 0; i < References.Count; i++)
             {
                 var component = References[i];
