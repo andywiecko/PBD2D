@@ -34,7 +34,7 @@ namespace andywiecko.PBD2D.Components
         {
             var allocator = Allocator.Persistent;
 
-            var count = Item1.Positions.Value.Length * Item2.Triangles.Value.Length;
+            var count = 4 * 1024;
             DisposeOnDestroy(
                 PotentialCollisions = new NativeList<IdPair<Point, Triangle>>(initialCapacity: count, allocator),
                 Collisions = new NativeList<IdPair<Point, ExternalEdge>>(initialCapacity: count, allocator)

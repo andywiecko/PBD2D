@@ -37,7 +37,7 @@ namespace andywiecko.PBD2D.Components
         {
             var allocator = Allocator.Persistent;
 
-            var count = Item1.CollidableEdges.Value.Length * Item2.CollidableEdges.Value.Length;
+            var count = 4 * 1024;
             DisposeOnDestroy(
                 PotentialCollisions = new NativeList<IdPair<CollidableEdge>>(initialCapacity: count, allocator),
                 Collisions = new NativeList<EdgeEdgeContactInfo>(initialCapacity: count, allocator)
