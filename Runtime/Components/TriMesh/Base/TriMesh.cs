@@ -36,6 +36,10 @@ namespace andywiecko.PBD2D.Components
 
             if (!SerializedData)
             {
+                foreach (var c in GetComponents<BaseComponent>())
+                {
+                    c.enabled = false;
+                }
                 throw new NullReferenceException();
             }
 

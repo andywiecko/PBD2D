@@ -40,7 +40,7 @@ namespace andywiecko.PBD2D.Components
 
         protected void OnDrawGizmos()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || Tree == null)
             {
                 return;
             }
