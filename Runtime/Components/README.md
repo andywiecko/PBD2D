@@ -18,8 +18,7 @@ Below one can find editor preview of the given scriptable object
 
 ![trimesh-serialized-data-texture2d](../../Documentation~/trimesh-serialized-data-texture-2d.png)
 
-
-> **Note:**
+> **Note**
 >
 > Derive from `TriMeshSerializedData` to implement custom data.
 
@@ -36,6 +35,14 @@ Below one can find editor preview of the given scriptable object
 - mouse interaction
 
 ### Ground
+
+The `Ground` corresponds to an infinite line.
+Line provides position and normal vectors and is used for collisions with points.
+Translation of the component is included into friction calculations, however transform for calculating the translation can be overriden.
+
+**Supported features:**
+- collisions
+  - point-line (with TriMesh)
 
 ## Tuples
 

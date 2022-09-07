@@ -69,15 +69,33 @@ Attribute supports for `Vector2` and `float2` types.
 
 ## Mouse Interaction Configuration
 
-**TODO**
+World's global configuration of the mouse interaction system.
+Currently supported quantities:
 
-## PBD Configuration ##
+- radius (size of area in which points will be grabbed),
+- rotation speed (speed of the rotation using mouse scroll).
 
-**TODO**
+> **Note**
+> 
+> Use gizmos for preview the current settings.
+
+## PBD Configuration
+
+World's global configuration of the PBD simulation.
+Currently supported quantities:
+
+- steps count (iteration count used in PBD algorithm),
+- delta time (time step for each frame),
+- global damping (control energy disipation),
+- global external acceleration (by default corresponds to earth gravity acceleration).
 
 ## Physical Material
 
-**TODO**
+Physical material is used for setup the physical properties of the given entities.
+Currently supported quantities:
+
+- friction (controls fraction of the friction force applied during resolving collisions),
+- density (areal density of the material, it effect on constraints and collisions).
 
 ## PBD2D Jobs Order
 
