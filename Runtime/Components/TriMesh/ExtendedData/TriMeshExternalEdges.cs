@@ -40,7 +40,7 @@ namespace andywiecko.PBD2D.Components
 
                 var p = edge.GetCenter(positions);
                 var n = edge.GetNormal(positions);
-                GizmosUtils.DrawArrow(p, p + 0.33f * n);
+                GizmosUtils.DrawRay(p, 0.33f * n);
             }
         }
     }

@@ -47,13 +47,5 @@ namespace andywiecko.PBD2D.Core
             DrawLine(a + pR, b + pR, z);
             DrawLine(a - pR, b - pR, z);
         }
-
-        public static void DrawArrow(float2 a, float2 b, float headSizeRatio = 0.33f)
-        {
-            Gizmos.DrawLine(a.ToFloat3(), b.ToFloat3());
-
-            var len = math.distance(a, b);
-            // TODO
-        }
     }
 }
