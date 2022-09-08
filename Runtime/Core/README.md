@@ -4,7 +4,7 @@ The `Core` assembly contains all contracts, common structs, required for entitie
 
 - All components interfaces can be found at [`Contracts/`](Contracts/)
 - Structs: primitives, constraints, etcs can be found at [`Structs/`](Structs/).
-- Extensions, utils, and common jobs can be found at [`Extensions/`](Extensions/), [`Utils/`](Utils/), and [`Jobs`](Jobs/), respectively.
+- Extensions, utils, and common jobs can be found at [`Extensions/`](Extensions/), [`Utils/`](Utils/), and [`Jobs/`](Jobs/), respectively.
 
 Below one can find summary of the most important features.
 
@@ -99,4 +99,13 @@ Currently supported quantities:
 
 ## PBD2D Jobs Order
 
-**TODO**
+Implements [`JobsOrder`](https://github.com/andywiecko/ECS/tree/main/Runtime/Solver/JobsOrder.cs), which allows for proper system configuration within PBD framework.
+Systems execution order is split into 3 categories, which run in order:
+
+- frame start (run once per frame)
+- substep (run count configurable via [PBD Configuration](#pbd-configuration))
+- frame end (run once per frame)
+
+Below one can see an example `PBD2D Jobs Order` asset
+
+![pbd-jobs-order](../../Documentation~/pbd-jobs-order.png)
