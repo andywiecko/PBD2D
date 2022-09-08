@@ -7,8 +7,6 @@ namespace andywiecko.PBD2D.Editor
 {
     public static class EntitiesEditor
     {
-        // TODO: add source generator for these
-
         private const string path = "GameObject/PBD2D/";
 
         [MenuItem(path + nameof(TriMesh))]
@@ -16,6 +14,11 @@ namespace andywiecko.PBD2D.Editor
 
         [MenuItem(path + nameof(Ground))]
         public static void CreateGround() => Create<Ground>();
+
+        [MenuItem(path + "Simulation Template")]
+        public static void CreateSimulationTemplate() => ScriptableObject
+            .CreateInstance<SimulationTemplateEditor>()
+            .Spawn();
 
         private static void Create<T>() where T : Entity
         {
