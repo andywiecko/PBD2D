@@ -1,24 +1,24 @@
 {
   "dependencies": {
     "com.andywiecko.burst.collections": {
-      "version": "https://github.com/andywiecko/BurstCollections.git#v1.5.0",
+      "version": "https://github.com/andywiecko/BurstCollections.git#v1.6.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.burst": "1.6.3",
         "com.unity.jobs": "0.11.0-preview.6"
       },
-      "hash": "36878e6ba8b90ef4676d59a4b40e202a8c9e13d6"
+      "hash": "d0d6d078b9b51141bb252fa0a6a150a82274fe72"
     },
     "com.andywiecko.burst.mathutils": {
-      "version": "https://github.com/andywiecko/BurstMathUtils.git#v1.2.0",
+      "version": "https://github.com/andywiecko/BurstMathUtils.git#v1.3.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.burst": "1.6.3",
         "com.unity.jobs": "0.11.0-preview.6"
       },
-      "hash": "ba246bb24adca5bc55c73ec71284989f269e55ac"
+      "hash": "770ff304b9dc29df2e796bf71a2f591106c2c431"
     },
     "com.andywiecko.burst.triangulator": {
       "version": "https://github.com/andywiecko/BurstTriangulator.git#v1.3.0",
@@ -46,20 +46,20 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.burst": "1.6.3",
+        "com.unity.burst": "1.7.4",
         "com.unity.jobs": "0.11.0-preview.6",
-        "com.andywiecko.burst.mathutils": "1.2.0",
-        "com.andywiecko.burst.collections": "1.5.0",
+        "com.andywiecko.burst.mathutils": "1.3.0",
+        "com.andywiecko.burst.collections": "1.6.0",
         "com.andywiecko.burst.triangulator": "1.3.0",
         "com.andywiecko.ecs": "0.2.0"
       }
     },
     "com.unity.2d.animation": {
-      "version": "7.0.6",
+      "version": "7.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "6.0.3",
+        "com.unity.2d.common": "6.0.1",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.uielements": "1.0.0"
@@ -67,7 +67,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "6.0.3",
+      "version": "6.0.1",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -79,7 +79,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.path": {
-      "version": "5.0.2",
+      "version": "5.0.1",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -93,12 +93,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "6.0.4",
+      "version": "6.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.6",
-        "com.unity.2d.common": "6.0.3",
+        "com.unity.2d.animation": "7.0.1",
+        "com.unity.2d.common": "6.0.0",
         "com.unity.2d.sprite": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -110,13 +110,13 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "7.0.4",
+      "version": "7.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.1.0",
-        "com.unity.2d.common": "6.0.3",
-        "com.unity.2d.path": "5.0.2",
+        "com.unity.2d.common": "6.0.1",
+        "com.unity.2d.path": "5.0.1",
         "com.unity.modules.physics2d": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -128,7 +128,7 @@
       "dependencies": {}
     },
     "com.unity.2d.tilemap.extras": {
-      "version": "2.2.3",
+      "version": "2.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -140,7 +140,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.6.6",
+      "version": "1.7.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -158,12 +158,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
-      "version": "1.2.4",
+      "version": "1.0.0-pre.5",
       "depth": 2,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.6.6",
-        "com.unity.test-framework": "1.1.31"
+        "com.unity.burst": "1.5.4",
+        "com.unity.test-framework": "1.1.22"
       },
       "url": "https://packages.unity.com"
     },
@@ -179,13 +179,13 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.6",
+        "com.unity.2d.animation": "7.0.2",
         "com.unity.2d.pixel-perfect": "5.0.1",
-        "com.unity.2d.psdimporter": "6.0.4",
+        "com.unity.2d.psdimporter": "6.0.1",
         "com.unity.2d.sprite": "1.0.0",
-        "com.unity.2d.spriteshape": "7.0.4",
+        "com.unity.2d.spriteshape": "7.0.3",
         "com.unity.2d.tilemap": "1.0.0",
-        "com.unity.2d.tilemap.extras": "2.2.3"
+        "com.unity.2d.tilemap.extras": "2.2.1"
       }
     },
     "com.unity.ide.rider": {
@@ -224,27 +224,25 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
-      "version": "1.2.6",
+      "version": "1.2.5",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.0.2",
+      "version": "2.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.services.core": {
-      "version": "1.4.0",
+      "version": "1.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.modules.androidjni": "1.0.0"
+        "com.unity.modules.unitywebrequest": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
