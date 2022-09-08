@@ -1,4 +1,4 @@
-name: Tests
+name: Build
 
 on:
   pull_request: {}
@@ -10,7 +10,7 @@ env:
 
 jobs:
   testAllModes:
-    name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -19,9 +19,8 @@ jobs:
           - Samples~/PBD2DTestProject
         unityVersion:
           - 2021.2.5f1
-        testMode:
-          - playmode
-          - editmode
+        targetPlatform:
+          - StandaloneWindows
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,8 +28,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.projectPath }}
+          key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
           restore-keys: |
+            Library-${{ matrix.projectPath }}-
             Library-
       - name: Preparing sample project
         run: |
@@ -42,15 +42,14 @@ jobs:
           echo "Copying package data"
           cp -r `ls -I Samples~` Samples~/PBD2DTestProject/Packages/com.andywiecko.pbd2d
           ls -alF Samples~/PBD2DTestProject/Packages/com.andywiecko.pbd2d
-      - uses: game-ci/unity-test-runner@v2
-        id: tests
+      - uses: game-ci/unity-builder@v2
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
-          testMode: ${{ matrix.testMode }}
-          artifactsPath: ${{ matrix.testMode }}-artifacts
-          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+andywiecko.ecs;pathFilters:-*/com.andywiecko.ecs/Runtime/Editor/*'
+          targetPlatform: ${{ matrix.targetPlatform }}
+          allowDirtyBuild: true
+          versioning: None
       - uses: actions/upload-artifact@v2
         with:
-          name: Test results for ${{ matrix.testMode }}
-          path: ${{ steps.tests.outputs.artifactsPath }}
+          name: Build
+          path: build
