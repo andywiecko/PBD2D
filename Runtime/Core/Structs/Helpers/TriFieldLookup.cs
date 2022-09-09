@@ -129,7 +129,6 @@ namespace andywiecko.PBD2D.Core
                 }
             }
 
-            // TODO: Brute force, should be done smarter using kd tree or voronoi
             private Id<ExternalEdge> FindClosestEdge(float2 p)
             {
                 var minDistanceSq = float.MaxValue;

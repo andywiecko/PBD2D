@@ -35,7 +35,6 @@ namespace andywiecko.PBD2D.Systems
                 MouseRotation = Complex.PolarUnit(0);
                 foreach (var c in References)
                 {
-                    // TODO: use bounds
                     new GrabBodyJob(c, MousePosition, Radius).Schedule(default).Complete();
                 }
             }

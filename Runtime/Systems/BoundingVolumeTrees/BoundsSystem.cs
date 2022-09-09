@@ -7,7 +7,6 @@ namespace andywiecko.PBD2D.Systems
     [Category(PBDCategory.ExtendedData)]
     public class BoundsSystem : BaseSystem<IBoundsComponent>
     {
-        // TODO: introduce ActionSystem without schedule
         public override JobHandle Schedule(JobHandle dependencies)
         {
             throw new System.NotImplementedException();
