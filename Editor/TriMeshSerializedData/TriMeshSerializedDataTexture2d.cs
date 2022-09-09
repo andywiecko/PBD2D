@@ -21,7 +21,7 @@ namespace andywiecko.PBD2D.Editor
         private class SettingsWrapper
         {
             [SerializeField] int batchCount = 64;
-            [SerializeField, Range(min: 0.175f, max: 0.698f)] float minimumAngle = math.radians(33);
+            [SerializeField, Range(min: 0.175f, max: 0.698f), Tooltip("Angle in [rad].")] float minimumAngle = math.radians(33);
             [SerializeField, RangeMinMax(1e-9f, 2)] Vector2 area = new(0.015f, 0.5f);
             [SerializeField] bool refineMesh = true;
             [SerializeField] bool constrainEdges = true;

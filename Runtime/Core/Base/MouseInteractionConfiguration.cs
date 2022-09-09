@@ -16,7 +16,7 @@ namespace andywiecko.PBD2D.Core
         [field: SerializeField, Min(0)]
         public float Radius { get; private set; } = 1;
 
-        [field: SerializeField, Range(0, 1)]
+        [field: SerializeField, Range(-1, 1)]
         public float RotationSpeed { get; private set; } = 0.1f;
     }
 }
