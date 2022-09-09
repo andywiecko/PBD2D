@@ -5,18 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Editor
+namespace andywiecko.PBD2D.Components
 {
     [PreferBinarySerialization]
     [CreateAssetMenu(
         fileName = "TriMeshSerializedDataTexture2d",
         menuName = "PBD2D/TriMesh/Serialized Data (Texture2d)"
     )]
-    public class TriMeshSerializedDataTexture2d : TriMeshSerializedDataImpl
+    public class TriMeshSerializedDataTexture2d : TriMeshSerializedData
     {
+#if UNITY_EDITOR
         [Serializable]
         private class SettingsWrapper
         {
@@ -40,7 +43,6 @@ namespace andywiecko.PBD2D.Editor
                 RestoreBoundary = wrapper.restoreBoundary
             };
         }
-
         [SerializeField]
         protected Texture2D texture = default;
 
@@ -128,5 +130,6 @@ namespace andywiecko.PBD2D.Editor
         {
             SubscribeDelayedCreateMesh();
         }
+#endif
     }
 }

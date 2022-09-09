@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Editor
+namespace andywiecko.PBD2D.Components
 {
     [Serializable]
     public class SerializedPath : IEnumerable<float2>

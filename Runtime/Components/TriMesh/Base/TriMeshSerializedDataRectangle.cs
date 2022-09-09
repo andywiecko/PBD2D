@@ -1,15 +1,16 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace andywiecko.PBD2D.Editor
+namespace andywiecko.PBD2D.Components
 {
     [PreferBinarySerialization]
     [CreateAssetMenu(
         fileName = "TriMeshSerializedDataRectangle",
         menuName = "PBD2D/TriMesh/Serialized Data (Rectangle)"
     )]
-    public class TriMeshSerializedDataRectangle : TriMeshSerializedDataImpl
+    public class TriMeshSerializedDataRectangle : TriMeshSerializedData
     {
+#if UNITY_EDITOR
         [SerializeField]
         private float2 size = 1;
 
@@ -49,5 +50,6 @@ namespace andywiecko.PBD2D.Editor
 
             RecalculateMesh();
         }
+#endif
     }
 }
