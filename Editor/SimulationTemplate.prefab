@@ -270,12 +270,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <World>k__BackingField: {fileID: 2908755417569427846}
   <Configuration>k__BackingField:
-    <StepsCount>k__BackingField: 10
-    <DeltaTime>k__BackingField: 0.016666668
-    <GlobalDamping>k__BackingField: 0.1
+    <StepsCount>k__BackingField: 8
+    <DeltaTime>k__BackingField: 0.01667
+    <GlobalDamping>k__BackingField: 0
     <GlobalExternalAcceleration>k__BackingField:
       x: 0
-      y: -50
+      y: -9.81
 --- !u!114 &2908755418351553974
 MonoBehaviour:
   m_ObjectHideFlags: 0
