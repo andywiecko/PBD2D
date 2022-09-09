@@ -8,15 +8,17 @@ Unity package for Position Based Dynamics in two dimensions.
 > The API may change without advance notice.
 > Production usage is not recommended.
 
-The package provides implementation of _position based dynamics_ (PBD) [^1] 
+[![Build](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml) [![Tests](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml) ![GitHub package.json version](https://img.shields.io/github/package-json/v/andywiecko/PBD2D?color=blue)
+
+The package provides an implementation of _position based dynamics_ (PBD) [^1] 
 [^3] [^5] using HPC# (via Burst compiler) 
 including extended position based dynamics (xPBD) [^4], 
-shape-matching [^2], 
-various collision algorithms with basic friction model [^6].
+shape-matching [^2], and
+various collision algorithms with a basic friction model [^6].
 There are also upcoming features regarding one-dimensional structures (rods) [^7] [^8]
-and fluids [^9] with softbodies coupling.
+and fluids [^9] with soft bodies coupling.
 
-Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www.youtube.com/channel/UCTG_vrRdKYfrpqCv_WV4eyA) for great tutorial about PBD related topics!
+Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www.youtube.com/channel/UCTG_vrRdKYfrpqCv_WV4eyA) for the great tutorial about PBD-related topics!
 
 **Package summary:**
 
@@ -52,21 +54,27 @@ TODO IMG
 
 ## Getting started
 
-Currently, Unity Engine does not supported git dependencies for custom git pacakges.
+Currently, Unity Engine does not support git dependencies for custom git packages.
 To install the PBD2D, one has to include dependencies manually.
-The easiest way to do it is by coping the following includes into project manifest:
+The easiest way to do it is by coping the following includes into the project manifest:
 
 ```json
-TODO
+    "com.andywiecko.burst.collections": "https://github.com/andywiecko/BurstCollections.git#v1.6.0",
+    "com.andywiecko.burst.mathutils": "https://github.com/andywiecko/BurstMathUtils.git#v1.3.0",
+    "com.andywiecko.burst.triangulator": "https://github.com/andywiecko/BurstTriangulator.git#v1.3.0",
+    "com.andywiecko.ecs": "https://github.com/andywiecko/ECS.git#v0.2.0",
+    "com.andywiecko.pbd2d": "https://github.com/andywiecko/PBD2D.git#v0.1.0",
 ```
 
 See the example project [manifest.json](TODO).
 
+TODO: add description of creating new scene
+
 ## Architecture
 
-The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern and it uses [andywiecko.ECS](https://github.com/andywiecko/ECS) as implementation of the core engine.
+The project architecture is based on the custom [ECS](https://en.wikipedia.org/wiki/Entity_component_system) pattern and it uses [andywiecko.ECS](https://github.com/andywiecko/ECS) as the implementation of the core engine.
 
-The package consist of three main assemblies:
+The package consists of three main assemblies:
 
 - [`andywiecko.PBD2D.Core`](Runtime/Core) contains all contracts, common structs, and all required abstractions.
 - [`andywiecko.PBD2D.Components`](Runtime/Components) which consists of components implementations.
@@ -85,9 +93,9 @@ a[Core]
 b[Components]
 c[Systems]
 
-click a href "andywiecko/PBD2D/Runtime/Core"
-click b href "andywiecko/PBD2D/Runtime/Components"
-click c href "andywiecko/PBD2D/Runtime/Systems"
+click a href "andywiecko/PBD2D/tree/main/Runtime/Core"
+click b href "andywiecko/PBD2D/tree/main/Runtime/Components"
+click c href "andywiecko/PBD2D/tree/main/Runtime/Systems"
 ```
 
 ## Preview for upcoming features
@@ -112,11 +120,11 @@ click c href "andywiecko/PBD2D/Runtime/Systems"
   - [ ] Ramp pendulum / box pile collision
   - [ ] Duck + heavy weight scene
   - [ ] Shape matching stars
-- [ ] CI/CD, git dependencies for unity-test-runner?
-- [ ] Add imgs in readmes
+  - [ ] Different stiffeness scene using boxes (like runtime test)
 
 **v1.0.0**
 
+- [ ] `TriMeshSerializedDataTriangulatorPostprocess` (triangulate `TriMeshSerializedData`).
 - [ ] Reimport and refactor rod structure.
 - [ ] Reimport and refactor position based fluid.
 - [ ] Destructible bodies (removing points/triangles during runtime).

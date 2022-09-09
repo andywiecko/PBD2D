@@ -1,12 +1,12 @@
 # PBD2D.Core
 
-The `Core` assembly contains all contracts, common structs, required for entities, components, and systems implementations.
+The `Core` assembly contains all contracts/common structs required for entities, components, and systems implementations.
 
 - All components interfaces can be found at [`Contracts/`](Contracts/)
-- Structs: primitives, constraints, etcs can be found at [`Structs/`](Structs/).
+- Structs: primitives, constraints, etc can be found at [`Structs/`](Structs/).
 - Extensions, utils, and common jobs can be found at [`Extensions/`](Extensions/), [`Utils/`](Utils/), and [`Jobs/`](Jobs/), respectively.
 
-Below one can find summary of the most important features.
+Below one can find a summary of the most important features.
 
 ## At() extension
 
@@ -36,7 +36,7 @@ it returns `Id<ExternalEdge>` which correspond for "the closest" one.
 > **Warning**
 > 
 > `TriFieldLookup` should be initialized before usage!
-> Currently, field generation is bruteforce implementation.
+> Currently, field generation is a brute-force implementation.
 > Regeneration during runtime may be costly.
 
 
@@ -54,7 +54,7 @@ foreach(var i in 2..10)
 
 ## `RangeMinMax` attribute
 
-Attribute is used for marking serialized data with min/max restrictions, e.g.
+The attribute is used for marking serialized data with min/max restrictions, e.g.
 
 ```csharp
 [SerializeField, RangeMinMax(min: 0, max: 1)]
@@ -72,7 +72,7 @@ Attribute supports for `Vector2` and `float2` types.
 World's global configuration of the mouse interaction system.
 Currently supported quantities:
 
-- radius (size of area in which points will be grabbed),
+- radius (size of the area in which points will be grabbed),
 - rotation speed (speed of the rotation using mouse scroll).
 
 > **Note**
@@ -86,20 +86,20 @@ Currently supported quantities:
 
 - steps count (iteration count used in PBD algorithm),
 - delta time (time step for each frame),
-- global damping (control energy disipation),
+- global damping (control energy dissipation),
 - global external acceleration (by default corresponds to earth gravity acceleration).
 
 ## Physical Material
 
-Physical material is used for setup the physical properties of the given entities.
+Physical material is used to set up the physical properties of the given entities.
 Currently supported quantities:
 
 - friction (controls fraction of the friction force applied during resolving collisions),
-- density (areal density of the material, it effect on constraints and collisions).
+- density (areal density of the material, its effect on constraints and collisions).
 
 ## PBD2D Jobs Order
 
-Implements [`JobsOrder`](https://github.com/andywiecko/ECS/tree/main/Runtime/Solver/JobsOrder.cs), which allows for proper system configuration within PBD framework.
+Implements [`JobsOrder`](https://github.com/andywiecko/ECS/tree/main/Runtime/Solver/JobsOrder.cs), which allows for proper system configuration within the PBD framework.
 Systems execution order is split into 3 categories, which run in order:
 
 - frame start (run once per frame)

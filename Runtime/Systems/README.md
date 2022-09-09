@@ -28,41 +28,41 @@
 
 ### Capsule Capsule Collision System
 
-Experimental system which implements capsule-capsule collision algorithm.
-It resolves capsules distance constraint.
-System supports friction (use `PhysicalMaterial` to control the behaviour).
-Currently algorightm implementation does not resolve case for capsules segments intersection.
+The experimental system which implements a capsule-capsule collision algorithm.
+It resolves capsule distance constraints.
+The system supports friction (use `PhysicalMaterial` to control the behavior).
+Currently, algorithm implementation does not resolve the case for capsules segments intersection.
 
 ### Point Line Collision System
 
-System responsible for resolving collisions between bodies, which provide points, and line (unbounded).
-System supports friction (use `PhysicalMaterial` to control the behaviour) for both, i.e. body and line can be translated.
+The system is responsible for resolving collisions between bodies, which provide points, and lines (unbounded).
+The system supports friction (use `PhysicalMaterial` to control the behavior) for both, i.e. body and a line can be translated.
 
 ### Point TriField Collision System
 
-System implements collision algorightm between points and `TriField`.
-The algorithm prevents from bodies stacking and since its "volumetrical" can be a good competitor with continous collisions algorithms which are more costly.
-System supports friction (use `PhysicalMaterial` to control the behaviour).
+The system implements a collision algorithm between points and `TriField`.
+The algorithm prevents from bodies stacking and since it's "volumetrical" can be a good competitor with continuous collision algorithms which are more costly.
+The system supports friction (use `PhysicalMaterial` to control the behavior).
 
 ## Constraints
 
 ### Edge Length Constraint System
 
-System responsible for resolving edge length constraint, the most common constraint in PBD simulation.
-Constraint is defined in the following way
+The system is responsible for resolving edge length constraints, the most common constraint in PBD simulation.
+The constraint is defined in the following way
 
 $$ C(p_1, p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
 
 where $\ell$ is rest length of the edge $(p_1, p_2)$.
 
-System supports XPBD compliance and PBD stiffness.
+The system supports XPBD compliance and PBD stiffness.
 
 ### Shape Matching Constraint System
 
 The system is responsible for resolving the shape matching constraint.
 The method has many advantages:
 
-- can be easly embeded withing PBD framework,
+- can be easily embedded withing PBD framework,
 - can be used for simulation _meshless_ objects,
 - it is computationally cheap,
 - can be used for simulation (quasi) rigid bodies.
@@ -80,11 +80,11 @@ It can be shown analytically that such rotation $R$ can be found as a rotational
 
 $$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
 
-System supports the linear deformation model.
+The system supports the linear deformation model.
 
 ### Triangle Area Constraint System
 
-System responsible for resolving triangle area (signed) constraint.
+The system is responsible for resolving triangle area (signed) constraints.
 Constraint enforces that triangle area is conserved during the simulation.
 The constraint function is defined in the following way
 
@@ -92,22 +92,22 @@ $$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
 
 where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
 
-System supports XPBD compliance and PBD stiffness.
+The system supports XPBD compliance and PBD stiffness.
 
 ## Debug
 
 ### Mouse Interaction System
 
-The system used for interacting mouse pointer with the simulated object (currently rather for debugging purposes).
+The system is used for interacting mouse pointer with the simulated object (currently rather for debugging purposes).
 It supports translation and rotation of multiple points.
-To grab a body use left mouse click, when draging a body use mouse scroll to rotate a body around current mouse position.
-For additinal settings or debugging attach `MouseInteractionConfiguration` for your `World`.
+To grab a body use the left mouse click when dragging a body use the mouse scroll to rotate a body around the current mouse position.
+For additional settings or debugging attach `MouseInteractionConfiguration` for your `World`.
 
 ## Extended data
 
 ### Bounding Volume Tree System
 
-A generic abstract system `BoundingVolumeTreeSystem<T>` responsible for updating the `NativeBoundingVolumeTree<AABB>`, where `T` is `IConvertableToAABB`.
+The generic abstract system `BoundingVolumeTreeSystem<T>` responsible for updating the `NativeBoundingVolumeTree<AABB>`, where `T` is `IConvertableToAABB`.
 
 ### Bounding Volume Tree External Edges System
 
@@ -119,8 +119,8 @@ Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) fo
 
 ### Bounding Volume Trees Intersections System
 
-System gathers the results of `NativeBoundingVolumeTree<AABB>` intersections.
-The result of intersection is stored in list of `int2` structs.
+The system gathers the results of the `NativeBoundingVolumeTree<AABB>` intersections.
+The result of intersection is stored in a list of `int2` structs.
 
 ### Bounding Volume Tree Triangles System
 
@@ -128,21 +128,21 @@ Implementation of [Bounding Volume Tree System](#bounding-volume-tree-system) fo
 
 ### Bounds System
 
-Action only system responsible for updating bounds of the object.
+The action-only system is responsible for updating bounds of the object.
 Bounds are used in collision algorithms scheduling.
 
 ## Graphics
 
 ### TriMesh Renderer System
 
-System responsible for updating the `Mesh`.
-It sync mesh verticies with simulation positions and updates the bounds.
+The system is responsible for updating the `Mesh`.
+It syncs mesh vertices with simulation positions and updates the bounds.
 
 ## Position based dynamics
 
 ### Position Based Dynamics Step End System
 
-System updates the velocity $\vec v$ for position based dynamics body
+The system updates the velocity $\vec v$ for position based dynamics body
 
 $$
 \vec v = \frac{\vec p - \vec q}{\Delta t},
