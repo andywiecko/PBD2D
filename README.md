@@ -38,7 +38,23 @@ Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www
 
 ## Gallery
 
-TODO IMG
+![demo-1](Documentation~/demo1.gif)
+![demo-2](Documentation~/demo2.gif)
+
+![demo-3](Documentation~/demo3.gif)
+![demo-4](Documentation~/demo4.gif)
+
+![demo-5](Documentation~/demo5.gif)
+![demo-6](Documentation~/demo6.gif)
+
+One can play the presented demos [**here**](https://andywiecko.github.io/PBD2D-examples).
+See [`PDB2D-examples`](https://github.com/andywiecko/PBD2D-examples) github repo for source codes and scenes.
+
+> **Warning**
+> 
+> Currently, `Burst` compiler is not supported with `WebGL`.
+> Demo scenes are for preview only.
+> Performance may be limited in web builds.
 
 ## Table od Contents
 
@@ -66,9 +82,9 @@ The easiest way to do it is by coping the following includes into the project ma
     "com.andywiecko.pbd2d": "https://github.com/andywiecko/PBD2D.git#v0.1.0",
 ```
 
-See the example project [manifest.json](TODO).
+See the example project [manifest.json](https://github.com/andywiecko/PBD2D-examples/tree/main/Packages/manifest.json).
 
-TODO: add description of creating new scene
+To run your first simulation with `PBD2D` follow the steps presented in [`TUTORIAL.md`](TUTORIAL.md).
 
 ## Architecture
 
@@ -111,16 +127,6 @@ click c href "andywiecko/PBD2D/tree/main/Runtime/Systems"
 ![fluid-two-sided](Documentation~/fluid-two-sided.gif)
 
 ## Roadmap
-
-**v0.1.0**
-
-- [ ] Sample scenes + build online.
-    (Demos)
-  - [ ] Washing machine scene (collisions)
-  - [ ] Ramp pendulum / box pile collision
-  - [ ] Duck + heavy weight scene
-  - [ ] Shape matching stars
-  - [ ] Different stiffeness scene using boxes (like runtime test)
 
 **v1.0.0**
 
