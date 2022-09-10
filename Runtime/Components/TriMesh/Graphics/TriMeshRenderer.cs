@@ -56,6 +56,11 @@ namespace andywiecko.PBD2D.Components
 
         public void UpdateMeshReference()
         {
+            if (this == null)
+            {
+                return;
+            }
+
             TryCreateRenderer();
             var meshFilter = rendererTransform.GetComponent<MeshFilter>();
             var triMesh = GetComponent<TriMesh>();

@@ -33,7 +33,7 @@ namespace andywiecko.PBD2D.Editor
 
         private void OnDestroy()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && Target != null)
             {
                 triMesh.OnSerializedDataChange -= Target.UpdateMeshReference;
             }
