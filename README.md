@@ -8,7 +8,7 @@ Unity package for Position Based Dynamics in two dimensions.
 > The API may change without advance notice.
 > Production usage is not recommended.
 
-[![Build](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml) [![Tests](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml) ![GitHub package.json version](https://img.shields.io/github/package-json/v/andywiecko/PBD2D?color=blue)
+[![Build](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml) [![Tests](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml) [![openupm](https://img.shields.io/npm/v/com.andywiecko.pbd2d?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.andywiecko.pbd2d/)
 
 The package provides an implementation of _position based dynamics_ (PBD) [^1] 
 [^3] [^5] using HPC# (via Burst compiler) 
@@ -70,20 +70,43 @@ See [`PDB2D-examples`](https://github.com/andywiecko/PBD2D-examples) github repo
 
 ## Getting started
 
-Currently, Unity Engine does not support git dependencies for custom git packages.
-To install the PBD2D, one has to include dependencies manually.
-The easiest way to do it is by coping the following includes into the project manifest:
+Install the package using one of the following methods
 
-```json
-    "com.andywiecko.burst.collections": "https://github.com/andywiecko/BurstCollections.git#v1.6.0",
-    "com.andywiecko.burst.mathutils": "https://github.com/andywiecko/BurstMathUtils.git#v1.3.0",
-    "com.andywiecko.burst.triangulator": "https://github.com/andywiecko/BurstTriangulator.git#v1.3.0",
-    "com.andywiecko.ecs": "https://github.com/andywiecko/ECS.git#v0.2.0",
-    "com.andywiecko.pbd2d": "https://github.com/andywiecko/PBD2D.git#v0.1.0",
-```
+<details open>
+<summary> Using scoped registry <b>(recommended)</b> </summary>
+Use OpenUPM CLI or add corresponding entries to the project's <code>manifest.json</code> manually.
+Add or modify scoped registries in the manifest
+<pre>
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com/",
+      "scopes": [
+        "com.andywiecko"
+      ]
+    }
+  ]
+</pre>
+and in the dependencies provide selected version of the package
+<pre>
+"dependencies": {
+    "com.andywiecko.pbd2d": "0.1.0",
+    ...
+</pre>
+See Unity docs for more details https://docs.unity3d.com/2021.1/Documentation/Manual/upm-scoped.html
+</details>
 
-See the example project [manifest.json](https://github.com/andywiecko/PBD2D-examples/tree/main/Packages/manifest.json).
+<details>
+<summary> <code>git</code> install </summary>
+Use package manager via git install: https://github.com/andywiecko/PBD2D.git#v0.1.0
+</details>
 
+<details>
+<summary> Manual instalation </summary>
+Clone or download this repository and then select <code>package.json</code> using Package Manager (<code>Window/Package Manager</code>).
+</details>
+
+See the example project [**here**](https://github.com/andywiecko/PBD2D-examples).
 To run your first simulation with `PBD2D` follow the steps presented in [`TUTORIAL.md`](TUTORIAL.md).
 
 ## Architecture
