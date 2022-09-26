@@ -38,4 +38,13 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeReference<Complex>> Rotation { get; }
         Ref<NativeList<PointShapeMatchingConstraint>> Constraints { get; }
     }
+
+    public interface IBendingAngleConstraints : IComponent
+    {
+        float Stiffness { get; }
+        float Compliance { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
+        Ref<NativeList<BendingAngleConstraint>> Constraints { get; }
+    }
 }
