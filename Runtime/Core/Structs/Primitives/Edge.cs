@@ -19,10 +19,12 @@ namespace andywiecko.PBD2D.Core
             0.5f * (positions[edge.IdA] + positions[edge.IdB]);
         public static float2 GetCenter<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : unmanaged, IEdge =>
             GetCenter(edge, positions.AsReadOnly());
+        public static float GetLength<T>(this T edge, ReadOnlySpan<float2> positions) where T : unmanaged, IEdge =>
+            math.distance(positions[(int)edge.IdA], positions[(int)edge.IdB]);
         public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions) where T : unmanaged, IEdge =>
-            math.distance(positions[edge.IdA], positions[edge.IdB]);
+            GetLength(edge, positions.AsReadOnlySpan());
         public static float GetLength<T>(this T edge, NativeIndexedArray<Id<Point>, float2> positions) where T : unmanaged, IEdge =>
-            GetLength(edge, positions.AsReadOnly());
+            GetLength(edge, positions.AsReadOnlySpan());
         public static AABB ToAABB<T>(this T edge, NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin = 0)
             where T : unmanaged, IEdge
         {
