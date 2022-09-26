@@ -2,11 +2,14 @@ using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
 using System;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace andywiecko.PBD2D.Core
 {
     public static class PrimitivesExtensions
     {
+        public static AABB ToAABB(this Bounds bounds) => new(bounds.min.ToFloat2(), bounds.max.ToFloat2());
+
         public static float2 GetPoint(this AABB aabb, int i) => i switch
         {
             0 => aabb.Min,

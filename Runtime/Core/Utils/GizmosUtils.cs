@@ -1,3 +1,4 @@
+using andywiecko.BurstCollections;
 using andywiecko.BurstMathUtils;
 using Unity.Mathematics;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace andywiecko.PBD2D.Core
             DrawLine(b, c, z);
             DrawLine(c, a, z);
         }
+
+        public static void DrawAABB(AABB aabb, float z = 0) => DrawRectangle(aabb.Min, aabb.Max, z);
 
         public static void DrawRectangle(float2 min, float2 max, float z = 0)
         {
