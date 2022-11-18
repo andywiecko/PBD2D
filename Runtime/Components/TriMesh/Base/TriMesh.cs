@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    public class TriMesh : Entity
+    public class TriMesh : Entity, IPointsProvider
     {
         public event Action OnSerializedDataChange;
 
