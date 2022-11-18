@@ -6,6 +6,13 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
 {
+    public interface IPointsProvider
+    {
+        Ref<NativeArray<Point>> Points { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
+    }
+
     public interface IPositionConstraints : IComponent
     {
         float Stiffness { get; }
