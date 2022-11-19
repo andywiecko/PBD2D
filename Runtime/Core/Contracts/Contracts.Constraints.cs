@@ -15,6 +15,12 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeList<PositionConstraint>> Constraints { get; }
     }
 
+    public interface IPositionHardConstraints : IComponent
+    {
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeList<PositionConstraint>> Constraints { get; }
+    }
+
     public interface IEdgeLengthConstraints : IComponent
     {
         float Stiffness { get; }
