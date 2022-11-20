@@ -20,16 +20,21 @@ namespace andywiecko.PBD2D.Editor
             var stiffness = serializedObject.FindProperty("<Stiffness>k__BackingField");
             var compliance = serializedObject.FindProperty("<Compliance>k__BackingField");
             var type = serializedObject.FindProperty("type");
+            var regenerateOnChange = serializedObject.FindProperty("regenerateOnChange");
 
             var stiffnessProperty = new PropertyField(stiffness);
             var complianceProperty = new PropertyField(compliance);
             var typeProperty = new PropertyField(type);
-            typeProperty.SetEnabled(!Application.isPlaying);
+            var regenerateOnChangeProperty = new PropertyField(regenerateOnChange);
             var helpBox = new HelpBox("Warning: Hard locks support is experimental!", HelpBoxMessageType.Warning);
+
+            typeProperty.SetEnabled(!Application.isPlaying);
+            regenerateOnChangeProperty.SetEnabled(!Application.isPlaying);
 
             root.Add(typeProperty);
             root.Add(stiffnessProperty);
             root.Add(complianceProperty);
+            root.Add(regenerateOnChangeProperty);
             root.Add(helpBox);
 
             ResetFields();

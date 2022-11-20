@@ -15,6 +15,7 @@ namespace andywiecko.PBD2D.Components
 
         protected override void Start()
         {
+            useRegenerateComponent = true;
             base.Start();
             DisposeOnDestroy(
                 Constraints = new NativeList<PositionConstraint>(Positions.Value.Length, Allocator.Persistent)
