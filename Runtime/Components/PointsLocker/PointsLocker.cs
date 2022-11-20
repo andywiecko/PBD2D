@@ -10,6 +10,7 @@ namespace andywiecko.PBD2D.Components
 {
     public class PointsLocker : Entity
     {
+        public bool TransformChanged => !RigidTransform.Equals(previousRigidTransform);
         public event Action OnTransformChanged;
         public Ref<NativeArray<Point>> Points => Target.Points;
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => Target.Positions;
@@ -40,7 +41,7 @@ namespace andywiecko.PBD2D.Components
 
         private void Update()
         {
-            if (!RigidTransform.Equals(previousRigidTransform))
+            if (TransformChanged)
             {
                 OnTransformChanged?.Invoke();
             }

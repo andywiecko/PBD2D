@@ -19,14 +19,14 @@ namespace andywiecko.PBD2D.Components
         {
             base.Start();
             DisposeOnDestroy(
-                Constraints = new NativeList<PositionConstraint>(1, Allocator.Persistent)
+                Constraints = new NativeList<PositionConstraint>(1, Allocator.Persistent) { Length = 1 }
             );
 
-            Constraints.Value.AddNoResize(GenerateConstraint());
-
+            RegenerateConstraints();
             OnConstraintsGeneration();
         }
 
+        protected override void RegenerateConstraints() => Constraints.Value[default] = GenerateConstraint();
         private PositionConstraint GenerateConstraint() => new(PointId, transform.position.ToFloat2());
     }
 }
