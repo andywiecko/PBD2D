@@ -28,6 +28,14 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeList<PositionConstraint>> Constraints { get; }
     }
 
+    public interface IRegeneratePositionConstraints : IComponent
+    {
+        Ref<NativeList<PositionConstraint>> Constraints { get; }
+        Ref<NativeList<float2>> InitialRelativePositions { get; }
+        float2 TransformPosition { get; }
+        bool TransformChanged { get; }
+    }
+
     public interface IEdgeLengthConstraints : IComponent
     {
         float Stiffness { get; }

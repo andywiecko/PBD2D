@@ -67,6 +67,9 @@ MonoBehaviour:
   - <Guid>k__BackingField: d6127d639e88d0c40aea6c6afb089647
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreeTrianglesSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: 8d298570f9e9c7549bb9ed4d65cbbd33
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.RegeneratePositionConstraintsSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   undefinedTypes:
   - tag: Bounds System
     <Type>k__BackingField:
