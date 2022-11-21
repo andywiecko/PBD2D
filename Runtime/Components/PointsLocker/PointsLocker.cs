@@ -49,18 +49,6 @@ namespace andywiecko.PBD2D.Components
             previousRigidTransform = RigidTransform;
         }
 
-        private void OnValidate()
-        {
-            if (target != null && target is not IPointsProvider)
-            {
-                Debug.LogError(
-                    $"[{name}]: Type {target.GetType()} is not supported! " +
-                    $"Use component which implements `{nameof(IPointsProvider)}`.",
-                    this
-                );
-                target = default;
-                return;
-            }
-        }
+        private void OnValidate() => PointsProviderUtils.Validate(ref target, this);
     }
 }

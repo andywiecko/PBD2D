@@ -13,6 +13,23 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
     }
 
+    public static class PointsProviderUtils
+    {
+        public static void Validate(ref Entity provider, UnityEngine.Object context)
+        {
+            if (provider != null && provider is not IPointsProvider)
+            {
+                UnityEngine.Debug.LogError(
+                    $"[{context.name}]: Type {provider.GetType()} is not supported! " +
+                    $"Use component which implements `{nameof(IPointsProvider)}`.",
+                    context
+                );
+                provider = default;
+                return;
+            }
+        }
+    }
+
     public interface IPositionConstraints : IComponent
     {
         float Stiffness { get; }

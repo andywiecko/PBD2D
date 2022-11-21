@@ -15,6 +15,9 @@ namespace andywiecko.PBD2D.Editor
         [MenuItem(path + nameof(Ground))]
         public static void CreateGround() => Create<Ground>();
 
+        [MenuItem(path + nameof(PointsLocker))]
+        public static void CreatePointsLocker() => Create<PointsLocker>();
+
         [MenuItem(path + "Simulation Template")]
         public static void CreateSimulationTemplate() => ScriptableObject
             .CreateInstance<SimulationTemplateEditor>()
