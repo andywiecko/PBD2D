@@ -18,6 +18,9 @@ namespace andywiecko.PBD2D.Editor
         [MenuItem(path + nameof(PointsLocker))]
         public static void CreatePointsLocker() => Create<PointsLocker>();
 
+        [MenuItem(path + nameof(PointPointConnector))]
+        public static void CreatePointPointConnector() => Create<PointPointConnector>();
+
         [MenuItem(path + "Simulation Template")]
         public static void CreateSimulationTemplate() => ScriptableObject
             .CreateInstance<SimulationTemplateEditor>()
