@@ -30,6 +30,9 @@ MonoBehaviour:
   - <Guid>k__BackingField: 26dae6751e5c4644584e5dcab09bd924
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PositionConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: 2d13012e49379cf498a3b6605b5410b3
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.PointPointConnectorConstraintsSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - <Guid>k__BackingField: d2118c6b0d6718840bcfafa82c8b8cb3
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.EdgeLengthConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
