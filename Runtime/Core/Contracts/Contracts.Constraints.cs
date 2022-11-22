@@ -62,6 +62,16 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeList<EdgeLengthConstraint>> Constraints { get; }
     }
 
+    public interface IPointPointConnectorConstraints : IComponent
+    {
+        float Stiffness { get; }
+        float Compliance { get; }
+        float Weight { get; }
+        IPointsProvider Connectee { get; }
+        IPointsProvider Connecter { get; }
+        Ref<NativeList<PointPointConnectorConstraint>> Constraints { get; }
+    }
+
     public interface ITriangleAreaConstraints : IComponent
     {
         float Stiffness { get; }
