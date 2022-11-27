@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
-    [Category(PBDCategory.Generator)]
     [DisallowMultipleComponent]
     public abstract class PointPointConnectorGenerator : BaseComponent, IPointPointConnectorConstraints
     {

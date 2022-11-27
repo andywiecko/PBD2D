@@ -1,4 +1,5 @@
 using andywiecko.BurstCollections;
+using andywiecko.ECS;
 using andywiecko.PBD2D.Core;
 using Unity.Burst;
 using Unity.Collections;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Components
 {
+    [Category(PBDCategory.Generator)]
     [RequireComponent(typeof(PointPointConnector))]
     public class PointPointConnectorGeneratorPointsInRadius : PointPointConnectorGenerator
     {
