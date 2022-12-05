@@ -13,6 +13,7 @@ namespace andywiecko.PBD2D.Components
     [Category(PBDCategory.Graphics)]
     public class TriMeshRenderer : BaseComponent, ITriMeshRenderer
     {
+        public float4x4 WorldToLocal => transform.worldToLocalMatrix;
         public Mesh Mesh { get; private set; }
         public Ref<NativeArray<float3>> MeshVertices { get; private set; }
         public Ref<NativeIndexedArray<Id<Point>, float2>> Positions => triMesh.Positions;
@@ -37,6 +38,7 @@ namespace andywiecko.PBD2D.Components
                 rendererTransform = new GameObject(name).transform;
                 rendererTransform.SetParent(transform);
                 rendererTransform.localPosition = float3.zero;
+                rendererTransform.localRotation = quaternion.identity;
                 rendererTransform.localScale = (float3)1;
             }
 
@@ -84,11 +86,10 @@ namespace andywiecko.PBD2D.Components
             TryCreateRenderer();
 
             triMesh = GetComponent<TriMesh>();
-            rendererTransform.SetPositionAndRotation(float3.zero, quaternion.identity);
             var meshFilter = rendererTransform.GetComponent<MeshFilter>();
             Mesh = meshFilter.mesh;
 
-            var vertices = triMesh.Positions.Value.Select(i => i.ToFloat3()).ToArray();
+            var vertices = triMesh.Positions.Value.Select(i => math.mul(WorldToLocal, math.float4(i, 1, 1)).xyz).ToArray();
             DisposeOnDestroy(
                 MeshVertices = new NativeArray<float3>(vertices, Allocator.Persistent)
             );

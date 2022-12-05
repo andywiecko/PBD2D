@@ -14,17 +14,19 @@ namespace andywiecko.PBD2D.Systems
         [BurstCompile]
         private struct CopyPositionsToMeshVerticesJob : IJobParallelFor
         {
+            private readonly float4x4 w2l;
             private NativeArray<float3> vertices;
             private NativeIndexedArray<Id<Point>, float2>.ReadOnly positions;
 
             public CopyPositionsToMeshVerticesJob(ITriMeshRenderer renderer)
             {
+                w2l = renderer.WorldToLocal;
                 vertices = renderer.MeshVertices.Value;
                 positions = renderer.Positions.Value.AsReadOnly();
             }
 
             public JobHandle Schedule(JobHandle dependencies) => this.Schedule(vertices.Length, 64, dependencies);
-            public void Execute(int index) => vertices[index] = positions[(Id<Point>)index].ToFloat3();
+            public void Execute(int index) => vertices[index] = math.mul(w2l, math.float4(positions[(Id<Point>)index], 1, 1)).xyz;
         }
 
         [SolverAction]
