@@ -42,9 +42,7 @@ namespace andywiecko.PBD2D.Components
                 throw new NullReferenceException();
             }
 
-            var s = transform.localScale;
-            var rb = new RigidTransform(transform.rotation, transform.position);
-            float2 T(float2 x) => math.transform(rb, s * (x.ToFloat3() - rb.pos) + s * rb.pos).xy;
+            float2 T(float2 x) => math.mul((float4x4)transform.localToWorldMatrix, math.float4(x, 1, 1)).xy;
             var transformedPositions = SerializedData.ToPositions(transformation: T);
             var pointsCount = SerializedData.Positions.Length;
 
@@ -85,9 +83,7 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            var rb = new RigidTransform(transform.rotation, transform.position);
-            var s = transform.localScale.ToFloat4().xyz;
-            float2 T(float2 x) => Application.isPlaying ? x : math.transform(rb, s * (x.ToFloat3() - rb.pos) + s * rb.pos).xy;
+            float2 T(float2 x) => Application.isPlaying ? x : math.mul((float4x4)transform.localToWorldMatrix, math.float4(x, 1, 1)).xy;
 
             ReadOnlySpan<float2> positions = Application.isPlaying ? Positions.Value : SerializedData.Positions;
             foreach (var p in positions)
