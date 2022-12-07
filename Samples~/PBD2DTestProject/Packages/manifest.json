@@ -1,9 +1,5 @@
 {
   "dependencies": {
-    "com.andywiecko.ecs": "https://github.com/andywiecko/ECS.git#v0.2.0",
-    "com.andywiecko.burst.collections": "https://github.com/andywiecko/BurstCollections.git#v1.6.0",
-    "com.andywiecko.burst.mathutils": "https://github.com/andywiecko/BurstMathUtils.git#v1.3.0",
-    "com.andywiecko.burst.triangulator": "https://github.com/andywiecko/BurstTriangulator.git#v1.3.0",
     "com.unity.collab-proxy": "1.15.18",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.15",
@@ -44,6 +40,15 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
   },
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com/",
+      "scopes": [
+        "com.andywiecko"
+      ]
+    }
+  ],
   "testables": [
     "com.andywiecko.pbd2d"
   ]
