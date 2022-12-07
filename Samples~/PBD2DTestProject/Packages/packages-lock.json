@@ -1,55 +1,55 @@
 {
   "dependencies": {
     "com.andywiecko.burst.collections": {
-      "version": "https://github.com/andywiecko/BurstCollections.git#v1.6.0",
-      "depth": 0,
-      "source": "git",
+      "version": "1.7.0",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.6.3",
         "com.unity.jobs": "0.11.0-preview.6"
       },
-      "hash": "d0d6d078b9b51141bb252fa0a6a150a82274fe72"
+      "url": "https://package.openupm.com"
     },
     "com.andywiecko.burst.mathutils": {
-      "version": "https://github.com/andywiecko/BurstMathUtils.git#v1.3.0",
-      "depth": 0,
-      "source": "git",
+      "version": "1.3.1",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.6.3",
         "com.unity.jobs": "0.11.0-preview.6"
       },
-      "hash": "770ff304b9dc29df2e796bf71a2f591106c2c431"
+      "url": "https://package.openupm.com"
     },
     "com.andywiecko.burst.triangulator": {
-      "version": "https://github.com/andywiecko/BurstTriangulator.git#v1.3.0",
-      "depth": 0,
-      "source": "git",
+      "version": "1.4.0",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.5.5",
         "com.unity.jobs": "0.11.0-preview.6"
       },
-      "hash": "30b05fe02499653adb7b08ce8727c68502b822b3"
+      "url": "https://package.openupm.com"
     },
     "com.andywiecko.ecs": {
-      "version": "https://github.com/andywiecko/ECS.git#v0.2.0",
-      "depth": 0,
-      "source": "git",
+      "version": "0.2.1",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.jobs": "0.11.0-preview.6",
         "com.andywiecko.burst.collections": "1.5.0",
         "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
-      "hash": "77df8bc5006914a5b79f074ca3714e922a29c0ad"
+      "url": "https://package.openupm.com"
     },
     "com.andywiecko.pbd2d": {
       "version": "file:com.andywiecko.pbd2d",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.burst": "1.7.4",
+        "com.unity.burst": "1.8.2",
         "com.unity.jobs": "0.11.0-preview.6",
         "com.andywiecko.burst.mathutils": "1.3.0",
-        "com.andywiecko.burst.collections": "1.6.0",
+        "com.andywiecko.burst.collections": "1.7.0",
         "com.andywiecko.burst.triangulator": "1.3.0",
         "com.andywiecko.ecs": "0.2.0"
       }
@@ -140,7 +140,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.7.4",
+      "version": "1.8.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -232,7 +232,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "2.0.0",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
