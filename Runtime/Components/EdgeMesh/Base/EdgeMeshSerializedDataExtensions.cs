@@ -3,6 +3,7 @@ using andywiecko.PBD2D.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Components
@@ -37,5 +38,113 @@ namespace andywiecko.PBD2D.Components
         private static IEnumerable<Edge> GetEdges(this EdgeMeshSerializedData data) => Enumerable
             .Range(0, data.Edges.Length / 2)
             .Select(i => (Edge)(data.Edges[2 * i], data.Edges[2 * i + 1]));
+
+        public static NativeStackedLists<Id<Point>> ToSegments(this EdgeMeshSerializedData data, Allocator allocator)
+        {
+            var segments = new NativeStackedLists<Id<Point>>(allocator);
+
+            using var edges = new NativeIndexedArray<Id<Edge>, Edge>(data.ToEdges(), Allocator.Temp);
+            var pointsLength = data.ToPoints().Length;
+
+            var neighbors = new NativeMultiHashMap<Id<Point>, Id<Point>>(capacity: pointsLength * pointsLength, Allocator.Temp);
+            var edgeToId = new NativeHashMap<Edge, Id<Edge>>(2 * edges.Length, Allocator.Temp);
+            var visited = new NativeIndexedArray<Id<Edge>, bool>(edges.Length, Allocator.Temp);
+            var degrees = new NativeIndexedArray<Id<Point>, int>(pointsLength, Allocator.Temp);
+
+            foreach (var (id, (a, b)) in edges.IdsValues)
+            {
+                neighbors.Add(a, b);
+                neighbors.Add(b, a);
+                edgeToId.Add(new(a, b), id);
+                edgeToId.Add(new(b, a), id);
+            }
+
+            var pointsToIterate = new List<(Point, int)>();
+            foreach (var i in 0..pointsLength)
+            {
+                var id = (Id<Point>)i;
+                var n = neighbors.GetValuesForKey(id);
+                var count = 0;
+                foreach (var _ in n)
+                {
+                    count++;
+                }
+
+                degrees[id] = count;
+
+                pointsToIterate.Add((new(i), count));
+            }
+
+            var queue = new Queue<(Point, int)>(pointsToIterate
+                .OrderByDescending(i => i.Item2 == 2 ? -1 : i.Item2)
+            );
+
+            while (queue.TryDequeue(out var p))
+            {
+                var id0 = p.Item1.Id;
+                foreach (var id1 in neighbors.GetValuesForKey(id0))
+                {
+                    var edge = new Edge(id0, id1);
+                    var eId = edgeToId[edge];
+                    if (!visited[eId])
+                    {
+                        BuildSegment(id0, id1);
+                    }
+                }
+            }
+
+            void BuildSegment(Id<Point> id0, Id<Point> id1)
+            {
+                Id<Edge> GetEdgeId(Id<Point> id0, Id<Point> id1) => edgeToId[new(id0, id1)];
+
+                bool TryGetNextPoint(Id<Point> id0, out Id<Point> id1)
+                {
+                    foreach (var id in neighbors.GetValuesForKey(id0))
+                    {
+                        var eId = GetEdgeId(id0, id);
+                        if (!visited[eId])
+                        {
+                            id1 = id;
+                            return true;
+                        }
+                    }
+                    id1 = Id<Point>.Invalid;
+                    return false;
+                }
+
+                segments.Push();
+
+                segments.Add(id0);
+                segments.Add(id1);
+                var eId = GetEdgeId(id0, id1);
+                visited[eId] = true;
+
+                if (degrees[id1] != 2)
+                {
+                    return;
+                }
+
+                do
+                {
+                    id0 = id1;
+                    if (!TryGetNextPoint(id0, out id1))
+                    {
+                        return;
+                    }
+
+                    segments.Add(id1);
+                    eId = GetEdgeId(id0, id1);
+                    visited[eId] = true;
+
+                } while (degrees[id1] == 2);
+            }
+
+            edgeToId.Dispose();
+            visited.Dispose();
+            neighbors.Dispose();
+            degrees.Dispose();
+
+            return segments;
+        }
     }
 }
