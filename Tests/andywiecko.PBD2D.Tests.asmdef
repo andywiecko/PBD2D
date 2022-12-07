@@ -2,8 +2,9 @@
     "name": "andywiecko.PBD2D.Tests",
     "rootNamespace": "",
     "references": [
-        "andywiecko.PBD2D.Systems",
+        "andywiecko.PBD2D.Components",
         "andywiecko.PBD2D.Core",
+        "andywiecko.PBD2D.Systems",
         "andywiecko.BurstMathUtils",
         "andywiecko.BurstCollections",
         "Unity.Mathematics",
