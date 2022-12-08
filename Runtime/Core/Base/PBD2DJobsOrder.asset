@@ -61,6 +61,9 @@ MonoBehaviour:
   - <Guid>k__BackingField: d153ff9d65a593f48b913a6c8edb8582
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.TriMeshRendererSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: adccffa5205420a4d8946b33139587e5
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.EdgeMeshRendererSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - <Guid>k__BackingField: e18b797d352459e469c033bd08af7304
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.BoundingVolumeTreeExternalEdgesSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
