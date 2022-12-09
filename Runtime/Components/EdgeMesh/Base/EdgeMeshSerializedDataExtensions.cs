@@ -146,5 +146,44 @@ namespace andywiecko.PBD2D.Components
 
             return segments;
         }
+
+        public static NativeList<Stencil> ToStencils(this EdgeMeshSerializedData data, Allocator allocator)
+        {
+            var stencils = new NativeList<Stencil>(64, allocator);
+
+            var pointsLength = data.ToPoints().Length;
+            using var points = new NativeArray<Point>(data.ToPoints(), Allocator.Temp);
+            using var edges = new NativeIndexedArray<Id<Edge>, Edge>(data.ToEdges(), Allocator.Temp);
+            using var neighbors = new NativeMultiHashMap<Id<Point>, Id<Point>>(capacity: pointsLength * pointsLength, Allocator.Temp);
+
+            foreach (var (id, (a, b)) in edges.IdsValues)
+            {
+                neighbors.Add(b, a);
+                neighbors.Add(a, b);
+            }
+
+            foreach (var p in points)
+            {
+                var n = neighbors.GetValuesForKey(p.Id);
+                using var list = new NativeList<Id<Point>>(Allocator.Temp);
+                foreach (var i in n)
+                {
+                    list.Add(i);
+                }
+
+                for (int i = 0; i < list.Length; i++)
+                {
+                    for (int j = i + 1; j < list.Length; j++)
+                    {
+                        var prev = list[j];
+                        var curr = p.Id;
+                        var next = list[i];
+                        stencils.Add(new(prev, curr, next));
+                    }
+                }
+            }
+
+            return stencils;
+        }
     }
 }
