@@ -81,6 +81,15 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeList<TriangleAreaConstraint>> Constraints { get; }
     }
 
+    public interface IStencilBendingConstraints : IComponent
+    {
+        float Stiffness { get; }
+        float Compliance { get; }
+        Ref<NativeIndexedArray<Id<Point>, float2>> Positions { get; }
+        Ref<NativeIndexedArray<Id<Point>, float>> Weights { get; }
+        Ref<NativeList<StencilBendingConstraint>> Constraints { get; }
+    }
+
     public interface IShapeMatchingConstraint : IComponent
     {
         float Stiffness { get; }
