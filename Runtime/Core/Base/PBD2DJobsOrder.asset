@@ -39,6 +39,9 @@ MonoBehaviour:
   - <Guid>k__BackingField: 73cc6ccdd8744f841947e4cf8086776d
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.TriangleAreaConstraintsSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - <Guid>k__BackingField: eb4851ae538db144292010b6e014c6ef
+    <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.StencilBendingConstraintsSystem,
+      andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - <Guid>k__BackingField: 538b76c4234524e4b8b9b7faa5d6e9aa
     <AssemblyQualifiedName>k__BackingField: andywiecko.PBD2D.Systems.ShapeMatchingConstraintSystem,
       andywiecko.PBD2D.Systems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
