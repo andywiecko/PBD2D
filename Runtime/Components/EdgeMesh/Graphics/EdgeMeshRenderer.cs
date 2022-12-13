@@ -66,8 +66,9 @@ namespace andywiecko.PBD2D.Components
                 return;
             }
 
-            foreach (Transform r in rendererTransform)
+            for (int i = rendererTransform.childCount - 1; i >= 0; i--)
             {
+                var r = rendererTransform.GetChild(i);
                 DestroyImmediate(r.gameObject);
             }
             renderers.Clear();
