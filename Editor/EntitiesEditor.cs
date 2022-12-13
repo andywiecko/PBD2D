@@ -9,6 +9,9 @@ namespace andywiecko.PBD2D.Editor
     {
         private const string path = "GameObject/PBD2D/";
 
+        [MenuItem(path + nameof(EdgeMesh))]
+        public static void CreateEdgeMesh() => Create<EdgeMesh>();
+
         [MenuItem(path + nameof(TriMesh))]
         public static void CreateTriMesh() => Create<TriMesh>();
 
