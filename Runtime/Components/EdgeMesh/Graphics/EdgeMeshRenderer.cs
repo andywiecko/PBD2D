@@ -74,6 +74,11 @@ namespace andywiecko.PBD2D.Components
             renderers.Clear();
 
             var edgeMesh = GetComponent<EdgeMesh>();
+            if (edgeMesh.SerializedData == null)
+            {
+                return;
+            }
+
             using var segments = edgeMesh.SerializedData.ToSegments(Allocator.Persistent);
             var prefab = rendererPrefab == null ? defaultRendererPrefab : rendererPrefab;
             foreach (var segment in segments)
