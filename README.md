@@ -10,9 +10,9 @@ Unity package for Position Based Dynamics in two dimensions.
 
 [![Build](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml) [![Tests](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml) [![openupm](https://img.shields.io/npm/v/com.andywiecko.pbd2d?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.andywiecko.pbd2d/)
 
-The package provides an implementation of _position based dynamics_ (PBD) [^1] 
+The package provides an implementation of _position based dynamics_ (PBD) [^1]
 [^3] [^5] using HPC# (via Burst compiler) 
-including extended position based dynamics (xPBD) [^4], 
+including extended position based dynamics (xPBD) [^4],
 shape-matching [^2], and
 various collision algorithms with a basic friction model [^6].
 There are also upcoming features regarding one-dimensional structures (rods) [^7] [^8]
@@ -38,20 +38,20 @@ Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www
 
 ## Gallery
 
-![demo-1](Documentation~/demo1.gif)
-![demo-2](Documentation~/demo2.gif)
+![demo-01](Documentation~/demo01.gif)
+![demo-02](Documentation~/demo02.gif)
 
-![demo-3](Documentation~/demo3.gif)
-![demo-4](Documentation~/demo4.gif)
+![demo-03](Documentation~/demo03.gif)
+![demo-04](Documentation~/demo04.gif)
 
-![demo-5](Documentation~/demo5.gif)
-![demo-6](Documentation~/demo6.gif)
+![demo-05](Documentation~/demo05.gif)
+![demo-06](Documentation~/demo06.gif)
 
 One can play the presented demos [**here**](https://andywiecko.github.io/PBD2D-examples).
 See [`PDB2D-examples`](https://github.com/andywiecko/PBD2D-examples) github repo for source codes and scenes.
 
 > **Warning**
-> 
+>
 > Currently, `Burst` compiler is not supported with `WebGL`.
 > Demo scenes are for preview only.
 > Performance may be limited in web builds.
