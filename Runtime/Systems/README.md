@@ -6,9 +6,14 @@
     - [Point Line Collision System](#point-line-collision-system)
     - [Point TriField Collision System](#point-trifield-collision-system)
   - [Constraints](#constraints)
-    - [Edge Length Constraint System](#edge-length-constraint-system)
+    - [Edge Length Constraints System](#edge-length-constraints-system)
     - [Shape Matching Constraint System](#shape-matching-constraint-system)
-    - [Triangle Area Constraint System](#triangle-area-constraint-system)
+    - [Triangle Area Constraints System](#triangle-area-constraints-system)
+    - [Point Point Connector Constraints System](#point-point-connector-constraints-system)
+    - [Position Hard Constraints System](#position-hard-constraints-system)
+    - [Regenerate Position Constraints System](#regenerate-position-constraints-system)
+    - [Stencil Bending Constraints System](#stencil-bending-constraints-system)
+    - [Position Soft Constraints System](#position-soft-constraints-system)
   - [Debug](#debug)
     - [Mouse Interaction System](#mouse-interaction-system)
   - [Extended data](#extended-data)
@@ -20,6 +25,7 @@
     - [Bounds System](#bounds-system)
   - [Graphics](#graphics)
     - [TriMesh Renderer System](#trimesh-renderer-system)
+    - [EdgeMesh Renderer System](#edgemesh-renderer-system)
   - [Position based dynamics](#position-based-dynamics)
     - [Position Based Dynamics Step End System](#position-based-dynamics-step-end-system)
     - [Position Based Dynamics Step Start System](#position-based-dynamics-step-start-system)
@@ -46,14 +52,14 @@ The system supports friction (use `PhysicalMaterial` to control the behavior).
 
 ## Constraints
 
-### Edge Length Constraint System
+### Edge Length Constraints System
 
 The system is responsible for resolving edge length constraints, the most common constraint in PBD simulation.
 The constraint is defined in the following way
 
-$$ C(p_1, p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
+$$ C(\vec p_1, \vec p_2) = \| \vec p_1 - \vec p_2 \| - \ell $$
 
-where $\ell$ is rest length of the edge $(p_1, p_2)$.
+where $\ell$ is rest length of the edge $(\vec p_1, \vec p_2)$.
 
 The system supports XPBD compliance and PBD stiffness.
 
@@ -82,7 +88,7 @@ $$A_{pq} = \sum_i m_i \vec p_i \vec q_i^{\mathsf T}$$
 
 The system supports the linear deformation model.
 
-### Triangle Area Constraint System
+### Triangle Area Constraints System
 
 The system is responsible for resolving triangle area (signed) constraints.
 Constraint enforces that triangle area is conserved during the simulation.
@@ -91,6 +97,57 @@ The constraint function is defined in the following way
 $$ C(p_1, p_2, p_3) = \vec p_{12} \times \vec p_{13} - A$$
 
 where $p_{ij} = p_j - p_i$ and $A$ is 2 times rest area of the triangle $(p_1, p_2, p_3)$.
+
+The system supports XPBD compliance and PBD stiffness.
+
+### Point Point Connector Constraints System
+
+The system is responsible for solving point-point connector constraints.
+The constraint is used for connecting two separate bodies.
+The constraint function is defined in a similar way as for edge length constraint (with zero rest length)
+
+$$C(\vec p_1, \vec p_2) = \| \vec p_1 - \vec p_2\|.$$
+
+### Position Hard Constraints System
+
+The system is responsible for maintaining the rest position.
+An applied constraint is _hard_, i.e. weight of constrained points is set to zero.
+Regarding the interaction, point position should be always preserved.
+
+### Regenerate Position Constraints System
+
+The system is responsible for position constraint regeneration.
+The rest position of the constraints is calculated using given `Transform`
+
+> **Note**
+>
+> `Transform.rotation` is not supported.
+
+### Stencil Bending Constraints System
+
+The system is responsible for resolving bending constraints for angles made of three points $\vec p_1, \vec p_2, \vec p_3$.
+The constraint enforces that the angle is conserved during the simulation.
+The constraint function is defined in the following way
+
+$$ C(p_1, p_2, p_3) = \arctan\frac{(\vec p_2 - \vec p_1)\times(\vec p_3 - \vec p_2)}
+{(\vec p_2 - \vec p_1)\cdot(\vec p_3 - \vec p_2)} - \varphi_0,$$
+
+where $\varphi$ corresponds to rest angle.
+
+The system supports XPBD compliance and PBD stiffness.
+
+> **Warning**
+>
+> Strong stiffness/compliance setting currently leads to simulation instabilities. Use the constraint with caution. 
+
+### Position Soft Constraints System
+
+The system is responsible for maintaining the rest position.
+The constraint function is defined in the following way
+
+$$ C(\vec p) = \| \vec p - \vec p_0 \|,$$
+
+where $p_0$ is rest position of the constraint.
 
 The system supports XPBD compliance and PBD stiffness.
 
@@ -137,6 +194,11 @@ Bounds are used in collision algorithms scheduling.
 
 The system is responsible for updating the `Mesh`.
 It syncs mesh vertices with simulation positions and updates the bounds.
+
+### EdgeMesh Renderer System
+
+The system is responsible for updating the `EdgeMesh` `LineRenderer`.
+It syncs segments vertices with simulation positions.
 
 ## Position based dynamics
 
