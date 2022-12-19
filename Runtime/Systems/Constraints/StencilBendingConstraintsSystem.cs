@@ -9,6 +9,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
+    [Category(PBDCategory.Constraints)]
     public class StencilBendingConstraintsSystem : BaseSystemWithConfiguration<IStencilBendingConstraints, PBDConfiguration>
     {
         [BurstCompile]
