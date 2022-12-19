@@ -14,7 +14,7 @@ namespace andywiecko.PBD2D.Components
         #region Inner types
         protected enum Type { Soft, Hard }
 
-        protected class SoftLocks : IPositionConstraints
+        protected class SoftLocks : IPositionSoftConstraints
         {
             public Id<IComponent> ComponentId => owner.ComponentId;
             public float Stiffness => owner.Stiffness;

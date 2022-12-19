@@ -9,7 +9,7 @@ using Unity.Mathematics;
 namespace andywiecko.PBD2D.Systems
 {
     [Category(PBDCategory.Constraints)]
-    public class PositionConstraintsSystem : BaseSystemWithConfiguration<IPositionConstraints, PBDConfiguration>
+    public class PositionSoftConstraintsSystem : BaseSystemWithConfiguration<IPositionSoftConstraints, PBDConfiguration>
     {
         [BurstCompile]
         private struct ApplyConstraintJob : IJob
@@ -21,7 +21,7 @@ namespace andywiecko.PBD2D.Systems
             private NativeIndexedArray<Id<Point>, float2> positions;
             private NativeIndexedArray<Id<Point>, float>.ReadOnly weights;
 
-            public ApplyConstraintJob(IPositionConstraints component, float dt)
+            public ApplyConstraintJob(IPositionSoftConstraints component, float dt)
             {
                 a = component.Compliance / dt / dt;
                 k = component.Stiffness;

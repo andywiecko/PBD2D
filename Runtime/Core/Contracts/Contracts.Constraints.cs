@@ -30,7 +30,7 @@ namespace andywiecko.PBD2D.Core
         }
     }
 
-    public interface IPositionConstraints : IComponent
+    public interface IPositionSoftConstraints : IComponent
     {
         float Stiffness { get; }
         float Compliance { get; }
