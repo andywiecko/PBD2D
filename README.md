@@ -26,6 +26,7 @@ Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www
   - edge length constraint
   - triangle area constraint
   - shape matching constraint
+  - stencil bending constraint
 - Collision systems:
   - point-line
   - capsule-capsule
@@ -33,8 +34,11 @@ Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www
 - Generating simulation bodies using sprites.
 - Mouse interaction (translation, rotation)
 - Entities:
+  - edgemesh
   - trimesh (triangle mesh)
   - ground
+  - points locker
+  - point point connector
 
 ## Gallery
 
@@ -46,6 +50,12 @@ Check out Matthias Müller's YouTube channel [**10 Minute Physics**](https://www
 
 ![demo-05](Documentation~/demo05.gif)
 ![demo-06](Documentation~/demo06.gif)
+
+![demo-07](Documentation~/demo07.gif)
+![demo-08](Documentation~/demo08.gif)
+
+![demo-09](Documentation~/demo09.gif)
+![demo-10](Documentation~/demo10.gif)
 
 One can play the presented demos [**here**](https://andywiecko.github.io/PBD2D-examples).
 See [`PDB2D-examples`](https://github.com/andywiecko/PBD2D-examples) github repo for source codes and scenes.
@@ -65,6 +75,7 @@ See [`PDB2D-examples`](https://github.com/andywiecko/PBD2D-examples) github repo
   - [Architecture](#architecture)
   - [Preview for upcoming features](#preview-for-upcoming-features)
   - [Roadmap](#roadmap)
+  - [Known Issues](#known-issues)
   - [Dependencies](#dependencies)
   - [Bibliography](#bibliography)
 
@@ -139,11 +150,6 @@ click c href "andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 ## Preview for upcoming features
 
-- **Elastic rods**
-
-![elastic-rod-pendulom](Documentation~/elastic-rod-pendulum.gif)
-![elastic-rod-tree](Documentation~/elastic-rod-tree.gif)
-
 - **Position based fluid**
 
 ![fluid-one-sided](Documentation~/fluid-one-sided.gif)
@@ -151,22 +157,22 @@ click c href "andywiecko/PBD2D/tree/main/Runtime/Systems"
 
 ## Roadmap
 
-**v1.0.0**
+**v1.0.0**:
 
 - [ ] `TriMeshSerializedDataTriangulatorPostprocess` (triangulate `TriMeshSerializedData`).
-- [ ] Reimport and refactor rod structure.
+- [X] ~~Reimport and refactor rod structure.~~
 - [ ] Reimport and refactor position based fluid.
 - [ ] Destructible bodies (removing points/triangles during runtime).
 - [ ] Refactor collision component and introduce collision layers.
 - [ ] GC alloc free component iterators for system scheduling.
 - [ ] TriMesh self collisions (external points/bvt/collisions).
-- [ ] Connectors and lockers.
+- [X] ~~Connectors and lockers.~~
 - [ ] Shape matching clusters.
-- [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs. 
+- [ ] Use **dynamic** bounding volume tree for scheduling the collision pairs.
 - [ ] Investigate performance with combined dependencies.
 - [ ] Fluid "fancy" shader.
 
-**v2.0.0**
+**v2.0.0**:
 
 - [ ] (Smooth) cuttable bodies (adding points/triangles during runtime).
 - [ ] Continous collisions.
@@ -174,6 +180,12 @@ click c href "andywiecko/PBD2D/tree/main/Runtime/Systems"
 - [ ] Sign distance field collisions.
 - [ ] GPU fluids.
 - [ ] Position based "smoke".
+
+## Known Issues
+
+1. Bending constraint may cause simulation instabilities when stiffness/compliance is too large.
+2. Hard locks do not support shape-matching constraints.
+3. `EdgeMeshRenderer` does not update after serialized data change.
 
 ## Dependencies
 
