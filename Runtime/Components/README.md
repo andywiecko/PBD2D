@@ -2,11 +2,34 @@
 
 - [PBD2D.Components](#pbd2dcomponents)
   - [Entities](#entities)
+    - [EdgeMesh](#edgemesh)
     - [TriMesh](#trimesh)
     - [Ground](#ground)
+    - [Points Locker](#points-locker)
+    - [Point Point Connector](#point-point-connector)
   - [Tuples](#tuples)
 
 ## Entities
+
+### EdgeMesh
+
+A (quasi) one-dimensional structure made of edges. One of the basic entities used in the PBD2D simulation engine.
+The structure can be used for simulation:
+
+- rods,
+- ropes,
+- trees,
+- bridges,
+- any structure made of edges.
+
+The entity requires `EdgeMeshSerializedData`.
+One can create an instance of one of the selected implementations in `Project` from `Create/PBD2D/EdgeMesh/.` or one can derive a new type from `EdgeMeshSerializedData`.
+
+**Supported features:**
+
+- position based dynamics,
+- edge length constraint,
+- stencil bending constraint.
 
 ### TriMesh
 
@@ -41,8 +64,28 @@ The line provides position and normal vectors and is used for collisions with po
 Translation of the component is included in friction calculations, however, transform for calculating the translation can be overridden.
 
 **Supported features:**
+
 - collisions
   - point-line (with TriMesh)
+
+### Points Locker
+
+The entity is related to the position constraints of another entity.
+It requires target which implements `IPointsProvider` interface.
+One can select _generator_ which generates the given constraints.
+
+**Supported generators:**
+
+- `Generator AABB` classifies point as constrained depending on the collection of `AABB`,
+- `Generator User Defined Point` classifies points using user input.
+
+### Point Point Connector
+
+The entity which is used for marking two bodies, which implement `IPointsProvider` interface, as connected via point-point.
+
+**Supported generators:**
+
+- `Generator Points In Radius` adds constraint for points in given radius.
 
 ## Tuples
 
