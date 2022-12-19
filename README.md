@@ -101,7 +101,7 @@ Add or modify scoped registries in the manifest
 and in the dependencies provide selected version of the package
 <pre>
 "dependencies": {
-    "com.andywiecko.pbd2d": "0.1.0",
+    "com.andywiecko.pbd2d": "0.2.0",
     ...
 </pre>
 See Unity docs for more details https://docs.unity3d.com/2021.1/Documentation/Manual/upm-scoped.html
@@ -109,7 +109,7 @@ See Unity docs for more details https://docs.unity3d.com/2021.1/Documentation/Ma
 
 <details>
 <summary> <code>git</code> install </summary>
-Use package manager via git install: https://github.com/andywiecko/PBD2D.git#v0.1.0
+Use package manager via git install: https://github.com/andywiecko/PBD2D.git#v0.2.0
 </details>
 
 <details>

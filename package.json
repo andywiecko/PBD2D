@@ -1,6 +1,6 @@
 {
     "name": "com.andywiecko.pbd2d",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "displayName": "PBD2D",
     "description": "Unity Position Based Dynamics in two dimensions.",
     "unity": "2021.2",
