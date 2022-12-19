@@ -7,9 +7,9 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Editor.Tests
 {
-    public class PositionConstraintSystemEditorTests
+    public class PositionSoftConstraintsSystemEditorTests
     {
-        private class FakeComponent : TestComponent, IPositionConstraints
+        private class FakeComponent : TestComponent, IPositionSoftConstraints
         {
             public float Stiffness { get; set; } = 1;
             public float Compliance { get; set; } = 0;
@@ -30,7 +30,7 @@ namespace andywiecko.PBD2D.Editor.Tests
         }
 
         private FakeComponent component;
-        private PositionConstraintsSystem system;
+        private PositionSoftConstraintsSystem system;
 
         [SetUp]
         public void SetUp()
