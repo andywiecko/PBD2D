@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace andywiecko.PBD2D.Systems
 {
+    [Category(PBDCategory.Graphics)]
     public class EdgeMeshRendererSystem : BaseSystem<IEdgeMeshRenderer>
     {
         [BurstCompile]

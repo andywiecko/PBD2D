@@ -8,6 +8,7 @@ using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Systems
 {
+    [Category(PBDCategory.Constraints)]
     public class PointPointConnectorConstraintsSystem : BaseSystemWithConfiguration<IPointPointConnectorConstraints, PBDConfiguration>
     {
         [BurstCompile]
