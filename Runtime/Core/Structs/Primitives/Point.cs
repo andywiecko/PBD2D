@@ -1,4 +1,5 @@
 ﻿using andywiecko.BurstCollections;
+using System;
 using Unity.Mathematics;
 
 namespace andywiecko.PBD2D.Core
@@ -19,7 +20,7 @@ namespace andywiecko.PBD2D.Core
         }
     }
 
-    public readonly struct Point : IPoint, IConvertableToAABB
+    public readonly struct Point : IPoint, IConvertableToAABB, IEquatable<Point>
     {
         public readonly Id<Point> Id { get; }
         public Point(Id<Point> id) => Id = id;
@@ -27,5 +28,8 @@ namespace andywiecko.PBD2D.Core
         public static implicit operator Point(Id<Point> id) => new(id);
         public static implicit operator Point(int id) => new((Id<Point>)id);
         AABB IConvertableToAABB.ToAABB(NativeIndexedArray<Id<Point>, float2>.ReadOnly positions, float margin) => this.ToAABB(positions, margin);
+        public bool Equals(Point other) => Id == other.Id;
+        public override int GetHashCode() => Id.Value;
+        public override string ToString() => Id.ToString();
     }
 }

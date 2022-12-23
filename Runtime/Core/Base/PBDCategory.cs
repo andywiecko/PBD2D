@@ -8,6 +8,7 @@ namespace andywiecko.PBD2D.Core
         public const string ExtendedData = "Extended data";
         public const string Graphics = nameof(Graphics);
         public const string Generator = nameof(Generator);
+        public const string Topology = nameof(Topology);
         public const string PBD = "Position based dynamics";
     }
 }
