@@ -11,4 +11,10 @@ namespace andywiecko.PBD2D.Core
         Ref<NativeHashSet<Point>> PointsToRemove { get; }
         Ref<NativeHashSet<Point>> RecentlyRemovedPoints { get; }
     }
+
+    public interface IEdgeLengthConstraintsTopology : IComponent
+    {
+        Ref<NativeList<EdgeLengthConstraint>> Constraints { get; }
+        Ref<NativeHashSet<Point>> RecentlyRemovedPoints { get; }
+    }
 }
