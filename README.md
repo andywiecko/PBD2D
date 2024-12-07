@@ -2,11 +2,19 @@
 
 Unity package for Position Based Dynamics in two dimensions.
 
-> **Warning**
->
+<br>
+
+> [!NOTE]
+> Development of the package will resume in 2025. Stay tuned for updates! 😉
+
+<br>
+
+> [!WARNING]  
 > The package is in a preview state.
 > The API may change without advance notice.
 > Production usage is not recommended.
+
+<br>
 
 [![Build](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/build.yaml) [![Tests](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml/badge.svg)](https://github.com/andywiecko/PBD2D/actions/workflows/test.yml) [![openupm](https://img.shields.io/npm/v/com.andywiecko.pbd2d?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.andywiecko.pbd2d/)
 
