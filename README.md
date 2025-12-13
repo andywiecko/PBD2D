@@ -5,7 +5,8 @@ Unity package for Position Based Dynamics in two dimensions.
 <br>
 
 > [!NOTE]
-> Development of the package will resume in 2025. Stay tuned for updates! 😉
+> ~~Development of the package will resume in 2025. Stay tuned for updates!~~  
+> Please note that due to personal issues, new development has been delayed. Thank you for your understanding!
 
 <br>
 
